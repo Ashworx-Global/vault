@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://ashworx-global.github.io/vault/sitemap.xml

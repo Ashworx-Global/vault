@@ -6,6 +6,8 @@ This site contains daily Bible reading notes with linked verse pages, harvested 
 
 [🌐 View Live Site](https://ashworx-global.github.io/vault/)
 
+> The site is built from this vault with `python3 scripts/build-site.py` (stdlib only, no npm) and deployed to GitHub Pages on every push to `main`. Wikilinks mirror Obsidian; `ref.ly` Logos links open in your own Logos copy.
+
 ---
 
 ## 📁 Vault Structure
