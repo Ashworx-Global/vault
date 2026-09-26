@@ -1,17 +1,9 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { verseData } from '../../data/verses';
-import { bookChapters, allBooks } from '../../data/bookChapters';
+import { getBooksIndexData } from '../../utils/booksIndex';
 ---
 
-const versePages = Object.values(verseData).flatMap(book => Object.values(book));
-const books = allBooks;
-
-const booksWithStats = books.map(book => {
-  const bookVerses = versePages.filter(v => v.book === book);
-  const chapters = new Set(bookVerses.map(v => v.chapter)).size;
-  return { book, bookVerses, chapters };
-});
+const { booksWithStats } = getBooksIndexData();
 ---
 
 <Layout title="Books" description="Browse verse pages by Bible book">
@@ -28,27 +20,26 @@ const booksWithStats = books.map(book => {
           class="bg-white rounded-xl p-6 shadow-sm border border-stone-200 hover:shadow-lg hover:border-primary-300 hover:-translate-y-1 transition-all group animate-slide-up"
           style={'animation-delay: ' + (i * 50) + 'ms'}
         >
-            <div class="flex items-start gap-4">
-              <div class="w-14 h-14 bg-primary-100 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-primary-200 transition-colors">
-                <svg class="w-7 h-7 text-primary-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
-                </svg>
-              </div>
-              <div class="flex-1 min-w-0">
-                <h3 class="font-bold text-stone-900 group-hover:text-primary-700 transition-colors">{book}</h3>
-                <p class="text-sm text-stone-600 mt-1">{bookVerses.length} passages • {chapters} chapters</p>
-              </div>
+          <div class="flex items-start gap-4">
+            <div class="w-14 h-14 bg-primary-100 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-primary-200 transition-colors">
+              <svg class="w-7 h-7 text-primary-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 5c1.747 0 3.332.477 4.5 1.253"/>
+              </svg>
             </div>
-            <div class="mt-4 pt-4 border-t border-stone-100 flex items-center justify-between">
-              <span class="text-xs text-stone-500">View chapters</span>
-              <svg class="w-5 h-5 text-stone-400 group-hover:text-primary-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            <div class="flex-1 min-w-0">
+              <h3 class="font-bold text-stone-900 group-hover:text-primary-700 transition-colors">{book}</h3>
+              <p class="text-sm text-stone-600 mt-1">{bookVerses.length} passages • {chapters} chapters</p>
             </div>
-          </a>
-        );
-      })}
+          </div>
+          <div class="mt-4 pt-4 border-t border-stone-100 flex items-center justify-between">
+            <span class="text-xs text-stone-500">View chapters</span>
+            <svg class="w-5 h-5 text-stone-400 group-hover:text-primary-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          </div>
+        </a>
+      ))}
     </div>
 
-    {books.length === 0 && (
+    {booksWithStats.length === 0 && (
       <div class="text-center py-16">
         <svg class="w-16 h-16 mx-auto text-stone-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
         <h2 class="text-xl text-stone-600 mb-2">No books yet</h2>

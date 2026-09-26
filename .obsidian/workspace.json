@@ -247,6 +247,8 @@
   },
   "active": "efdc2a45cf68d3fb",
   "lastOpenFiles": [
+    "src/utils/booksIndex.js",
+    "src/utils/booksIndex.ts",
     "node_modules/astro/dist/assets/services/vendor/squoosh/mozjpeg/mozjpeg_node_enc.wasm",
     "node_modules/astro/dist/assets/services/vendor/squoosh/mozjpeg/mozjpeg_node_dec.wasm",
     "node_modules/astro/dist/assets/services/vendor/squoosh/avif/avif_node_dec.wasm",
@@ -256,8 +258,6 @@
     "node_modules/astro/dist/core/sync/write-files.d.ts",
     "node_modules/astro/dist/assets/services/vendor/squoosh/utils/workerPool.d.ts",
     "node_modules/astro/dist/runtime/client/dev-toolbar/ui-library/window.d.ts",
-    "node_modules/astro/dist/core/viteUtils.d.ts",
-    "node_modules/astro/dist/core/module-loader/vite.d.ts",
     "node_modules/@img/sharp-libvips-darwin-x64/README.md",
     "node_modules/@esbuild/darwin-x64/README.md",
     "node_modules/@jridgewell/trace-mapping/README.md",
