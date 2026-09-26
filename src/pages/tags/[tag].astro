@@ -103,7 +103,6 @@ const totalCount = data.daily.length + data.verses.length;
         <div class="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
           {data.verses.map(versePath => {
             const parts = versePath.split("/");
-            const book = parts[0];
             const verseRef = parts[1].replace(/-/g, " ").replace(/–/g, "–").replace(/v /g, "v ");
             return (
               <article class="bg-white rounded-xl p-5 shadow-sm border border-stone-200 hover:shadow-md transition-all">
