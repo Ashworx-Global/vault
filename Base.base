@@ -1,0 +1,20 @@
+views:
+  - type: table
+    name: Table
+    order:
+      - file.name
+      - file.backlinks
+      - file.basename
+      - file.ctime
+      - file.ext
+      - file.embeds
+      - file.folder
+      - file.fullname
+      - file.links
+      - tags
+      - cssclasses
+      - aliases
+      - file.tags
+      - file.size
+      - file.path
+      - file.mtime

@@ -1,0 +1,1252 @@
+{
+  "bibleVersion": "esv",
+  "defaultBibleVersion": "esv",
+  "offlineMode": true,
+  "referenceLinkPosition": "Header",
+  "verseFormatting": "Single Line",
+  "verseNumberFormatting": "1. ",
+  "multiChapterSeparatorFormat": "Chapter Separator",
+  "showChapterNumberInSeparator": true,
+  "verseSegmentSeparatorFormat": "Verse Separator",
+  "collapsibleVerses": true,
+  "enableHyperlinking": true,
+  "linkOnlyMode": false,
+  "showVerseTranslation": true,
+  "bookTagging": true,
+  "bookTaggingFormat": "{{book}}",
+  "chapterTagging": true,
+  "chapterTaggingFormat": "{{book}}{{chapter}}",
+  "enableBibleVerseLookupRibbon": false,
+  "bookBacklinking": "Bottom",
+  "chapterBacklinking": "Bottom",
+  "bibleVersionStatusIndicator": "Short",
+  "displayBibleIconPrefixAtHeader": true,
+  "internalLinkingFormat": "[[Book Chapter#^Verse|Verse]]",
+  "enableInternalLinking": "None",
+  "logosFallbackVersion": "niv2011",
+  "sourceOfReference": "biblegateway",
+  "bookNameLanguage": "Version-Specific",
+  "collapsedByDefault": true,
+  "advancedSettings": true,
+  "verseCache": {
+    "version": 1,
+    "translations": {
+      "esv": {
+        "John|3": {
+          "1": {
+            "text": "Now there was a man of the Pharisees named Nicodemus, a ruler of the Jews.",
+            "chapter": 3,
+            "book_name": "John",
+            "verse": 1
+          },
+          "2": {
+            "text": "This man came to Jesus  by night and said to him, “Rabbi, we know that you are a teacher come from God, for no one can do these signs that you do unless God is with him.”",
+            "chapter": 3,
+            "book_name": "John",
+            "verse": 2
+          },
+          "3": {
+            "text": "Jesus answered him, “Truly, truly, I say to you, unless one is born again  he cannot see the kingdom of God.”",
+            "chapter": 3,
+            "book_name": "John",
+            "verse": 3
+          },
+          "4": {
+            "text": "Nicodemus said to him, “How can a man be born when he is old? Can he enter a second time into his mother's womb and be born?”",
+            "chapter": 3,
+            "book_name": "John",
+            "verse": 4
+          },
+          "5": {
+            "text": "Jesus answered, “Truly, truly, I say to you, unless one is born of water and the Spirit, he cannot enter the kingdom of God.",
+            "chapter": 3,
+            "book_name": "John",
+            "verse": 5
+          },
+          "6": {
+            "text": " That which is born of the flesh is flesh, and that which is born of the Spirit is spirit.",
+            "chapter": 3,
+            "book_name": "John",
+            "verse": 6
+          },
+          "7": {
+            "text": " Do not marvel that I said to you, ‘You  must be born again.’",
+            "chapter": 3,
+            "book_name": "John",
+            "verse": 7
+          },
+          "8": {
+            "text": " The wind  blows where it wishes, and you hear its sound, but you do not know where it comes from or where it goes. So it is with everyone who is born of the Spirit.”",
+            "chapter": 3,
+            "book_name": "John",
+            "verse": 8
+          },
+          "9": {
+            "text": "Nicodemus said to him, “How can these things be?”",
+            "chapter": 3,
+            "book_name": "John",
+            "verse": 9
+          },
+          "10": {
+            "text": "Jesus answered him, “Are you the teacher of Israel and yet you do not understand these things?",
+            "chapter": 3,
+            "book_name": "John",
+            "verse": 10
+          },
+          "11": {
+            "text": "Truly, truly, I say to you, we speak of what we know, and bear witness to what we have seen, but you  do not receive our testimony.",
+            "chapter": 3,
+            "book_name": "John",
+            "verse": 11
+          },
+          "12": {
+            "text": "If I have told you earthly things and you do not believe, how can you believe if I tell you heavenly things?",
+            "chapter": 3,
+            "book_name": "John",
+            "verse": 12
+          },
+          "13": {
+            "text": " No one has ascended into heaven except he who descended from heaven, the Son of Man.",
+            "chapter": 3,
+            "book_name": "John",
+            "verse": 13
+          },
+          "14": {
+            "text": "And as Moses lifted up the serpent in the wilderness, so must the Son of Man be lifted up,",
+            "chapter": 3,
+            "book_name": "John",
+            "verse": 14
+          },
+          "15": {
+            "text": "that whoever believes in him may have eternal life.",
+            "chapter": 3,
+            "book_name": "John",
+            "verse": 15
+          },
+          "16": {
+            "text": "“For God so loved the world,  that he gave his only Son, that whoever believes in him should not perish but have eternal life.",
+            "chapter": 3,
+            "book_name": "John",
+            "verse": 16
+          },
+          "17": {
+            "text": "For God did not send his Son into the world to condemn the world, but in order that the world might be saved through him.",
+            "chapter": 3,
+            "book_name": "John",
+            "verse": 17
+          },
+          "18": {
+            "text": " Whoever believes in him is not condemned, but whoever does not believe is condemned already, because he has not believed in the name of the only Son of God.",
+            "chapter": 3,
+            "book_name": "John",
+            "verse": 18
+          },
+          "19": {
+            "text": " And this is the judgment: the light has come into the world, and people loved the darkness rather than the light because their works were evil.",
+            "chapter": 3,
+            "book_name": "John",
+            "verse": 19
+          },
+          "20": {
+            "text": " For everyone who does wicked things hates the light and does not come to the light, lest his works should be exposed.",
+            "chapter": 3,
+            "book_name": "John",
+            "verse": 20
+          },
+          "21": {
+            "text": "But whoever does what is true comes to the light, so that it may be clearly seen that his works have been carried out in God.”",
+            "chapter": 3,
+            "book_name": "John",
+            "verse": 21
+          },
+          "22": {
+            "text": "After this Jesus and his disciples went into the Judean countryside, and he remained there with them and was baptizing.",
+            "chapter": 3,
+            "book_name": "John",
+            "verse": 22
+          },
+          "23": {
+            "text": "John also was baptizing at Aenon near Salim, because water was plentiful there, and people were coming and being baptized",
+            "chapter": 3,
+            "book_name": "John",
+            "verse": 23
+          },
+          "24": {
+            "text": "(for John had not yet been put in prison).",
+            "chapter": 3,
+            "book_name": "John",
+            "verse": 24
+          },
+          "25": {
+            "text": "Now a discussion arose between some of John's disciples and a Jew over purification.",
+            "chapter": 3,
+            "book_name": "John",
+            "verse": 25
+          },
+          "26": {
+            "text": "And they came to John and said to him, “Rabbi, he who was with you across the Jordan, to whom you bore witness — look, he is baptizing, and all are going to him.”",
+            "chapter": 3,
+            "book_name": "John",
+            "verse": 26
+          },
+          "27": {
+            "text": "John answered, “A person cannot receive even one thing unless it is given him from heaven.",
+            "chapter": 3,
+            "book_name": "John",
+            "verse": 27
+          },
+          "28": {
+            "text": "You yourselves bear me witness, that I said, ‘I am not the Christ, but I have been sent before him.’",
+            "chapter": 3,
+            "book_name": "John",
+            "verse": 28
+          },
+          "29": {
+            "text": " The one who has the bride is the bridegroom. The friend of the bridegroom, who stands and hears him, rejoices greatly at the bridegroom's voice. Therefore this joy of mine is now complete.",
+            "chapter": 3,
+            "book_name": "John",
+            "verse": 29
+          },
+          "30": {
+            "text": " He must increase, but I must decrease.”",
+            "chapter": 3,
+            "book_name": "John",
+            "verse": 30
+          },
+          "31": {
+            "text": " He who comes from above is above all. He who is of the earth belongs to the earth and speaks in an earthly way. He who comes from heaven is above all.",
+            "chapter": 3,
+            "book_name": "John",
+            "verse": 31
+          },
+          "32": {
+            "text": " He bears witness to what he has seen and heard, yet no one receives his testimony.",
+            "chapter": 3,
+            "book_name": "John",
+            "verse": 32
+          },
+          "33": {
+            "text": "Whoever receives his testimony sets his seal to this, that God is true.",
+            "chapter": 3,
+            "book_name": "John",
+            "verse": 33
+          },
+          "34": {
+            "text": "For he whom God has sent utters the words of God, for he gives the Spirit without measure.",
+            "chapter": 3,
+            "book_name": "John",
+            "verse": 34
+          },
+          "35": {
+            "text": " The Father loves the Son and has given all things into his hand.",
+            "chapter": 3,
+            "book_name": "John",
+            "verse": 35
+          },
+          "36": {
+            "text": " Whoever believes in the Son has eternal life; whoever does not obey the Son shall not see life, but the wrath of God remains on him.",
+            "chapter": 3,
+            "book_name": "John",
+            "verse": 36
+          }
+        },
+        "Mark|1": {
+          "1": {
+            "text": "The beginning of the gospel of Jesus Christ, the Son of God.",
+            "chapter": 1,
+            "book_name": "Mark",
+            "verse": 1
+          },
+          "2": {
+            "text": " As it is written in Isaiah the prophet,  “Behold, I send my messenger before your face, who will prepare your way,",
+            "chapter": 1,
+            "book_name": "Mark",
+            "verse": 2
+          },
+          "3": {
+            "text": " the voice of one crying in the wilderness: ‘Prepare  the way of the Lord, make his paths straight,’”",
+            "chapter": 1,
+            "book_name": "Mark",
+            "verse": 3
+          },
+          "4": {
+            "text": " John appeared, baptizing in the wilderness and proclaiming a baptism of repentance for the forgiveness of sins.",
+            "chapter": 1,
+            "book_name": "Mark",
+            "verse": 4
+          },
+          "5": {
+            "text": "And all the country of Judea and all Jerusalem were going out to him and were being baptized by him in the river Jordan, confessing their sins.",
+            "chapter": 1,
+            "book_name": "Mark",
+            "verse": 5
+          },
+          "6": {
+            "text": "Now John was clothed with camel's hair and wore a leather belt around his waist and ate locusts and wild honey.",
+            "chapter": 1,
+            "book_name": "Mark",
+            "verse": 6
+          },
+          "7": {
+            "text": "And he preached, saying, “After me comes he who is mightier than I, the strap of whose sandals I am not worthy to stoop down and untie.",
+            "chapter": 1,
+            "book_name": "Mark",
+            "verse": 7
+          },
+          "8": {
+            "text": " I have baptized you with water, but he will baptize you with the Holy Spirit.”",
+            "chapter": 1,
+            "book_name": "Mark",
+            "verse": 8
+          },
+          "9": {
+            "text": " In those days Jesus came from Nazareth of Galilee and was baptized by John in the Jordan.",
+            "chapter": 1,
+            "book_name": "Mark",
+            "verse": 9
+          },
+          "10": {
+            "text": "And when he came up out of the water, immediately he saw the heavens being torn open and the Spirit descending on him like a dove.",
+            "chapter": 1,
+            "book_name": "Mark",
+            "verse": 10
+          },
+          "11": {
+            "text": "And a voice came from heaven, “You are my beloved Son;  with you I am well pleased.”",
+            "chapter": 1,
+            "book_name": "Mark",
+            "verse": 11
+          },
+          "12": {
+            "text": " The Spirit immediately drove him out into the wilderness.",
+            "chapter": 1,
+            "book_name": "Mark",
+            "verse": 12
+          },
+          "13": {
+            "text": " And he was in the wilderness forty days, being tempted by Satan. And he was with the wild animals, and the angels were ministering to him.",
+            "chapter": 1,
+            "book_name": "Mark",
+            "verse": 13
+          },
+          "14": {
+            "text": " Now after John was arrested, Jesus came into Galilee, proclaiming the gospel of God,",
+            "chapter": 1,
+            "book_name": "Mark",
+            "verse": 14
+          },
+          "15": {
+            "text": "and saying,  “The time is fulfilled, and the kingdom of God is at hand;  repent and believe in the gospel.”",
+            "chapter": 1,
+            "book_name": "Mark",
+            "verse": 15
+          },
+          "16": {
+            "text": " Passing alongside the Sea of Galilee, he saw Simon and Andrew the brother of Simon casting a net into the sea, for they were fishermen.",
+            "chapter": 1,
+            "book_name": "Mark",
+            "verse": 16
+          },
+          "17": {
+            "text": "And Jesus said to them, “Follow me, and I will make you become fishers of men.”",
+            "chapter": 1,
+            "book_name": "Mark",
+            "verse": 17
+          },
+          "18": {
+            "text": "And immediately they left their nets and followed him.",
+            "chapter": 1,
+            "book_name": "Mark",
+            "verse": 18
+          },
+          "19": {
+            "text": "And going on a little farther, he saw James the son of Zebedee and John his brother, who were in their boat mending the nets.",
+            "chapter": 1,
+            "book_name": "Mark",
+            "verse": 19
+          },
+          "20": {
+            "text": "And immediately he called them, and they left their father Zebedee in the boat with the hired servants and followed him.",
+            "chapter": 1,
+            "book_name": "Mark",
+            "verse": 20
+          },
+          "21": {
+            "text": " And they went into Capernaum, and immediately on the Sabbath he entered the synagogue and was teaching.",
+            "chapter": 1,
+            "book_name": "Mark",
+            "verse": 21
+          },
+          "22": {
+            "text": "And they were astonished at his teaching, for he taught them as one who had authority, and not as the scribes.",
+            "chapter": 1,
+            "book_name": "Mark",
+            "verse": 22
+          },
+          "23": {
+            "text": "And immediately there was in their synagogue a man with an unclean spirit. And he cried out,",
+            "chapter": 1,
+            "book_name": "Mark",
+            "verse": 23
+          },
+          "24": {
+            "text": " “What have you to do with us, Jesus of Nazareth? Have you come to destroy us? I know who you are — the Holy One of God.”",
+            "chapter": 1,
+            "book_name": "Mark",
+            "verse": 24
+          },
+          "25": {
+            "text": "But Jesus rebuked him, saying, “Be silent, and come out of him!”",
+            "chapter": 1,
+            "book_name": "Mark",
+            "verse": 25
+          },
+          "26": {
+            "text": "And the unclean spirit, convulsing him and crying out with a loud voice, came out of him.",
+            "chapter": 1,
+            "book_name": "Mark",
+            "verse": 26
+          },
+          "27": {
+            "text": "And they were all amazed, so that they questioned among themselves, saying, “What is this? A new teaching with authority! He commands even the unclean spirits, and they obey him.”",
+            "chapter": 1,
+            "book_name": "Mark",
+            "verse": 27
+          },
+          "28": {
+            "text": "And at once his fame spread everywhere throughout all the surrounding region of Galilee.",
+            "chapter": 1,
+            "book_name": "Mark",
+            "verse": 28
+          },
+          "29": {
+            "text": " And immediately he  left the synagogue and entered the house of Simon and Andrew, with James and John.",
+            "chapter": 1,
+            "book_name": "Mark",
+            "verse": 29
+          },
+          "30": {
+            "text": "Now Simon's mother-in-law lay ill with a fever, and immediately they told him about her.",
+            "chapter": 1,
+            "book_name": "Mark",
+            "verse": 30
+          },
+          "31": {
+            "text": "And he came and took her by the hand and lifted her up, and the fever left her, and she began to serve them.",
+            "chapter": 1,
+            "book_name": "Mark",
+            "verse": 31
+          },
+          "32": {
+            "text": "That evening at sundown they brought to him all who were sick or oppressed by demons.",
+            "chapter": 1,
+            "book_name": "Mark",
+            "verse": 32
+          },
+          "33": {
+            "text": "And the whole city was gathered together at the door.",
+            "chapter": 1,
+            "book_name": "Mark",
+            "verse": 33
+          },
+          "34": {
+            "text": " And he healed many who were sick with various diseases, and cast out many demons. And he would not permit the demons to speak, because they knew him.",
+            "chapter": 1,
+            "book_name": "Mark",
+            "verse": 34
+          },
+          "35": {
+            "text": " And rising very early in the morning, while it was still dark, he departed and went out to a desolate place, and there he prayed.",
+            "chapter": 1,
+            "book_name": "Mark",
+            "verse": 35
+          },
+          "36": {
+            "text": "And Simon and those who were with him searched for him,",
+            "chapter": 1,
+            "book_name": "Mark",
+            "verse": 36
+          },
+          "37": {
+            "text": "and they found him and said to him, “Everyone is looking for you.”",
+            "chapter": 1,
+            "book_name": "Mark",
+            "verse": 37
+          },
+          "38": {
+            "text": "And he said to them, “Let us go on to the next towns, that I may preach there also, for that is why I came out.”",
+            "chapter": 1,
+            "book_name": "Mark",
+            "verse": 38
+          },
+          "39": {
+            "text": " And he went throughout all Galilee, preaching in their synagogues and casting out demons.",
+            "chapter": 1,
+            "book_name": "Mark",
+            "verse": 39
+          },
+          "40": {
+            "text": " And a leper  came to him, imploring him, and kneeling said to him, “If you will, you can make me clean.”",
+            "chapter": 1,
+            "book_name": "Mark",
+            "verse": 40
+          },
+          "41": {
+            "text": "Moved with pity, he stretched out his hand and touched him and said to him, “I will; be clean.”",
+            "chapter": 1,
+            "book_name": "Mark",
+            "verse": 41
+          },
+          "42": {
+            "text": "And immediately the leprosy left him, and he was made clean.",
+            "chapter": 1,
+            "book_name": "Mark",
+            "verse": 42
+          },
+          "43": {
+            "text": "And Jesus  sternly charged him and sent him away at once,",
+            "chapter": 1,
+            "book_name": "Mark",
+            "verse": 43
+          },
+          "44": {
+            "text": "and said to him,  “See that you say nothing to anyone, but go, show yourself to the priest and offer for your cleansing what Moses commanded, for a proof to them.”",
+            "chapter": 1,
+            "book_name": "Mark",
+            "verse": 44
+          },
+          "45": {
+            "text": " But he went out and began to talk freely about it, and to spread the news, so that Jesus could no longer openly enter a town, but was out in desolate places, and people were coming to him from every quarter.",
+            "chapter": 1,
+            "book_name": "Mark",
+            "verse": 45
+          }
+        },
+        "Zechariah|6": {
+          "1": {
+            "text": "Again I lifted my eyes and saw, and behold, four chariots came out from between two mountains. And the mountains were mountains of bronze.",
+            "chapter": 6,
+            "book_name": "Zechariah",
+            "verse": 1
+          },
+          "2": {
+            "text": "The first chariot had red horses, the second black horses,",
+            "chapter": 6,
+            "book_name": "Zechariah",
+            "verse": 2
+          },
+          "3": {
+            "text": "the third white horses, and the fourth chariot dappled horses — all of them strong.",
+            "chapter": 6,
+            "book_name": "Zechariah",
+            "verse": 3
+          },
+          "4": {
+            "text": "Then I answered and said to the angel who talked with me, “What are these, my lord?”",
+            "chapter": 6,
+            "book_name": "Zechariah",
+            "verse": 4
+          },
+          "5": {
+            "text": "And the angel answered and said to me, “These are going out to the four winds of heaven, after presenting themselves before the Lord of all the earth.",
+            "chapter": 6,
+            "book_name": "Zechariah",
+            "verse": 5
+          },
+          "6": {
+            "text": "The chariot with the black horses goes toward the north country, the white ones go after them, and the dappled ones go toward the south country.”",
+            "chapter": 6,
+            "book_name": "Zechariah",
+            "verse": 6
+          },
+          "7": {
+            "text": "When the strong horses came out, they were impatient to go and patrol the earth. And he said, “Go, patrol the earth.” So they patrolled the earth.",
+            "chapter": 6,
+            "book_name": "Zechariah",
+            "verse": 7
+          },
+          "8": {
+            "text": "Then he cried to me, “Behold, those who go toward the north country have set my Spirit at rest in the north country.”",
+            "chapter": 6,
+            "book_name": "Zechariah",
+            "verse": 8
+          },
+          "9": {
+            "text": "And the word of the LORD came to me:",
+            "chapter": 6,
+            "book_name": "Zechariah",
+            "verse": 9
+          },
+          "10": {
+            "text": "“Take from the exiles Heldai, Tobijah, and Jedaiah, who have arrived from Babylon, and go the same day to the house of Josiah, the son of Zephaniah.",
+            "chapter": 6,
+            "book_name": "Zechariah",
+            "verse": 10
+          },
+          "11": {
+            "text": "Take from them silver and gold, and make a crown, and set it on the head of Joshua, the son of Jehozadak, the high priest.",
+            "chapter": 6,
+            "book_name": "Zechariah",
+            "verse": 11
+          },
+          "12": {
+            "text": "And say to him, ‘Thus says the LORD of hosts, “Behold, the man whose name is the Branch: for he shall branch out from his place, and he shall build the temple of the LORD.",
+            "chapter": 6,
+            "book_name": "Zechariah",
+            "verse": 12
+          },
+          "13": {
+            "text": " It is he who shall build the temple of the LORD and shall bear royal honor, and shall sit and rule on his throne. And there  shall be a priest on his throne, and the counsel of peace shall be between them both.”’",
+            "chapter": 6,
+            "book_name": "Zechariah",
+            "verse": 13
+          },
+          "14": {
+            "text": "And the crown shall be in the temple of the LORD as a reminder to Helem,  Tobijah, Jedaiah, and Hen the son of Zephaniah.",
+            "chapter": 6,
+            "book_name": "Zechariah",
+            "verse": 14
+          },
+          "15": {
+            "text": " “And those who are far off shall come and help to build the temple of the LORD. And you shall know that the LORD of hosts has sent me to you. And this shall come to pass, if you will diligently obey the voice of the LORD your God.”",
+            "chapter": 6,
+            "book_name": "Zechariah",
+            "verse": 15
+          }
+        },
+        "Acts|23": {
+          "1": {
+            "text": "And looking intently at the council, Paul said, “Brothers, I have lived my life before God in all good conscience up to this day.”",
+            "chapter": 23,
+            "book_name": "Acts",
+            "verse": 1
+          },
+          "2": {
+            "text": "And the high priest Ananias commanded those who stood by him to strike him on the mouth.",
+            "chapter": 23,
+            "book_name": "Acts",
+            "verse": 2
+          },
+          "3": {
+            "text": "Then Paul said to him, “God is going to strike you, you whitewashed wall! Are you sitting to judge me according to the law, and yet contrary to the law you order me to be struck?”",
+            "chapter": 23,
+            "book_name": "Acts",
+            "verse": 3
+          },
+          "4": {
+            "text": "Those who stood by said, “Would you revile God's high priest?”",
+            "chapter": 23,
+            "book_name": "Acts",
+            "verse": 4
+          },
+          "5": {
+            "text": "And Paul said, “I did not know, brothers, that he was the high priest, for it is written, ‘You shall not speak evil of a ruler of your people.’”",
+            "chapter": 23,
+            "book_name": "Acts",
+            "verse": 5
+          },
+          "6": {
+            "text": "Now when Paul perceived that one part were Sadducees and the other Pharisees, he cried out in the council, “Brothers, I am a Pharisee, a son of Pharisees. It is with respect to the hope and the resurrection of the dead that I am on trial.”",
+            "chapter": 23,
+            "book_name": "Acts",
+            "verse": 6
+          },
+          "7": {
+            "text": "And when he had said this, a dissension arose between the Pharisees and the Sadducees, and the assembly was divided.",
+            "chapter": 23,
+            "book_name": "Acts",
+            "verse": 7
+          },
+          "8": {
+            "text": "For the Sadducees say that there is no resurrection, nor angel, nor spirit, but the Pharisees acknowledge them all.",
+            "chapter": 23,
+            "book_name": "Acts",
+            "verse": 8
+          },
+          "9": {
+            "text": "Then a great clamor arose, and some of the scribes of the Pharisees' party stood up and contended sharply, “We find nothing wrong in this man. What if a spirit or an angel spoke to him?”",
+            "chapter": 23,
+            "book_name": "Acts",
+            "verse": 9
+          },
+          "10": {
+            "text": "And when the dissension became violent, the tribune, afraid that Paul would be torn to pieces by them, commanded the soldiers to go down and take him away from among them by force and bring him into the barracks.",
+            "chapter": 23,
+            "book_name": "Acts",
+            "verse": 10
+          },
+          "11": {
+            "text": " The following night the Lord stood by him and said,  “Take courage, for as you have testified to the facts about me in Jerusalem, so you must testify also in Rome.”",
+            "chapter": 23,
+            "book_name": "Acts",
+            "verse": 11
+          },
+          "12": {
+            "text": "When it was day, the Jews made a plot and bound themselves by an oath neither to eat nor drink till they had killed Paul.",
+            "chapter": 23,
+            "book_name": "Acts",
+            "verse": 12
+          },
+          "13": {
+            "text": "There were more than forty who made this conspiracy.",
+            "chapter": 23,
+            "book_name": "Acts",
+            "verse": 13
+          },
+          "14": {
+            "text": "They went to the chief priests and elders and said, “We have strictly bound ourselves by an oath to taste no food till we have killed Paul.",
+            "chapter": 23,
+            "book_name": "Acts",
+            "verse": 14
+          },
+          "15": {
+            "text": "Now therefore you, along with the council, give notice to the tribune to bring him down to you, as though you were going to determine his case more exactly. And we are ready to kill him before he comes near.”",
+            "chapter": 23,
+            "book_name": "Acts",
+            "verse": 15
+          },
+          "16": {
+            "text": "Now the son of Paul's sister heard of their ambush, so he went and entered the barracks and told Paul.",
+            "chapter": 23,
+            "book_name": "Acts",
+            "verse": 16
+          },
+          "17": {
+            "text": "Paul called one of the centurions and said, “Take this young man to the tribune, for he has something to tell him.”",
+            "chapter": 23,
+            "book_name": "Acts",
+            "verse": 17
+          },
+          "18": {
+            "text": "So he took him and brought him to the tribune and said, “Paul the prisoner called me and asked me to bring this young man to you, as he has something to say to you.”",
+            "chapter": 23,
+            "book_name": "Acts",
+            "verse": 18
+          },
+          "19": {
+            "text": "The tribune took him by the hand, and going aside asked him privately, “What is it that you have to tell me?”",
+            "chapter": 23,
+            "book_name": "Acts",
+            "verse": 19
+          },
+          "20": {
+            "text": "And he said, “The Jews have agreed to ask you to bring Paul down to the council tomorrow, as though they were going to inquire somewhat more closely about him.",
+            "chapter": 23,
+            "book_name": "Acts",
+            "verse": 20
+          },
+          "21": {
+            "text": "But do not be persuaded by them, for more than forty of their men are lying in ambush for him, who have bound themselves by an oath neither to eat nor drink till they have killed him. And now they are ready, waiting for your consent.”",
+            "chapter": 23,
+            "book_name": "Acts",
+            "verse": 21
+          },
+          "22": {
+            "text": "So the tribune dismissed the young man, charging him, “Tell no one that you have informed me of these things.”",
+            "chapter": 23,
+            "book_name": "Acts",
+            "verse": 22
+          },
+          "23": {
+            "text": "Then he called two of the centurions and said, “Get ready two hundred soldiers, with seventy horsemen and two hundred spearmen to go as far as Caesarea at the third hour of the night.",
+            "chapter": 23,
+            "book_name": "Acts",
+            "verse": 23
+          },
+          "24": {
+            "text": "Also provide mounts for Paul to ride and bring him safely to Felix the governor.”",
+            "chapter": 23,
+            "book_name": "Acts",
+            "verse": 24
+          },
+          "25": {
+            "text": "And he wrote a letter to this effect:",
+            "chapter": 23,
+            "book_name": "Acts",
+            "verse": 25
+          },
+          "26": {
+            "text": "“Claudius Lysias, to his Excellency the governor Felix, greetings.",
+            "chapter": 23,
+            "book_name": "Acts",
+            "verse": 26
+          },
+          "27": {
+            "text": " This man was seized by the Jews and was about to be killed by them when I came upon them with the soldiers and rescued him, having learned that he was a Roman citizen.",
+            "chapter": 23,
+            "book_name": "Acts",
+            "verse": 27
+          },
+          "28": {
+            "text": "And desiring to know the charge for which they were accusing him, I brought him down to their council.",
+            "chapter": 23,
+            "book_name": "Acts",
+            "verse": 28
+          },
+          "29": {
+            "text": "I found that he was being accused about questions of their law, but charged with nothing deserving death or imprisonment.",
+            "chapter": 23,
+            "book_name": "Acts",
+            "verse": 29
+          },
+          "30": {
+            "text": " And when it was disclosed to me that there would be a plot against the man, I sent him to you at once, ordering his accusers also to state before you what they have against him.”",
+            "chapter": 23,
+            "book_name": "Acts",
+            "verse": 30
+          },
+          "31": {
+            "text": "So the soldiers, according to their instructions, took Paul and brought him by night to Antipatris.",
+            "chapter": 23,
+            "book_name": "Acts",
+            "verse": 31
+          },
+          "32": {
+            "text": "And on the next day they returned to the barracks, letting the horsemen go on with him.",
+            "chapter": 23,
+            "book_name": "Acts",
+            "verse": 32
+          },
+          "33": {
+            "text": "When they had come to Caesarea and delivered the letter to the governor, they presented Paul also before him.",
+            "chapter": 23,
+            "book_name": "Acts",
+            "verse": 33
+          },
+          "34": {
+            "text": "On reading the letter, he asked what province he was from. And when he learned that he was from Cilicia,",
+            "chapter": 23,
+            "book_name": "Acts",
+            "verse": 34
+          },
+          "35": {
+            "text": "he said, “I will give you a hearing when your accusers arrive.” And he commanded him to be guarded in Herod's praetorium.",
+            "chapter": 23,
+            "book_name": "Acts",
+            "verse": 35
+          }
+        },
+        "Acts|22": {
+          "1": {
+            "text": " “Brothers and fathers, hear the defense that I now make before you.”",
+            "chapter": 22,
+            "book_name": "Acts",
+            "verse": 1
+          },
+          "2": {
+            "text": "And when they heard that he was addressing them in the Hebrew language,  they became even more quiet. And he said:",
+            "chapter": 22,
+            "book_name": "Acts",
+            "verse": 2
+          },
+          "3": {
+            "text": " “I am a Jew, born in Tarsus in Cilicia, but brought up in this city, educated at the feet of Gamaliel  according to the strict manner of the law of our fathers, being zealous for God as all of you are this day.",
+            "chapter": 22,
+            "book_name": "Acts",
+            "verse": 3
+          },
+          "4": {
+            "text": " I persecuted this Way to the death, binding and delivering to prison both men and women,",
+            "chapter": 22,
+            "book_name": "Acts",
+            "verse": 4
+          },
+          "5": {
+            "text": "as the high priest and the whole council of elders can bear me witness. From them I received letters to the brothers, and I journeyed toward Damascus to take those also who were there and bring them in bonds to Jerusalem to be punished.",
+            "chapter": 22,
+            "book_name": "Acts",
+            "verse": 5
+          },
+          "6": {
+            "text": " “As I was on my way and drew near to Damascus, about noon a great light from heaven suddenly shone around me.",
+            "chapter": 22,
+            "book_name": "Acts",
+            "verse": 6
+          },
+          "7": {
+            "text": "And I fell to the ground and heard a voice saying to me, ‘Saul, Saul, why are you persecuting me?’",
+            "chapter": 22,
+            "book_name": "Acts",
+            "verse": 7
+          },
+          "8": {
+            "text": "And I answered, ‘Who are you, Lord?’ And he said to me, ‘I am Jesus of Nazareth, whom you are persecuting.’",
+            "chapter": 22,
+            "book_name": "Acts",
+            "verse": 8
+          },
+          "9": {
+            "text": " Now those who were with me saw the light but did not understand  the voice of the one who was speaking to me.",
+            "chapter": 22,
+            "book_name": "Acts",
+            "verse": 9
+          },
+          "10": {
+            "text": "And I said, ‘What shall I do, Lord?’ And the Lord said to me, ‘Rise, and go into Damascus, and there you will be told all that is appointed for you to do.’",
+            "chapter": 22,
+            "book_name": "Acts",
+            "verse": 10
+          },
+          "11": {
+            "text": "And since I could not see because of the brightness of that light, I was led by the hand by those who were with me, and came into Damascus.",
+            "chapter": 22,
+            "book_name": "Acts",
+            "verse": 11
+          },
+          "12": {
+            "text": "“And one Ananias, a devout man according to the law, well spoken of by all the Jews who lived there,",
+            "chapter": 22,
+            "book_name": "Acts",
+            "verse": 12
+          },
+          "13": {
+            "text": " came to me, and standing by me said to me, ‘Brother Saul, receive your sight.’ And at that very hour I received my sight and saw him.",
+            "chapter": 22,
+            "book_name": "Acts",
+            "verse": 13
+          },
+          "14": {
+            "text": "And he said, ‘The God of our fathers appointed you to know his will, to see the Righteous One and to hear a voice from his mouth;",
+            "chapter": 22,
+            "book_name": "Acts",
+            "verse": 14
+          },
+          "15": {
+            "text": "for you will be a witness for him to everyone of what you have seen and heard.",
+            "chapter": 22,
+            "book_name": "Acts",
+            "verse": 15
+          },
+          "16": {
+            "text": "And now why do you wait? Rise and be baptized and wash away your sins, calling on his name.’",
+            "chapter": 22,
+            "book_name": "Acts",
+            "verse": 16
+          },
+          "17": {
+            "text": " “When I had returned to Jerusalem and was praying in the temple, I fell into a trance",
+            "chapter": 22,
+            "book_name": "Acts",
+            "verse": 17
+          },
+          "18": {
+            "text": "and saw him saying to me,  ‘Make haste and get out of Jerusalem quickly, because they will not accept your testimony about me.’",
+            "chapter": 22,
+            "book_name": "Acts",
+            "verse": 18
+          },
+          "19": {
+            "text": "And I said, ‘Lord, they themselves know that in one synagogue after another I imprisoned and beat those who believed in you.",
+            "chapter": 22,
+            "book_name": "Acts",
+            "verse": 19
+          },
+          "20": {
+            "text": "And when the blood of Stephen your witness was being shed, I myself was standing by and approving and watching over the garments of those who killed him.’",
+            "chapter": 22,
+            "book_name": "Acts",
+            "verse": 20
+          },
+          "21": {
+            "text": "And he said to me, ‘Go, for I will send you far away to the Gentiles.’”",
+            "chapter": 22,
+            "book_name": "Acts",
+            "verse": 21
+          },
+          "22": {
+            "text": "Up to this word they listened to him. Then they raised their voices and said, “Away with such a fellow from the earth! For he should not be allowed to live.”",
+            "chapter": 22,
+            "book_name": "Acts",
+            "verse": 22
+          },
+          "23": {
+            "text": "And as they were shouting and throwing off their cloaks and flinging dust into the air,",
+            "chapter": 22,
+            "book_name": "Acts",
+            "verse": 23
+          },
+          "24": {
+            "text": "the tribune ordered him to be brought into the barracks, saying that he should be examined by flogging, to find out why they were shouting against him like this.",
+            "chapter": 22,
+            "book_name": "Acts",
+            "verse": 24
+          },
+          "25": {
+            "text": "But when they had stretched him out for the whips,  Paul said to the centurion who was standing by, “Is it lawful for you to flog a man who is a Roman citizen and uncondemned?”",
+            "chapter": 22,
+            "book_name": "Acts",
+            "verse": 25
+          },
+          "26": {
+            "text": "When the centurion heard this, he went to the tribune and said to him, “What are you about to do? For this man is a Roman citizen.”",
+            "chapter": 22,
+            "book_name": "Acts",
+            "verse": 26
+          },
+          "27": {
+            "text": "So the tribune came and said to him, “Tell me, are you a Roman citizen?” And he said, “Yes.”",
+            "chapter": 22,
+            "book_name": "Acts",
+            "verse": 27
+          },
+          "28": {
+            "text": "The tribune answered, “I bought this citizenship for a large sum.” Paul said, “But I am a citizen by birth.”",
+            "chapter": 22,
+            "book_name": "Acts",
+            "verse": 28
+          },
+          "29": {
+            "text": "So those who were about to examine him withdrew from him immediately, and the tribune also was afraid, for he realized that Paul was a Roman citizen and that he had bound him.",
+            "chapter": 22,
+            "book_name": "Acts",
+            "verse": 29
+          },
+          "30": {
+            "text": "But on the next day, desiring to know the real reason why he was being accused by the Jews, he unbound him and commanded the chief priests and all the council to meet, and he brought Paul down and set him before them.",
+            "chapter": 22,
+            "book_name": "Acts",
+            "verse": 30
+          }
+        },
+        "Zechariah|7": {
+          "1": {
+            "text": " In the fourth year of King Darius, the word of the LORD came to Zechariah on the fourth day of the ninth month, which is Chislev.",
+            "chapter": 7,
+            "book_name": "Zechariah",
+            "verse": 1
+          },
+          "2": {
+            "text": "Now the people of Bethel had sent Sharezer and Regem-melech and their men to entreat the favor of the LORD,",
+            "chapter": 7,
+            "book_name": "Zechariah",
+            "verse": 2
+          },
+          "3": {
+            "text": " saying to the priests of the house of the LORD of hosts and the prophets, “Should I weep and abstain in the fifth month, as I have done for so many years?”",
+            "chapter": 7,
+            "book_name": "Zechariah",
+            "verse": 3
+          },
+          "4": {
+            "text": "Then the word of the LORD of hosts came to me:",
+            "chapter": 7,
+            "book_name": "Zechariah",
+            "verse": 4
+          },
+          "5": {
+            "text": "“Say to all the people of the land and the priests, ‘When you fasted and mourned in the fifth month and in the seventh, for these seventy years, was it for me that you fasted?",
+            "chapter": 7,
+            "book_name": "Zechariah",
+            "verse": 5
+          },
+          "6": {
+            "text": " And when you eat and when you drink, do you not eat for yourselves and drink for yourselves?",
+            "chapter": 7,
+            "book_name": "Zechariah",
+            "verse": 6
+          },
+          "7": {
+            "text": " Were not these the words that the LORD proclaimed by the former prophets, when Jerusalem was inhabited and prosperous, with her cities around her, and the South and the lowland were inhabited?’”",
+            "chapter": 7,
+            "book_name": "Zechariah",
+            "verse": 7
+          },
+          "8": {
+            "text": "And the word of the LORD came to Zechariah, saying,",
+            "chapter": 7,
+            "book_name": "Zechariah",
+            "verse": 8
+          },
+          "9": {
+            "text": "“Thus says the LORD of hosts, Render true judgments, show kindness and mercy to one another,",
+            "chapter": 7,
+            "book_name": "Zechariah",
+            "verse": 9
+          },
+          "10": {
+            "text": " do not oppress the widow, the fatherless, the sojourner, or the poor, and let none of you devise evil against another in your heart.”",
+            "chapter": 7,
+            "book_name": "Zechariah",
+            "verse": 10
+          },
+          "11": {
+            "text": "But they refused to pay attention and turned a stubborn shoulder and stopped their ears that they might not hear.",
+            "chapter": 7,
+            "book_name": "Zechariah",
+            "verse": 11
+          },
+          "12": {
+            "text": " They made their hearts diamond-hard lest they should hear the law and the words that the LORD of hosts had sent by his Spirit through the former prophets. Therefore great anger came from the LORD of hosts.",
+            "chapter": 7,
+            "book_name": "Zechariah",
+            "verse": 12
+          },
+          "13": {
+            "text": " “As I  called, and they would not hear, so they called, and I would not hear,” says the LORD of hosts,",
+            "chapter": 7,
+            "book_name": "Zechariah",
+            "verse": 13
+          },
+          "14": {
+            "text": " “and I scattered them with a whirlwind among all the nations that they had not known. Thus the land they left was desolate, so that no one went to and fro, and the pleasant land was made desolate.”",
+            "chapter": 7,
+            "book_name": "Zechariah",
+            "verse": 14
+          }
+        },
+        "Job|29": {
+          "1": {
+            "text": "And Job again took up his discourse, and said:",
+            "chapter": 29,
+            "book_name": "Job",
+            "verse": 1
+          },
+          "2": {
+            "text": "“Oh, that I were as in the months of old, as in the days when God watched over me,",
+            "chapter": 29,
+            "book_name": "Job",
+            "verse": 2
+          },
+          "3": {
+            "text": "when his lamp shone upon my head, and by his light I walked through darkness,",
+            "chapter": 29,
+            "book_name": "Job",
+            "verse": 3
+          },
+          "4": {
+            "text": "as I was in my prime,  when the friendship of God was upon my tent,",
+            "chapter": 29,
+            "book_name": "Job",
+            "verse": 4
+          },
+          "5": {
+            "text": "when the Almighty was yet with me, when my children were all around me,",
+            "chapter": 29,
+            "book_name": "Job",
+            "verse": 5
+          },
+          "6": {
+            "text": "when my steps were washed with butter, and the rock poured out for me streams of oil!",
+            "chapter": 29,
+            "book_name": "Job",
+            "verse": 6
+          },
+          "7": {
+            "text": "When I went out to the gate of the city, when I prepared my seat in the square,",
+            "chapter": 29,
+            "book_name": "Job",
+            "verse": 7
+          },
+          "8": {
+            "text": "the young men saw me and withdrew, and the aged rose and stood;",
+            "chapter": 29,
+            "book_name": "Job",
+            "verse": 8
+          },
+          "9": {
+            "text": "the princes refrained from talking and laid their hand on their mouth;",
+            "chapter": 29,
+            "book_name": "Job",
+            "verse": 9
+          },
+          "10": {
+            "text": "the voice of the nobles was hushed, and their tongue stuck to the roof of their mouth.",
+            "chapter": 29,
+            "book_name": "Job",
+            "verse": 10
+          },
+          "11": {
+            "text": "When the ear heard, it called me blessed, and when the eye saw, it approved,",
+            "chapter": 29,
+            "book_name": "Job",
+            "verse": 11
+          },
+          "12": {
+            "text": "because I delivered the poor who cried for help, and the fatherless who had none to help him.",
+            "chapter": 29,
+            "book_name": "Job",
+            "verse": 12
+          },
+          "13": {
+            "text": " The blessing of him who was about to perish came upon me, and I caused the widow's heart to sing for joy.",
+            "chapter": 29,
+            "book_name": "Job",
+            "verse": 13
+          },
+          "14": {
+            "text": "I put on righteousness, and it clothed me; my justice was like a robe and a turban.",
+            "chapter": 29,
+            "book_name": "Job",
+            "verse": 14
+          },
+          "15": {
+            "text": "I was eyes to the blind and feet to the lame.",
+            "chapter": 29,
+            "book_name": "Job",
+            "verse": 15
+          },
+          "16": {
+            "text": "I was a father to the needy, and I searched out the cause of him whom I did not know.",
+            "chapter": 29,
+            "book_name": "Job",
+            "verse": 16
+          },
+          "17": {
+            "text": "I broke the fangs of the unrighteous and made him drop his prey from his teeth.",
+            "chapter": 29,
+            "book_name": "Job",
+            "verse": 17
+          },
+          "18": {
+            "text": " Then I thought, ‘I shall die in my nest, and I shall multiply my days as the sand,",
+            "chapter": 29,
+            "book_name": "Job",
+            "verse": 18
+          },
+          "19": {
+            "text": "my roots spread out to the waters, with the dew all night on my branches,",
+            "chapter": 29,
+            "book_name": "Job",
+            "verse": 19
+          },
+          "20": {
+            "text": "my glory fresh with me, and my bow ever new in my hand.’",
+            "chapter": 29,
+            "book_name": "Job",
+            "verse": 20
+          },
+          "21": {
+            "text": "“Men listened to me and waited and kept silence for my counsel.",
+            "chapter": 29,
+            "book_name": "Job",
+            "verse": 21
+          },
+          "22": {
+            "text": "After I spoke they did not speak again, and my word dropped upon them.",
+            "chapter": 29,
+            "book_name": "Job",
+            "verse": 22
+          },
+          "23": {
+            "text": "They waited for me as for the rain, and they opened their mouths as for the spring rain.",
+            "chapter": 29,
+            "book_name": "Job",
+            "verse": 23
+          },
+          "24": {
+            "text": "I smiled on them when they had no confidence, and the light of my face they did not cast down.",
+            "chapter": 29,
+            "book_name": "Job",
+            "verse": 24
+          },
+          "25": {
+            "text": "I chose their way and sat as chief, and I lived like a king among his troops, like one who comforts mourners.",
+            "chapter": 29,
+            "book_name": "Job",
+            "verse": 25
+          }
+        }
+      }
+    }
+  }
+}

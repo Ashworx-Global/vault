@@ -1,1 +1,6 @@
-{}
+{
+  "accentColor": "#44c55e",
+  "enabledCssSnippets": [
+    "verse"
+  ]
+}

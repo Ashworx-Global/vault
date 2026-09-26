@@ -1,0 +1,574 @@
+/* Bible Verse Plugin - Styles
+ * Uses Obsidian's native CSS variables directly for reliable
+ * light/dark theme compatibility. No custom :root overrides.
+ *
+ * Obsidian variables used:
+ *   --text-normal          body text
+ *   --text-muted           copyright / secondary text
+ *   --text-accent          links
+ *   --interactive-accent   accent color (borders, highlights)
+ *   --background-primary   main editor bg
+ *   --background-secondary subtle panel bg
+ *   --background-modifier-border  borders
+ */
+
+/* ========================
+   Base / Shared
+   ======================== */
+.bible-verse {
+  margin: 0.75em 0;
+  font-size: 0.95em;
+  line-height: 1.6;
+  color: var(--text-normal);
+}
+
+.bible-verse-text {
+  margin: 0;
+  white-space: pre-wrap;
+  color: var(--text-normal);
+}
+
+.bible-verse-ref {
+  color: var(--text-accent);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.bible-verse-ref:hover {
+  text-decoration: underline;
+}
+
+.bible-verse-copyright {
+  font-size: 0.75em;
+  color: var(--text-muted);
+  margin-top: 0.25em;
+}
+
+.bible-verse-footer {
+  margin-top: 0.5em;
+  display: flex;
+  align-items: center;
+  gap: 0.75em;
+  flex-wrap: wrap;
+  color: var(--text-normal);
+}
+
+/* ========================
+   Sidebar Style
+   ======================== */
+.bible-verse-sidebar {
+  border-left: 3px solid var(--interactive-accent);
+  /* Top padding is adjustable via settings (GitHub issue #5). 
+     Keep the other sides for breathing room. */
+  padding: var(--bible-verse-sidebar-top-padding, 0.5em) 0.75em 0.5em 1em;
+  background: transparent;
+  color: var(--text-normal);
+}
+
+/* Ensure the first rendered child (body/text) has no top margin pushing
+   it down below the sidebar's top edge. */
+.bible-verse-sidebar > :first-child,
+.bible-verse-sidebar .bible-verse-body,
+.bible-verse-sidebar .bible-verse-text {
+  margin-top: 0;
+}
+
+/* ========================
+   Callout Style
+   ======================== */
+.bible-verse-callout {
+  background: var(--background-secondary);
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 6px;
+  overflow: hidden;
+  color: var(--text-normal);
+}
+
+.bible-verse-callout .bible-verse-header {
+  background: var(--background-secondary-alt);
+  padding: 0.4em 0.75em;
+  display: flex;
+  align-items: center;
+  gap: 0.6em;
+  border-bottom: 1px solid var(--background-modifier-border);
+  font-weight: 600;
+  color: var(--text-normal);
+}
+
+.bible-verse-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  opacity: 0.7;
+}
+
+.bible-verse-icon svg {
+  width: 1.1em;
+  height: 1.1em;
+}
+
+.bible-verse-callout .bible-verse-body {
+  padding: 0.75em;
+  color: var(--text-normal);
+}
+
+.bible-verse-callout .bible-verse-copyright {
+  padding: 0 0.75em 0.5em;
+  color: var(--text-muted);
+}
+
+/* ========================
+   Blockquote Style
+   ======================== */
+.bible-verse-blockquote {
+  border-left: 3px solid var(--background-modifier-border);
+  padding: 0.5em 0.75em 0.5em 1em;
+  background: var(--background-secondary);
+  border-radius: 0 6px 6px 0;
+  font-style: italic;
+  color: var(--text-normal);
+}
+
+.bible-verse-blockquote .bible-verse-footer {
+  font-style: normal;
+  color: var(--text-normal);
+}
+
+/* ========================
+   Inline Style
+   ======================== */
+.bible-verse-inline {
+  display: inline;
+  margin: 0;
+  color: var(--text-normal);
+}
+
+.bible-verse-inline .bible-verse-text {
+  display: inline;
+  color: var(--text-normal);
+}
+
+.bible-verse-inline .bible-verse-ref {
+  font-size: 0.9em;
+}
+
+.bible-verse-inline .bible-verse-copyright {
+  display: inline;
+  margin-left: 0.25em;
+  color: var(--text-muted);
+}
+
+/* ========================
+   Link-only (placeholder)
+   ======================== */
+.bible-verse-link {
+  display: inline;
+  margin: 0;
+}
+
+.bible-verse-link .bible-verse-ref {
+  font-weight: 500;
+  color: var(--text-accent);
+}
+
+/* Placeholder shown in the editor for a reference that will bake on read. */
+.bible-verse-bake-pending {
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* ========================
+   Error
+   ======================== */
+.bible-verse-error {
+  color: var(--text-error, #e53e3e);
+  background: rgba(229, 62, 62, 0.1);
+  padding: 0.5em 0.75em;
+  border-radius: 6px;
+  border-left: 3px solid var(--text-error, #e53e3e);
+  font-size: 0.9em;
+}
+
+/* ========================
+   Comparison / Parallel View
+   ======================== */
+.bible-verse-comparison {
+  margin: 0.75em 0;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 6px;
+  overflow: hidden;
+  color: var(--text-normal);
+}
+
+.bible-verse-comparison-header {
+  background: var(--background-secondary);
+  padding: 0.5em 0.75em;
+  font-weight: 700;
+  border-bottom: 1px solid var(--background-modifier-border);
+  font-size: 1em;
+  color: var(--text-normal);
+}
+
+.bible-verse-comparison-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 0;
+}
+
+.bible-verse-comparison-col {
+  padding: 0.75em;
+  border-right: 1px solid var(--background-modifier-border);
+}
+
+.bible-verse-comparison-col:last-child {
+  border-right: none;
+}
+
+.bible-verse-comparison-trans {
+  font-weight: 700;
+  font-size: 0.85em;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5em;
+  color: var(--interactive-accent);
+}
+
+.bible-verse-comparison-trans a {
+  color: var(--interactive-accent);
+  text-decoration: none;
+}
+
+.bible-verse-comparison-trans a:hover {
+  text-decoration: underline;
+}
+
+.bible-verse-comparison-col .bible-verse-text {
+  font-size: 0.93em;
+  color: var(--text-normal);
+}
+
+.bible-verse-comparison-col .bible-verse-copyright {
+  margin-top: 0.5em;
+  color: var(--text-muted);
+}
+
+/* Responsive: stack columns on narrow views */
+@media (max-width: 600px) {
+  .bible-verse-comparison-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .bible-verse-comparison-col {
+    border-right: none;
+    border-bottom: 1px solid var(--background-modifier-border);
+  }
+
+  .bible-verse-comparison-col:last-child {
+    border-bottom: none;
+  }
+}
+
+/* Prevent CM6 editor's white-space: pre-wrap from being inherited into verse
+   content. Without this, the \n text nodes that MarkdownRenderer emits after
+   each <br> render as extra blank lines in Live Preview. */
+.bible-verse .bible-verse-body {
+  white-space: normal;
+}
+
+/* Paragraph spacing within verse content.
+   Uses our own class hierarchy for specificity — avoids relying on
+   Obsidian parent contexts which differ between reading/preview/editor.
+   nl-mode verses stay compact; para-mode gets a visible paragraph gap. */
+.bible-verse .bible-verse-body p {
+  margin: 0;
+}
+.bible-verse--para .bible-verse-body p + p {
+  margin-top: 0.75em;
+}
+
+/* ========================
+   Settings tab
+   ======================== */
+.bible-verse-settings-note {
+  font-size: 0.85em;
+  opacity: 0.7;
+}
+
+.bible-verse-settings-ref {
+  margin: 0.5em 0 1em;
+  font-size: 0.9em;
+}
+
+.bible-verse-settings-ref summary {
+  cursor: pointer;
+  opacity: 0.7;
+  user-select: none;
+  margin-bottom: 0.5em;
+}
+
+.bible-verse-settings-ref table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.bible-verse-settings-ref td {
+  padding: 0.2em 0.75em 0.2em 0;
+  vertical-align: top;
+  color: var(--text-normal);
+}
+
+.bible-verse-settings-ref td:first-child {
+  white-space: nowrap;
+}
+
+.bible-verse-settings-ref td code {
+  font-size: 0.85em;
+}
+
+/* ========================
+   Quick Insert Modal
+   ======================== */
+.bible-verse-quick-input {
+  width: 100%;
+  padding: 8px 12px;
+  font-size: 1.1em;
+  border: 2px solid var(--background-modifier-border);
+  border-radius: 6px;
+  background: var(--background-primary);
+  color: var(--text-normal);
+  margin-bottom: 0.5em;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.bible-verse-quick-input:focus {
+  border-color: var(--interactive-accent);
+}
+
+.bible-verse-quick-status {
+  font-size: 0.9em;
+  min-height: 1.4em;
+  margin-bottom: 0.75em;
+  font-weight: 500;
+}
+
+.bible-verse-quick-status.is-valid,
+.bible-verse-quick-input.is-valid {
+  color: var(--text-success);
+  border-color: var(--text-success);
+}
+
+.bible-verse-quick-status.is-invalid,
+.bible-verse-quick-input.is-invalid {
+  color: var(--text-error);
+  border-color: var(--text-error);
+}
+
+/* ========================
+   Suggest popup
+   ======================== */
+.bible-suggest-prefix {
+  opacity: 0.5;
+}
+
+.bible-suggest-modifier {
+  font-weight: 600;
+}
+
+.bible-suggest-name {
+  opacity: 0.5;
+  font-size: 0.9em;
+  margin-left: 8px;
+}
+
+.bible-suggest-label {
+  margin-left: auto;
+  opacity: 0.5;
+  font-size: 0.85em;
+  padding-left: 12px;
+}
+
+/* Paragraph separator injected between inline-mode paragraph groups.
+   A block span with controlled height — avoids the full blank line of <br><br>. */
+.bible-verse-para-break {
+  display: block;
+  height: 0.5em;
+}
+
+/* Per-verse line break injected in inline mode when "new line per verse" is on.
+   Zero-height block span — a plain line break with no extra gap. */
+.bible-verse-line-break {
+  display: block;
+  height: 0;
+}
+
+/* ========================
+   Container (wraps inline replacements)
+   ======================== */
+.bible-verse-container {
+  display: inline;
+}
+
+/* ========================
+   Live Preview pill (CM6 ViewPlugin)
+   Shown in the editor when cursor is not inside a {ref} token.
+   ======================== */
+.bible-verse-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25em;
+  padding: 0.05em 0.5em;
+  border-radius: 999px;
+  font-size: 0.88em;
+  font-weight: 500;
+  line-height: 1.6;
+  cursor: pointer;
+  text-decoration: none;
+  color: var(--interactive-accent);
+  background: color-mix(in srgb, var(--interactive-accent) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--interactive-accent) 30%, transparent);
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.bible-verse-pill:hover {
+  background: color-mix(in srgb, var(--interactive-accent) 22%, transparent);
+  border-color: var(--interactive-accent);
+  text-decoration: none;
+}
+
+/* ── Verse shift controls (#49) ─────────────────────────────────────────── */
+
+/* Wraps the reference label together with the controls, so travelling from one
+   to the other never leaves the hover zone. */
+.bible-verse-shift-zone {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+}
+
+.bible-verse-shift {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.15em;
+  vertical-align: middle;
+
+  /* Hidden rather than removed: the controls keep their width at all times, so
+     revealing them never reflows the surrounding text. That matters most for
+     the inline display style, where the label sits mid-sentence. */
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 120ms ease-in-out;
+}
+
+.bible-verse-shift-zone:hover .bible-verse-shift,
+.bible-verse-shift-zone.is-revealed .bible-verse-shift {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Keyboard users get the same reveal when a control takes focus. */
+.bible-verse-shift:focus-within {
+  visibility: visible;
+  opacity: 1;
+}
+
+.bible-verse-shift-btn,
+.bible-verse-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  /* Sized as a comfortable pointer target without dominating an inline verse.
+     The sermon-notes case is repeated tapping, so it is deliberately larger
+     than the surrounding text rather than scaled to it. */
+  min-width: 1.6em;
+  height: 1.6em;
+  padding: 0;
+  box-shadow: none;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--radius-s);
+  background: var(--background-secondary);
+  color: var(--text-muted);
+  font-size: 0.85em;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.bible-verse-shift-btn:hover:not(:disabled),
+.bible-verse-toggle-btn:hover:not(:disabled) {
+  background: var(--background-modifier-hover);
+  color: var(--text-normal);
+  border-color: var(--interactive-accent);
+}
+
+.bible-verse-shift-btn:active:not(:disabled),
+.bible-verse-toggle-btn:active:not(:disabled) {
+  background: color-mix(in srgb, var(--interactive-accent) 20%, transparent);
+}
+
+.bible-verse-shift-btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+/* Separate the nudge pair from the formatting toggles. The sibling selector
+   only matches a toggle that directly follows a shift button, so references
+   with no +/- (whole-chapter and friends) get no stray leading gap. */
+.bible-verse-shift-btn + .bible-verse-toggle-btn {
+  margin-left: 0.45em;
+}
+
+.bible-verse-toggle-btn .svg-icon {
+  width: 0.95em;
+  height: 0.95em;
+}
+
+/* Two independent signals on one button (#51):
+   colour carries the effective value (is the verse doing this right now),
+   opacity and border carry where that value came from. A dimmed toggle is
+   inheriting the plugin setting; a solid one is pinned by the token itself. */
+.bible-verse-toggle-btn {
+  position: relative;
+  opacity: 0.5;
+  color: var(--text-faint);
+}
+
+.bible-verse-toggle-btn.is-on {
+  color: var(--interactive-accent);
+}
+
+.bible-verse-toggle-btn.is-pinned {
+  opacity: 1;
+  border-color: color-mix(in srgb, var(--interactive-accent) 55%, var(--background-modifier-border));
+}
+
+/* "Off" needs a mark of its own. Colour alone is ambiguous at icon size, and
+   text-decoration does nothing to an SVG, so strike the icon through. Keyed on
+   the effective value, not on pinning: off is off whether it came from the
+   token or from settings. */
+.bible-verse-toggle-btn:not(.is-on)::after {
+  content: "";
+  position: absolute;
+  left: 12%;
+  right: 12%;
+  top: 50%;
+  border-top: 1.5px solid currentColor;
+  transform: rotate(-45deg);
+}
+
+.bible-verse-toggle-btn:hover:not(:disabled) {
+  opacity: 1;
+}
+
+/* A flag the active provider cannot honour — shown so the strip stays the same
+   shape across translations, but inert and without the on/off strike, which
+   would imply a state it does not have. */
+.bible-verse-toggle-btn.is-unsupported {
+  opacity: 0.25;
+  cursor: default;
+}
+
+.bible-verse-toggle-btn.is-unsupported::after {
+  content: none;
+}

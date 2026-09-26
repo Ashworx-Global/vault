@@ -1,0 +1,16 @@
+/* Verse pages: add `cssclasses: [verse]` to the note's properties.
+   Enable this snippet in Settings → Appearance → CSS snippets. */
+
+.verse blockquote {
+  font-size: 1.1em;
+  font-style: italic;
+  border-left: 3px solid var(--text-accent, #daa520);
+  background: rgba(218, 165, 32, 0.08);
+  padding: 0.6em 1em;
+  border-radius: 0 6px 6px 0;
+}
+
+.verse .markdown-embed-link,
+.verse .internal-embed {
+  border-left-color: var(--text-accent, #daa520);
+}

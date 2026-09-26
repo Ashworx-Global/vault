@@ -1,0 +1,15 @@
+{
+  "defaultTranslation": "ESV",
+  "preferredWebsite": "BibleGateway",
+  "displayStyle": "callout",
+  "persistVerseText": true,
+  "sidebarTopPadding": 0.5,
+  "showVerseNumbers": true,
+  "verseNewLine": true,
+  "showAttribution": true,
+  "bakeInline": true,
+  "paragraphBreaks": true,
+  "helperMode": true,
+  "esvApiKey": "50bbd88e2f1f5083ba3ee32646c174cbc997290e",
+  "nativeCalloutType": "quote"
+}
