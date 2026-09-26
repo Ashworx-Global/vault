@@ -38,7 +38,7 @@ const bookButtonsHtml = versePagesData.map(book =>
     <div class="mb-8">
       <nav class="flex flex-wrap gap-2" aria-label="Filter by book">
         <button class="px-4 py-2 bg-primary-600 text-white rounded-full text-sm font-medium active" data-book="all">All Books</button>
-        {bookButtonsHtml}
+        <span set:html={bookButtonsHtml}></span>
       </nav>
     </div>
 
