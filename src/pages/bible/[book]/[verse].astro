@@ -1,80 +1,147 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
-import { getVersePages, getPageBySlug, getRelatedVerses } from '../../../lib/vault';
 ---
+
+const verseData = {
+  "zechariah": {
+    "8-v-1-23": { 
+      reference: "Zechariah 8 v 1–23", 
+      book: "Zechariah", 
+      chapter: "8", 
+      verse: "1–23",
+      tags: ["restoration", "covenant", "truth", "peace", "faithfulness"],
+      content: "<p><strong>1</strong> The word of Yahweh of Armies came to me.<br><strong>2</strong> Yahweh of Armies says: “I am jealous for Zion with great jealousy, and I am jealous for her with great wrath.”</p>"
+    },
+    "9-v-9": { 
+      reference: "Zechariah 9 v 9", 
+      book: "Zechariah", 
+      chapter: "9", 
+      verse: "9",
+      tags: ["messiah", "king", "humility", "triumphal-entry", "salvation"],
+      content: "<p><strong>9</strong> Rejoice greatly, daughter of Zion! Shout, daughter of Jerusalem! Behold, your King comes to you! He is righteous, and having salvation; lowly, and riding on a donkey, even on a colt, the foal of a donkey.</p>"
+    }
+  },
+  "acts": {
+    "23-v-23-35": { 
+      reference: "Acts 23 v 23–35", 
+      book: "Acts", 
+      chapter: "23", 
+      verse: "23–35",
+      tags: ["protection", "providence", "roman-citizenship", "pauls-journey"],
+      content: "<p><strong>23</strong> He called to himself two of the centurions, and said, “Prepare two hundred soldiers to go as far as Caesarea, with seventy horsemen, and two hundred men armed with spears, at the third hour of the night.”</p>"
+    },
+    "24-v-1-27": { 
+      reference: "Acts 24 v 1–27", 
+      book: "Acts", 
+      chapter: "24", 
+      verse: "1–27",
+      tags: ["trial", "felix", "resurrection", "faith", "conscience", "judgment", "paul"],
+      content: "<p><strong>1</strong> After five days, the high priest, Ananias, came down with certain elders and an orator, one Tertullus. They informed the governor against Paul.</p>"
+    }
+  },
+  "job": {
+    "30-v-1-15": { 
+      reference: "Job 30 v 1–15", 
+      book: "Job", 
+      chapter: "30", 
+      verse: "1–15",
+      tags: ["suffering", "mockery", "affliction", "despair", "aging", "derision"],
+      content: "<p><strong>1</strong> “But now those who are younger than I have me in derision, whose fathers I considered unworthy to put with my sheep dogs.</p>"
+    }
+  }
+};
+
+const relatedVersesData = {
+  "zechariah": {
+    "8": [
+      { reference: "Zechariah 8 v 4", book: "Zechariah", verse: "4" },
+      { reference: "Zechariah 8 v 5", book: "Zechariah", verse: "5" },
+      { reference: "Zechariah 8 v 8", book: "Zechariah", verse: "8" },
+      { reference: "Zechariah 8 v 13", book: "Zechariah", verse: "13" },
+      { reference: "Zechariah 8 v 14", book: "Zechariah", verse: "14" },
+    ],
+    "9": [
+      { reference: "Zechariah 9 v 9", book: "Zechariah", verse: "9" },
+      { reference: "Zechariah 9 v 10", book: "Zechariah", verse: "10" },
+      { reference: "Zechariah 9 v 16", book: "Zechariah", verse: "16" },
+    ]
+  },
+  "acts": {
+    "23": [
+      { reference: "Acts 23 v 1–22", book: "Acts", verse: "1–22" },
+      { reference: "Acts 23 v 11", book: "Acts", verse: "11" },
+      { reference: "Acts 23 v 21–22", book: "Acts", verse: "21–22" },
+      { reference: "Acts 23 v 23–35", book: "Acts", verse: "23–35" },
+    ],
+    "24": [
+      { reference: "Acts 24 v 1–27", book: "Acts", verse: "1–27" },
+    ]
+  },
+  "job": {
+    "30": [
+      { reference: "Job 30 v 1–15", book: "Job", verse: "1–15" },
+    ]
+  }
+};
 
 export async function getStaticPaths() {
-  const versePages = await getVersePages();
-  return versePages.map(verse => ({
-    params: { 
-      book: verse.book.toLowerCase().replace(/\s+/g, '-'),
-      verse: verse.verse.toLowerCase().replace(/ /g, '-').replace(/–/g, '-').replace(/:/g, '')
-    },
-    props: { verse },
-  }));
+  const paths = [];
+  for (const book of Object.keys(verseData)) {
+    for (const verse of Object.keys(verseData[book])) {
+      paths.push({ params: { book, verse } });
+    }
+  }
+  return paths;
 }
 
-const { verse } = Astro.props;
-const relatedVerses = await getRelatedVerses(verse.book, verse.chapter);
-const canonical = '/bible/' + verse.book.toLowerCase().replace(/\s+/g, '-') + '/' + verse.verse.toLowerCase().replace(/ /g, '-').replace(/–/g, '-').replace(/:/g, '');
+const { book, verse } = Astro.props;
+const verseInfo = verseData[book]?.[verse] || { reference: verse, book, chapter: "1", verse: verse, tags: [], content: "" };
+const relatedVerses = relatedVersesData[book]?.[verseInfo.chapter] || [];
+const canonical = "/bible/" + book + "/" + verse;
 ---
 
-<Layout title={verse.reference} description={verse.frontmatter.description || 'Verse page: ' + verse.reference} canonical={canonical}>
+<Layout title={verseInfo.reference} description={"Verse page: " + verseInfo.reference} canonical={canonical}>
   <article class="animate-fade-in max-w-4xl mx-auto">
     <header class="mb-8 pb-6 border-b border-stone-200">
       <nav class="flex items-center gap-2 text-sm text-stone-500 mb-4" aria-label="Breadcrumb">
         <a href="/bible" class="hover:text-primary-700 transition-colors">Verse Pages</a>
         <span>/</span>
-        <a href={'/books/' + verse.book.toLowerCase().replace(/\s+/g, '-')} class="hover:text-primary-700 transition-colors">{verse.book}</a>
+        <a href="/books/" + book class="hover:text-primary-700 transition-colors">{verseInfo.book}</a>
         <span>/</span>
-        <span class="text-stone-900 font-medium">{verse.verse}</span>
+        <span class="text-stone-900 font-medium">{verseInfo.verse}</span>
       </nav>
       
-      <h1 class="text-3xl md:text-4xl font-bold font-serif text-stone-900 mb-4">{verse.reference}</h1>
+      <h1 class="text-3xl md:text-4xl font-bold font-serif text-stone-900 mb-4">{verseInfo.reference}</h1>
       
       <div class="flex flex-wrap items-center gap-3">
-        {(verse.frontmatter.tags || []).map(tag => (
-          <a href={'/tags/' + tag} class="px-3 py-1 bg-stone-100 text-stone-700 text-sm rounded-full hover:bg-primary-50 hover:text-primary-700 transition-colors border border-stone-200">#{tag}</a>
-        ))}
+        {verseInfo.tags.map(tag => '<a href="/tags/' + tag + '" class="px-3 py-1 bg-stone-100 text-stone-700 text-sm rounded-full hover:bg-primary-50 hover:text-primary-700 transition-colors border border-stone-200">#' + tag + '</a>').join("")}
       </div>
     </header>
 
     <div class="prose prose-custom prose-stone max-w-none mb-12">
-      <div class="markdown-body" set:html={verse.content} />
+      <div class="markdown-body" set:html={verseInfo.content} />
     </div>
 
     {relatedVerses.length > 1 && (
       <section class="mb-12">
         <h2 class="text-2xl font-bold text-stone-900 mb-4 flex items-center gap-2">
           <svg class="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
-          Related Passages in {verse.book} {verse.chapter}
+          Related Passages in {verseInfo.book} {verseInfo.chapter}
         </h2>
         <div class="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
           {relatedVerses
-            .filter(v => v.reference !== verse.reference)
+            .filter(v => v.reference !== verseInfo.reference)
             .slice(0, 8)
-            .map(related => (
+            .map(related => `
               <article class="bg-white rounded-xl p-5 shadow-sm border border-stone-200 hover:shadow-md transition-all">
                 <h3 class="font-semibold text-stone-900 mb-2">
-                  <a href={'/bible/' + related.book.toLowerCase().replace(/\s+/g, '-') + '/' + related.verse.toLowerCase().replace(/ /g, '-').replace(/–/g, '-').replace(/:/g, '')} class="hover:text-primary-700 transition-colors">
+                  <a href="/bible/" + related.book.toLowerCase().replace(/\s+/g, '-') + "/" + related.verse.toLowerCase().replace(/ /g, '-').replace(/–/g, '-').replace(/:/g, '') class="hover:text-primary-700 transition-colors">
                     {related.reference}
                   </a>
                 </h3>
-                <p class="text-stone-600 text-sm line-clamp-2">
-                  {related.content.replace(/<[^>]*>/g, '').slice(0, 100)}...
-                </p>
               </article>
-            ))}
+            `).join("")}
         </div>
-      </section>
-    )}
-
-    {verse.frontmatter.aliases && verse.frontmatter.aliases.length > 0 && (
-      <section class="mb-12 p-6 bg-primary-50 rounded-xl border border-primary-100">
-        <h3 class="font-semibold text-primary-800 mb-2">Also Known As</h3>
-        <ul class="list-disc list-inside text-primary-700 space-y-1">
-          {verse.frontmatter.aliases.map(alias => <li>{alias}</li>)}
-        </ul>
       </section>
     )}
 
@@ -84,9 +151,9 @@ const canonical = '/bible/' + verse.book.toLowerCase().replace(/\s+/g, '-') + '/
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
           All Verse Pages
         </a>
-        <a href={'/books/' + verse.book.toLowerCase().replace(/\s+/g, '-')} class="hover:text-primary-700 transition-colors flex items-center gap-1">
+        <a href="/books/" + book class="hover:text-primary-700 transition-colors flex items-center gap-1">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
-          {verse.book} Chapters
+          {verseInfo.book} Chapters
         </a>
         <a href="/tags" class="hover:text-primary-700 transition-colors flex items-center gap-1">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>
@@ -96,7 +163,7 @@ const canonical = '/bible/' + verse.book.toLowerCase().replace(/\s+/g, '-') + '/
       
       <div class="mt-4 p-4 bg-stone-50 rounded-lg text-sm text-stone-600">
         <p class="font-medium text-stone-900 mb-1">Source</p>
-        <p>Generated from <code class="bg-stone-200 px-1 rounded">{verse.sourceFile}</code> using the <a href="https://github.com/lee-royashworth/opencode-skills/tree/main/verse-pages" target="_blank" rel="noopener" class="text-primary-700 hover:underline">verse-pages</a> skill.</p>
+        <p>Generated from <code class="bg-stone-200 px-1 rounded">Bible/{verseInfo.book} {verseInfo.verse}.md</code> using the <a href="https://github.com/lee-royashworth/opencode-skills/tree/main/verse-pages" target="_blank" rel="noopener" class="text-primary-700 hover:underline">verse-pages</a> skill.</p>
       </div>
     </footer>
   </article>

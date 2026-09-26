@@ -3,25 +3,29 @@ import Layout from '../layouts/Layout.astro';
 ---
 
 const versePagesData = [
-  { book: 'Zechariah', count: 21, chapters: 9 },
-  { book: 'Acts', count: 7, chapters: 3 },
-  { book: 'Haggai', count: 5, chapters: 2 },
-  { book: 'Ezra', count: 3, chapters: 2 },
-  { book: 'Job', count: 2, chapters: 2 },
-  { book: 'Isaiah', count: 2, chapters: 2 },
-  { book: 'Psalm', count: 2, chapters: 2 },
-  { book: '1 Chronicles', count: 1, chapters: 1 },
-  { book: '1 Corinthians', count: 1, chapters: 1 },
-  { book: '1 Samuel', count: 1, chapters: 1 },
-  { book: '2 Chronicles', count: 1, chapters: 1 },
-  { book: '2 Corinthians', count: 1, chapters: 1 },
-  { book: 'Deuteronomy', count: 1, chapters: 1 },
-  { book: 'Hosea', count: 1, chapters: 1 },
-  { book: 'Jeremiah', count: 1, chapters: 1 },
-  { book: 'Luke', count: 1, chapters: 1 },
-  { book: 'Matthew', count: 1, chapters: 1 },
-  { book: 'Nehemiah', count: 1, chapters: 1 },
+  { book: "Zechariah", count: 21, chapters: 9 },
+  { book: "Acts", count: 7, chapters: 3 },
+  { book: "Haggai", count: 5, chapters: 2 },
+  { book: "Ezra", count: 3, chapters: 2 },
+  { book: "Job", count: 2, chapters: 2 },
+  { book: "Isaiah", count: 2, chapters: 2 },
+  { book: "Psalm", count: 2, chapters: 2 },
+  { book: "1 Chronicles", count: 1, chapters: 1 },
+  { book: "1 Corinthians", count: 1, chapters: 1 },
+  { book: "1 Samuel", count: 1, chapters: 1 },
+  { book: "2 Chronicles", count: 1, chapters: 1 },
+  { book: "2 Corinthians", count: 1, chapters: 1 },
+  { book: "Deuteronomy", count: 1, chapters: 1 },
+  { book: "Hosea", count: 1, chapters: 1 },
+  { book: "Jeremiah", count: 1, chapters: 1 },
+  { book: "Luke", count: 1, chapters: 1 },
+  { book: "Matthew", count: 1, chapters: 1 },
+  { book: "Nehemiah", count: 1, chapters: 1 },
 ];
+
+const bookButtonsHtml = versePagesData.map(book => 
+  '<button class="px-4 py-2 bg-stone-100 text-stone-700 rounded-full text-sm font-medium hover:bg-primary-50 hover:text-primary-700 transition-colors border border-stone-200" data-book="' + book.book.toLowerCase().replace(/\s+/g, '-') + '">' + book.book + ' (' + book.count + ')</button>'
+).join("");
 ---
 
 <Layout title="Verse Pages" description="Browse all individual verse pages organized by book">
@@ -34,9 +38,7 @@ const versePagesData = [
     <div class="mb-8">
       <nav class="flex flex-wrap gap-2" aria-label="Filter by book">
         <button class="px-4 py-2 bg-primary-600 text-white rounded-full text-sm font-medium active" data-book="all">All Books</button>
-        {versePagesData.map(book => (
-          <button class="px-4 py-2 bg-stone-100 text-stone-700 rounded-full text-sm font-medium hover:bg-primary-50 hover:text-primary-700 transition-colors border border-stone-200" data-book={book.book.toLowerCase().replace(/\s+/g, '-')}>{book.book} ({book.count})</button>
-        ))}
+        {bookButtonsHtml}
       </nav>
     </div>
 

@@ -41,10 +41,13 @@ export async function getStaticPaths() {
 }
 
 const { book } = Astro.props;
-const bookData = bookChapters[book as keyof typeof bookChapters] || { title: book, chapters: [] };
+const bookData = bookChapters[book] || { title: book, chapters: [] };
 const bookIndex = allBooks.indexOf(book);
 const prevBook = bookIndex > 0 ? allBooks[bookIndex - 1] : null;
 const nextBook = bookIndex < allBooks.length - 1 ? allBooks[bookIndex + 1] : null;
+
+const totalPassages = bookData.chapters.reduce((sum, c) => sum + c.verses.length, 0);
+const totalChapters = bookData.chapters.length;
 ---
 
 <Layout title={bookData.title} description={"Browse all verse pages from " + bookData.title}>
@@ -59,51 +62,39 @@ const nextBook = bookIndex < allBooks.length - 1 ? allBooks[bookIndex + 1] : nul
       <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
           <h1 class="text-3xl md:text-4xl font-bold font-serif text-stone-900">{bookData.title}</h1>
-          <p class="text-stone-600 mt-2">
-            {bookData.chapters.reduce((sum, c) => sum + c.verses.length, 0)} passages across {bookData.chapters.length} chapters
-          </p>
+          <p class="text-stone-600 mt-2">{totalPassages} passages across {totalChapters} chapters</p>
         </div>
         <div class="flex gap-2">
-          {prevBook && (
-            <a href="/books/" + prevBook class="px-4 py-2 bg-stone-100 text-stone-700 rounded-lg text-sm font-medium hover:bg-primary-50 hover:text-primary-700 transition-colors border border-stone-200 flex items-center gap-2">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
-              {prevBook.charAt(0).toUpperCase() + prevBook.slice(1)}
-            </a>
-          )}
-          {nextBook && (
-            <a href="/books/" + nextBook class="px-4 py-2 bg-stone-100 text-stone-700 rounded-lg text-sm font-medium hover:bg-primary-50 hover:text-primary-700 transition-colors border border-stone-200 flex items-center gap-2">
-              {nextBook.charAt(0).toUpperCase() + nextBook.slice(1)}
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-            </a>
-          )}
+          {prevBook ? '<a href="/books/' + prevBook + '" class="px-4 py-2 bg-stone-100 text-stone-700 rounded-lg text-sm font-medium hover:bg-primary-50 hover:text-primary-700 transition-colors border border-stone-200 flex items-center gap-2"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>' + (prevBook.charAt(0).toUpperCase() + prevBook.slice(1)) + '</a>' : ''}
+          {nextBook ? '<a href="/books/' + nextBook + '" class="px-4 py-2 bg-stone-100 text-stone-700 rounded-lg text-sm font-medium hover:bg-primary-50 hover:text-primary-700 transition-colors border border-stone-200 flex items-center gap-2">' + (nextBook.charAt(0).toUpperCase() + nextBook.slice(1)) + '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg></a>' : ''}
         </div>
       </div>
     </header>
 
     <div class="space-y-6">
       {bookData.chapters.map(chapter => (
-        <section class="bg-white rounded-xl shadow-sm border border-stone-200 overflow-hidden">
-          <header class="bg-stone-50 px-6 py-4 border-b border-stone-200">
-            <h2 class="font-semibold text-stone-900">{bookData.title} {chapter.chapter}</h2>
-            <p class="text-sm text-stone-600 mt-1">{chapter.verses.length} verse pages in this chapter</p>
-          </header>
-          <div class="divide-y divide-stone-100">
-            {chapter.verses.map(verseRef => (
-              <article class="p-5 hover:bg-stone-50 transition-colors">
-                <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
-                  <div class="flex-1">
-                    <h3 class="font-semibold text-stone-900 mb-1">
-                      <a href="/bible/" + book + "/" + verseRef.toLowerCase().replace(/ /g, '-').replace(/–/g, '-').replace(/:/g, '') class="hover:text-primary-700 transition-colors">
-                        {verseRef}
-                      </a>
-                    </h3>
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
-      ))}
+        '<section class="bg-white rounded-xl shadow-sm border border-stone-200 overflow-hidden">' +
+        '<header class="bg-stone-50 px-6 py-4 border-b border-stone-200">' +
+        '<h2 class="font-semibold text-stone-900">' + bookData.title + ' ' + chapter.chapter + '</h2>' +
+        '<p class="text-sm text-stone-600 mt-1">' + chapter.verses.length + ' verse pages in this chapter</p>' +
+        '</header>' +
+        '<div class="divide-y divide-stone-100">' +
+        chapter.verses.map(verse => (
+          '<article class="p-5 hover:bg-stone-50 transition-colors">' +
+          '<div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4">' +
+          '<div class="flex-1">' +
+          '<h3 class="font-semibold text-stone-900 mb-1">' +
+          '<a href="/bible/' + book + '/' + verse.toLowerCase().replace(/ /g, '-').replace(/–/g, '-').replace(/:/g, '') + '" class="hover:text-primary-700 transition-colors">' +
+          verse +
+          '</a>' +
+          '</h3>' +
+          '</div>' +
+          '</div>' +
+          '</article>'
+        )).join("") +
+        '</div>' +
+        '</section>'
+      )).join("")}
     </div>
   </div>
 </Layout>
