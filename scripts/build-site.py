@@ -248,7 +248,7 @@ def render_blocks(body: str, linkmap: dict, base: str, books: set[str]) -> str:
                 inner = "\n".join(buf[1:])
                 inner_html = render_blocks(inner, linkmap, base, books)
                 out.append(
-                    "<details class=\"bible\" open>"
+                    "<details class=\"bible\">"
                     f"<summary><span>{esc(title)}</span>"
                     f'<a href="{esc(url)}" target="_blank" rel="noopener noreferrer">BibleGateway ↗</a>'
                     "</summary>"
