@@ -1,0 +1,135 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+const tagData: Record<string, { daily: string[]; verses: string[] }> = {
+  'restoration': { daily: ['2026-09-26-unexpected-opportunities'], verses: ['zechariah/8-v-1-23'] },
+  'covenant': { daily: ['2026-09-26-unexpected-opportunities'], verses: ['zechariah/8-v-1-23', 'zechariah/8-v-8'] },
+  'messiah': { daily: ['2026-09-26-unexpected-opportunities'], verses: ['zechariah/9-v-9', 'zechariah/9-v-1-17', 'zechariah/9-v-10'] },
+  'peace': { daily: ['2026-09-26-unexpected-opportunities'], verses: ['zechariah/9-v-1-17', 'zechariah/9-v-10', 'zechariah/8-v-1-23'] },
+  'providence': { daily: ['2026-09-26-unexpected-opportunities', '2026-09-25-visions-revelations-and-questions'], verses: ['acts/23-v-23-35', 'acts/23-v-1-22', 'zechariah/4-v-6'] },
+  'suffering': { daily: ['2026-09-26-unexpected-opportunities'], verses: ['job/30-v-1-15'] },
+  'aging': { daily: ['2026-09-26-unexpected-opportunities'], verses: ['zechariah/8-v-4', 'zechariah/8-v-5', 'job/30-v-1-15'] },
+  'grace': { daily: ['2026-09-26-unexpected-opportunities', '2026-09-24-not-by-might-nor-by-power'], verses: ['zechariah/4-v-6', 'zechariah/4-v-7'] },
+  'judgment': { daily: ['2026-09-26-unexpected-opportunities', '2026-09-25-visions-revelations-and-questions'], verses: ['zechariah/9-v-1-17', 'zechariah/7-v-9', 'zechariah/7-v-10'] },
+  'resurrection': { daily: ['2026-09-26-unexpected-opportunities', '2026-09-25-visions-revelations-and-questions'], verses: ['acts/24-v-1-27', 'acts/23-v-1-22'] },
+  'faith': { daily: ['2026-09-26-unexpected-opportunities', '2026-09-25-visions-revelations-and-questions', '2026-09-24-not-by-might-nor-by-power'], verses: ['zechariah/4-v-6', 'acts/24-v-1-27', 'zechariah/8-v-8'] },
+  'scripture': { daily: ['2026-09-26-unexpected-opportunities'], verses: [] },
+  'praise': { daily: ['2026-09-26-unexpected-opportunities'], verses: [] },
+  'dependence': { daily: ['2026-09-26-unexpected-opportunities', '2026-09-25-visions-revelations-and-questions', '2026-09-24-not-by-might-nor-by-power'], verses: ['zechariah/4-v-6'] },
+  'unexpected-opportunities': { daily: ['2026-09-26-unexpected-opportunities'], verses: [] },
+  'visions': { daily: ['2026-09-25-visions-revelations-and-questions'], verses: ['zechariah/6-v-1-15'] },
+  'revelation': { daily: ['2026-09-25-visions-revelations-and-questions'], verses: ['zechariah/6-v-1-15'] },
+  'sovereignty': { daily: ['2026-09-25-visions-revelations-and-questions'], verses: ['zechariah/6-v-1-15', 'zechariah/4-v-6'] },
+  'justice': { daily: ['2026-09-25-visions-revelations-and-questions'], verses: ['zechariah/7-v-9', 'zechariah/7-v-10'] },
+  'mercy': { daily: ['2026-09-25-visions-revelations-and-questions'], verses: ['zechariah/7-v-9'] },
+  'fasting': { daily: ['2026-09-25-visions-revelations-and-questions'], verses: ['zechariah/7-v-5', 'zechariah/7-v-1-14'] },
+  'heart': { daily: ['2026-09-25-visions-revelations-and-questions'], verses: ['zechariah/7-v-5', 'zechariah/7-v-9'] },
+  'obedience': { daily: ['2026-09-25-visions-revelations-and-questions'], verses: ['zechariah/7-v-1-14'] },
+  'roman-citizenship': { daily: ['2026-09-25-visions-revelations-and-questions'], verses: ['acts/22-v-25'] },
+  'courage': { daily: ['2026-09-25-visions-revelations-and-questions'], verses: ['acts/23-v-11', 'acts/23-v-1-22'] },
+  'persecution': { daily: ['2026-09-25-visions-revelations-and-questions'], verses: ['acts/22-v-1-30'] },
+  'conspiracy': { daily: ['2026-09-25-visions-revelations-and-questions'], verses: ['acts/23-v-21-22', 'acts/23-v-1-22'] },
+  'divine-protection': { daily: ['2026-09-25-visions-revelations-and-questions'], verses: ['acts/23-v-21-22', 'acts/23-v-1-22'] },
+  'righteousness': { daily: ['2026-09-25-visions-revelations-and-questions'], verses: ['job/29-v-13-25'] },
+  'compassion': { daily: ['2026-09-25-visions-revelations-and-questions'], verses: ['job/29-v-13-25'] },
+  'blessing': { daily: ['2026-09-25-visions-revelations-and-questions'], verses: ['zechariah/8-v-13', 'job/29-v-13-25'] },
+  'prayer': { daily: ['2026-09-25-visions-revelations-and-questions'], verses: [] },
+  'zerubbabel': { daily: ['2026-09-24-not-by-might-nor-by-power'], verses: ['zechariah/4-v-6'] },
+  'david': { daily: ['2026-09-24-not-by-might-nor-by-power'], verses: [] },
+  'spirit': { daily: ['2026-09-24-not-by-might-nor-by-power'], verses: ['zechariah/4-v-6'] },
+  'power': { daily: ['2026-09-24-not-by-might-nor-by-power'], verses: [] },
+  'might': { daily: ['2026-09-24-not-by-might-nor-by-power'], verses: [] },
+  'weakness': { daily: ['2026-09-24-not-by-might-nor-by-power'], verses: ['zechariah/4-v-6'] },
+  'trust': { daily: ['2026-09-24-not-by-might-nor-by-power'], verses: [] },
+  'divine-enablement': { daily: ['2026-09-24-not-by-might-nor-by-power'], verses: ['zechariah/4-v-6'] },
+  'human-limitation': { daily: ['2026-09-24-not-by-might-nor-by-power'], verses: [] },
+  'faithfulness': { daily: ['2026-09-24-not-by-might-nor-by-power'], verses: ['zechariah/4-v-7'] },
+  'mountain': { daily: ['2026-09-24-not-by-might-nor-by-power'], verses: ['zechariah/4-v-7'] },
+  'obstacles': { daily: ['2026-09-24-not-by-might-nor-by-power'], verses: ['zechariah/4-v-7'] },
+  'daily-struggles': { daily: ['2026-09-24-not-by-might-nor-by-power'], verses: [] },
+};
+
+const allTags = Object.keys(tagData).sort();
+
+export async function getStaticPaths() {
+  return allTags.map(tag => ({ params: { tag } }));
+}
+
+const { tag } = Astro.props;
+const data = tagData[tag] || { daily: [], verses: [] };
+---
+
+<Layout title={"#" + tag} description={"Browse all content tagged with #" + tag}>
+  <div class="animate-fade-in">
+    <header class="mb-10">
+      <nav class="flex items-center gap-2 text-sm text-stone-500 mb-4" aria-label="Breadcrumb">
+        <a href="/tags" class="hover:text-primary-700 transition-colors">Topics</a>
+        <span>/</span>
+        <span class="text-stone-900 font-medium">#{tag}</span>
+      </nav>
+      
+      <h1 class="text-3xl md:text-4xl font-bold font-serif text-stone-900 mb-3">#{tag}</h1>
+      <p class="text-stone-600 text-lg">{(data.daily.length + data.verses.length)} {(data.daily.length + data.verses.length) === 1 ? 'page' : 'pages'} tagged with this topic</p>
+    </header>
+
+    {data.daily.length > 0 && (
+      <section class="mb-12">
+        <h2 class="text-2xl font-bold text-stone-900 mb-4 flex items-center gap-2">
+          <svg class="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+          Daily Notes
+        </h2>
+        <div class="space-y-4">
+          {data.daily.map(slug => (
+            <article class="bg-white rounded-xl p-5 shadow-sm border border-stone-200 hover:shadow-md transition-all">
+              <h3 class="font-semibold text-stone-900 mb-2">
+                <a href="/daily/" + slug class="hover:text-primary-700 transition-colors">
+                  {slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                </a>
+              </h3>
+            </article>
+          ))}
+        </div>
+      </section>
+    )}
+
+    {data.verses.length > 0 && (
+      <section class="mb-12">
+        <h2 class="text-2xl font-bold text-stone-900 mb-4 flex items-center gap-2">
+          <svg class="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+          Verse Pages
+        </h2>
+        <div class="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
+          {data.verses.map(versePath => {
+            const parts = versePath.split('/');
+            const book = parts[0];
+            const verseRef = parts[1].replace(/-/g, ' ').replace(/–/g, '–').replace(/v /g, 'v ');
+            return (
+              <article class="bg-white rounded-xl p-5 shadow-sm border border-stone-200 hover:shadow-md transition-all">
+                <h3 class="font-semibold text-stone-900 mb-2">
+                  <a href="/bible/" + versePath class="hover:text-primary-700 transition-colors">
+                    {verseRef.charAt(0).toUpperCase() + verseRef.slice(1)}
+                  </a>
+                </h3>
+              </article>
+            );
+          })}
+        </div>
+      </section>
+    )}
+
+    {(data.daily.length === 0 && data.verses.length === 0) && (
+      <div class="text-center py-16">
+        <svg class="w-16 h-16 mx-auto text-stone-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>
+        <h2 class="text-xl text-stone-600 mb-2">No content with this tag</h2>
+      </div>
+    )}
+
+    <footer class="pt-6 border-t border-stone-200">
+      <a href="/tags" class="text-primary-700 hover:text-primary-800 font-medium text-sm flex items-center gap-1 inline-flex">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+        Back to All Topics
+      </a>
+    </footer>
+  </div>
+</Layout>

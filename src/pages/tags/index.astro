@@ -1,0 +1,56 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { loadAllPages, getAllTags } from '../lib/vault';
+---
+
+const allPages = await loadAllPages();
+const tags = getAllTags(allPages);
+
+const tagCounts = new Map<string, number>();
+for (const page of allPages) {
+  if (page.frontmatter.tags) {
+    for (const tag of page.frontmatter.tags) {
+      tagCounts.set(tag, (tagCounts.get(tag) || 0) + 1);
+    }
+  }
+}
+
+const sortedTags = tags.sort((a, b) => (tagCounts.get(b) || 0) - (tagCounts.get(a) || 0));
+---
+
+<Layout title="Topics" description="Browse all topics and themes across daily notes and verse pages">
+  <div class="animate-fade-in">
+    <header class="mb-10">
+      <h1 class="text-3xl md:text-4xl font-bold font-serif text-stone-900 mb-3">Topics & Themes</h1>
+      <p class="text-stone-600 text-lg max-w-2xl">Explore content by theological themes and topics extracted from Scripture passages and personal reflections.</p>
+    </header>
+
+    <div class="grid gap-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+      {sortedTags.map((tag, i) => {
+        const count = tagCounts.get(tag) || 0;
+        const delay = i * 20;
+        return (
+          <a 
+            href={'/tags/' + tag} 
+            class="bg-white rounded-xl p-5 shadow-sm border border-stone-200 hover:shadow-md hover:border-primary-300 hover:-translate-y-1 transition-all group animate-slide-up"
+            style={'animation-delay: ' + delay + 'ms'}
+          >
+            <div class="flex items-center justify-between mb-2">
+              <span class="font-semibold text-stone-900 group-hover:text-primary-700 transition-colors">#{tag}</span>
+              <span class="text-xs text-stone-500 bg-stone-100 px-2 py-0.5 rounded-full">{count}</span>
+            </div>
+            <p class="text-sm text-stone-600">Appears in {count} {count === 1 ? 'page' : 'pages'}</p>
+          </a>
+        );
+      })}
+    </div>
+
+    {tags.length === 0 && (
+      <div class="text-center py-16">
+        <svg class="w-16 h-16 mx-auto text-stone-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>
+        <h2 class="text-xl text-stone-600 mb-2">No topics yet</h2>
+        <p class="text-stone-500">Tags will appear here as you add content with thematic tags.</p>
+      </div>
+    )}
+  </div>
+</Layout>

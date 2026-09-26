@@ -1,0 +1,290 @@
+{
+  "main": {
+    "id": "902b7728d13dca71",
+    "type": "split",
+    "children": [
+      {
+        "id": "d9bec324358dd634",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "c5d62d6b0a037612",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Daily/2026-09-25 (Visions, Revelations, and Questions).md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "2026-09-25 (Visions, Revelations, and Questions)"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "4618174e01c7634c",
+    "type": "split",
+    "children": [
+      {
+        "id": "4603ccdee7dc5e3a",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "583318b59f8500a6",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "af70aa1ceb15182e",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "41ca39a457a9d3a6",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          },
+          {
+            "id": "efdc2a45cf68d3fb",
+            "type": "leaf",
+            "state": {
+              "type": "notebook-navigator",
+              "state": {},
+              "icon": "notebook-navigator",
+              "title": "Notebook Navigator"
+            }
+          }
+        ],
+        "currentTab": 3
+      }
+    ],
+    "direction": "horizontal",
+    "width": 351.0945129394531
+  },
+  "right": {
+    "id": "c555f33fd70aef3f",
+    "type": "split",
+    "children": [
+      {
+        "id": "889b9ece9ebc2f0c",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "6fba18d8a2147978",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Untitled.canvas",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks"
+            }
+          },
+          {
+            "id": "527b5f94870ff612",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "Untitled.canvas",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links"
+            }
+          },
+          {
+            "id": "44c81130dbd1dedd",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "a7b2ac738fc1046d",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "All properties"
+            }
+          },
+          {
+            "id": "a060e6d221069dca",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "Untitled.canvas",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline"
+            }
+          },
+          {
+            "id": "195832fa8e6dab82",
+            "type": "leaf",
+            "state": {
+              "type": "footnotes",
+              "state": {
+                "file": "Daily/2026-09-24 (Not by might, nor by power, but by my Spirit, says the Lord of hosts).md"
+              },
+              "icon": "lucide-file-signature",
+              "title": "Footnotes"
+            }
+          },
+          {
+            "id": "bf1bebf946062094",
+            "type": "leaf",
+            "state": {
+              "type": "copilot-agent-chat-view",
+              "state": {},
+              "icon": "copilot-agent",
+              "title": "Copilot Agent"
+            }
+          },
+          {
+            "id": "a43fd522540b70df",
+            "type": "leaf",
+            "state": {
+              "type": "calendar",
+              "state": {},
+              "icon": "calendar-with-checkmark",
+              "title": "Calendar"
+            }
+          }
+        ],
+        "currentTab": 6
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "bases:Create new base": false,
+      "copilot:Open Copilot Agent Chat": false,
+      "omnisearch:Omnisearch": false,
+      "obsidian-bible-reference:Bible Verse Lookup": false,
+      "tasknotes:Open mini calendar view": false,
+      "tasknotes:Open calendar view": false,
+      "tasknotes:Open tasks view": false,
+      "tasknotes:Open agenda view": false,
+      "tasknotes:Open Kanban board": false,
+      "tasknotes:Open Pomodoro timer": false,
+      "tasknotes:Open Pomodoro statistics": false,
+      "tasknotes:Create new task": false,
+      "notebook-navigator:Notebook Navigator": false,
+      "obsidian-full-calendar:Open Full Calendar": false
+    }
+  },
+  "active": "efdc2a45cf68d3fb",
+  "lastOpenFiles": [
+    "src/env.d.ts",
+    "node_modules/yaml/bin.mjs",
+    "node_modules/yaml/README.md",
+    "node_modules/yaml/package.json",
+    "node_modules/yaml/util.js",
+    "node_modules/@astrojs/tailwind/node_modules/postcss-load-config/src/req.js",
+    "node_modules/@astrojs/tailwind/node_modules/postcss-load-config/src/plugins.js",
+    "node_modules/@astrojs/tailwind/node_modules/postcss-load-config/src/options.js",
+    "node_modules/@astrojs/tailwind/node_modules/postcss-load-config/src/index.js",
+    "node_modules/@astrojs/tailwind/node_modules/postcss-load-config/src/index.d.ts",
+    "node_modules/@astrojs/tailwind/node_modules/postcss-load-config/src",
+    "node_modules/@astrojs/tailwind/node_modules/postcss-load-config/package.json",
+    "node_modules/@astrojs/tailwind/node_modules/postcss-load-config/README.md",
+    "node_modules/@astrojs/tailwind/README.md",
+    "node_modules/fsevents/README.md",
+    "node_modules/caniuse-lite/README.md",
+    "node_modules/astro/README.md",
+    "node_modules/prismjs/README.md",
+    "node_modules/prismjs/CHANGELOG.md",
+    "node_modules/tailwindcss/README.md",
+    "node_modules/zod/README.md",
+    "node_modules/typescript/README.md",
+    "node_modules/typescript/SECURITY.md",
+    "node_modules/aria-query/README.md",
+    "node_modules/@img/sharp-libvips-darwin-x64/README.md",
+    "node_modules/axobject-query/README.md",
+    "node_modules/sucrase/README.md",
+    "node_modules/@esbuild/darwin-x64/README.md",
+    "node_modules/zod-to-json-schema/README.md",
+    "node_modules/zod-to-json-schema/contributing.md",
+    "node_modules/zod-to-json-schema/changelog.md",
+    "node_modules/resolve/SECURITY.md",
+    "node_modules/mdast-util-to-markdown/readme.md",
+    "node_modules/autoprefixer/README.md",
+    "node_modules/micromark-core-commonmark/readme.md",
+    "node_modules/prompts/readme.md",
+    "public/favicon.svg",
+    "Untitled 1.canvas",
+    "Untitled.canvas"
+  ]
+}

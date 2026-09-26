@@ -1,0 +1,104 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+@layer base {
+  html {
+    @apply scroll-smooth;
+  }
+  
+  body {
+    @apply font-sans text-stone-800 bg-stone-50 antialiased;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-sans font-semibold text-stone-900;
+  }
+  
+  ::selection {
+    @apply bg-primary-200 text-primary-900;
+  }
+}
+
+@layer components {
+  .prose-custom {
+    @apply prose prose-stone max-w-none;
+  }
+  
+  .prose-custom h1 { @apply text-3xl md:text-4xl font-bold mb-6 text-stone-900; }
+  .prose-custom h2 { @apply text-2xl md:text-3xl font-semibold mt-10 mb-4 text-stone-900 border-b border-stone-200 pb-2; }
+  .prose-custom h3 { @apply text-xl md:text-2xl font-semibold mt-8 mb-3 text-stone-900; }
+  .prose-custom h4 { @apply text-lg md:text-xl font-semibold mt-6 mb-2 text-stone-800; }
+  
+  .prose-custom p { @apply leading-relaxed mb-4 text-stone-700; }
+  .prose-custom a { @apply text-primary-700 hover:text-primary-800 underline-offset-2 hover:underline transition-colors; }
+  .prose-custom strong { @apply font-semibold text-stone-900; }
+  .prose-custom em { @apply italic text-stone-700; }
+  .prose-custom blockquote { @apply border-l-4 border-primary-400 pl-6 my-6 italic text-stone-700 bg-primary-50/30 rounded-r-lg py-2; }
+  .prose-custom code { @apply bg-primary-100 text-primary-800 px-1.5 py-0.5 rounded text-sm font-mono; }
+  .prose-custom pre { @apply bg-stone-900 text-stone-100 rounded-lg p-4 overflow-x-auto; }
+  .prose-custom pre code { @apply bg-transparent text-inherit p-0; }
+  .prose-custom ul { @apply list-disc list-inside mb-4 space-y-2; }
+  .prose-custom ol { @apply list-decimal list-inside mb-4 space-y-2; }
+  .prose-custom li { @apply leading-relaxed; }
+  .prose-custom hr { @apply border-stone-200 my-8; }
+  .prose-custom table { @apply w-full border-collapse mb-6; }
+  .prose-custom th, .prose-custom td { @apply border border-stone-200 px-4 py-2 text-left; }
+  .prose-custom th { @apply bg-stone-100 font-semibold; }
+  .prose-custom img { @apply rounded-lg shadow-sm my-6; }
+  
+  /* Verse-specific styles */
+  .prose-custom .verse-block { 
+    @apply bg-amber-50 border-l-4 border-amber-400 p-4 my-4 rounded-r-lg; 
+  }
+  .prose-custom .verse-ref { 
+    @apply font-semibold text-amber-800 mb-2 block; 
+  }
+  .prose-custom .verse-text { 
+    @apply text-stone-700 leading-relaxed; 
+  }
+  
+  /* Callout styles for bible blocks */
+  .prose-custom .bible-callout { 
+    @apply bg-blue-50 border-l-4 border-blue-400 p-4 my-4 rounded-r-lg; 
+  }
+  .prose-custom .bible-callout summary { 
+    @apply font-semibold text-blue-800 cursor-pointer; 
+  }
+  .prose-custom .bible-callout details[open] summary { 
+    @apply mb-2; 
+  }
+  
+  /* Wikilink styles */
+  .wikilink { 
+    @apply text-primary-700 hover:text-primary-800 underline-offset-2 hover:underline font-medium transition-colors; 
+  }
+  
+  .wikilink-external { 
+    @apply text-blue-700 hover:text-blue-800 underline-offset-2 hover:underline font-medium transition-colors; 
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  .animate-fade-in {
+    animation: fadeIn 0.3s ease-out;
+  }
+  
+  .animate-slide-up {
+    animation: slideUp 0.4s ease-out;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+}

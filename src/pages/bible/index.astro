@@ -1,0 +1,85 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+const versePagesData = [
+  { book: 'Zechariah', count: 21, chapters: 9 },
+  { book: 'Acts', count: 7, chapters: 3 },
+  { book: 'Haggai', count: 5, chapters: 2 },
+  { book: 'Ezra', count: 3, chapters: 2 },
+  { book: 'Job', count: 2, chapters: 2 },
+  { book: 'Isaiah', count: 2, chapters: 2 },
+  { book: 'Psalm', count: 2, chapters: 2 },
+  { book: '1 Chronicles', count: 1, chapters: 1 },
+  { book: '1 Corinthians', count: 1, chapters: 1 },
+  { book: '1 Samuel', count: 1, chapters: 1 },
+  { book: '2 Chronicles', count: 1, chapters: 1 },
+  { book: '2 Corinthians', count: 1, chapters: 1 },
+  { book: 'Deuteronomy', count: 1, chapters: 1 },
+  { book: 'Hosea', count: 1, chapters: 1 },
+  { book: 'Jeremiah', count: 1, chapters: 1 },
+  { book: 'Luke', count: 1, chapters: 1 },
+  { book: 'Matthew', count: 1, chapters: 1 },
+  { book: 'Nehemiah', count: 1, chapters: 1 },
+];
+---
+
+<Layout title="Verse Pages" description="Browse all individual verse pages organized by book">
+  <div class="animate-fade-in">
+    <header class="mb-10">
+      <h1 class="text-3xl md:text-4xl font-bold font-serif text-stone-900 mb-3">Verse Pages</h1>
+      <p class="text-stone-600 text-lg max-w-2xl">Individual verse pages with full text, thematic tags, and cross-references to daily notes.</p>
+    </header>
+
+    <div class="mb-8">
+      <nav class="flex flex-wrap gap-2" aria-label="Filter by book">
+        <button class="px-4 py-2 bg-primary-600 text-white rounded-full text-sm font-medium active" data-book="all">All Books</button>
+        {versePagesData.map(book => (
+          <button class="px-4 py-2 bg-stone-100 text-stone-700 rounded-full text-sm font-medium hover:bg-primary-50 hover:text-primary-700 transition-colors border border-stone-200" data-book={book.book.toLowerCase().replace(/\s+/g, '-')}>{book.book} ({book.count})</button>
+        ))}
+      </nav>
+    </div>
+
+    <div id="verse-grid" class="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <article class="verse-card bg-white rounded-xl p-5 shadow-sm border border-stone-200 hover:shadow-md hover:-translate-y-1 transition-all" data-book="zechariah">
+        <h3 class="font-semibold text-stone-900 mb-2"><a href="/bible/zechariah/8-v-1-23" class="hover:text-primary-700 transition-colors">Zechariah 8 v 1–23</a></h3>
+        <p class="text-stone-600 text-sm mb-3 line-clamp-2">The word of Yahweh of Armies came to me...</p>
+        <div class="flex flex-wrap gap-1"><a href="/tags/restoration" class="px-2 py-0.5 bg-stone-100 text-stone-600 text-xs rounded hover:bg-primary-50 hover:text-primary-700 transition-colors">#restoration</a><a href="/tags/covenant" class="px-2 py-0.5 bg-stone-100 text-stone-600 text-xs rounded hover:bg-primary-50 hover:text-primary-700 transition-colors">#covenant</a></div>
+      </article>
+      <article class="verse-card bg-white rounded-xl p-5 shadow-sm border border-stone-200 hover:shadow-md hover:-translate-y-1 transition-all" data-book="zechariah">
+        <h3 class="font-semibold text-stone-900 mb-2"><a href="/bible/zechariah/9-v-9" class="hover:text-primary-700 transition-colors">Zechariah 9 v 9</a></h3>
+        <p class="text-stone-600 text-sm mb-3 line-clamp-2">Rejoice greatly, daughter of Zion! Shout, daughter of Jerusalem! Behold, your King comes to you! He is righteous...</p>
+        <div class="flex flex-wrap gap-1"><a href="/tags/messiah" class="px-2 py-0.5 bg-stone-100 text-stone-600 text-xs rounded hover:bg-primary-50 hover:text-primary-700 transition-colors">#messiah</a><a href="/tags/king" class="px-2 py-0.5 bg-stone-100 text-stone-600 text-xs rounded hover:bg-primary-50 hover:text-primary-700 transition-colors">#king</a></div>
+      </article>
+      <article class="verse-card bg-white rounded-xl p-5 shadow-sm border border-stone-200 hover:shadow-md hover:-translate-y-1 transition-all" data-book="acts">
+        <h3 class="font-semibold text-stone-900 mb-2"><a href="/bible/acts/23-v-23-35" class="hover:text-primary-700 transition-colors">Acts 23 v 23–35</a></h3>
+        <p class="text-stone-600 text-sm mb-3 line-clamp-2">He called to himself two of the centurions, and said, Prepare two hundred soldiers...</p>
+        <div class="flex flex-wrap gap-1"><a href="/tags/protection" class="px-2 py-0.5 bg-stone-100 text-stone-600 text-xs rounded hover:bg-primary-50 hover:text-primary-700 transition-colors">#protection</a><a href="/tags/providence" class="px-2 py-0.5 bg-stone-100 text-stone-600 text-xs rounded hover:bg-primary-50 hover:text-primary-700 transition-colors">#providence</a></div>
+      </article>
+      <article class="verse-card bg-white rounded-xl p-5 shadow-sm border border-stone-200 hover:shadow-md hover:-translate-y-1 transition-all" data-book="acts">
+        <h3 class="font-semibold text-stone-900 mb-2"><a href="/bible/acts/24-v-1-27" class="hover:text-primary-700 transition-colors">Acts 24 v 1–27</a></h3>
+        <p class="text-stone-600 text-sm mb-3 line-clamp-2">After five days, the high priest, Ananias, came down with certain elders...</p>
+        <div class="flex flex-wrap gap-1"><a href="/tags/trial" class="px-2 py-0.5 bg-stone-100 text-stone-600 text-xs rounded hover:bg-primary-50 hover:text-primary-700 transition-colors">#trial</a><a href="/tags/faith" class="px-2 py-0.5 bg-stone-100 text-stone-600 text-xs rounded hover:bg-primary-50 hover:text-primary-700 transition-colors">#faith</a></div>
+      </article>
+      <article class="verse-card bg-white rounded-xl p-5 shadow-sm border border-stone-200 hover:shadow-md hover:-translate-y-1 transition-all" data-book="job">
+        <h3 class="font-semibold text-stone-900 mb-2"><a href="/bible/job/30-v-1-15" class="hover:text-primary-700 transition-colors">Job 30 v 1–15</a></h3>
+        <p class="text-stone-600 text-sm mb-3 line-clamp-2">But now those who are younger than I have me in derision...</p>
+        <div class="flex flex-wrap gap-1"><a href="/tags/suffering" class="px-2 py-0.5 bg-stone-100 text-stone-600 text-xs rounded hover:bg-primary-50 hover:text-primary-700 transition-colors">#suffering</a><a href="/tags/mockery" class="px-2 py-0.5 bg-stone-100 text-stone-600 text-xs rounded hover:bg-primary-50 hover:text-primary-700 transition-colors">#mockery</a></div>
+      </article>
+    </div>
+  </div>
+
+  <script>
+    const buttons = document.querySelectorAll('[data-book]');
+    const cards = document.querySelectorAll('.verse-card');
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        buttons.forEach(b => { b.classList.remove('active', 'bg-primary-600', 'text-white'); b.classList.add('bg-stone-100', 'text-stone-700'); });
+        btn.classList.add('active', 'bg-primary-600', 'text-white');
+        btn.classList.remove('bg-stone-100', 'text-stone-700');
+        const filter = btn.dataset.book;
+        cards.forEach(card => { card.style.display = (filter === 'all' || card.dataset.book === filter) ? 'block' : 'none'; });
+      });
+    });
+  </script>
+</Layout>

@@ -1,8 +1,10 @@
-# AshworX Vault — Daily Readings & Verse Notes
+# Man of God Daily Readings
 
 > **Not by might, nor by power, but by my Spirit, says the Lord of hosts.** — Zechariah 4:6
 
-This vault contains daily Bible reading notes with linked verse pages, harvested from daily reflections using the [`verse-pages`](https://github.com/lee-royashworth/opencode-skills/tree/main/verse-pages) skill.
+This site contains daily Bible reading notes with linked verse pages, harvested from daily reflections using the [`verse-pages`](https://github.com/lee-royashworth/opencode-skills/tree/main/verse-pages) skill.
+
+[🌐 View Live Site](https://ashworx-global.github.io/vault/)
 
 ---
 
