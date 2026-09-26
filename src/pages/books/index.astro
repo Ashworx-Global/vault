@@ -22,14 +22,12 @@ const booksWithStats = books.map(book => {
     </header>
 
     <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-      {booksWithStats.map(({ book, bookVerses, chapters }, i) => {
-        const delay = i * 50;
-        return (
-          <a 
-            href={'/books/' + book.toLowerCase().replace(/\s+/g, '-')}
-            class="bg-white rounded-xl p-6 shadow-sm border border-stone-200 hover:shadow-lg hover:border-primary-300 hover:-translate-y-1 transition-all group animate-slide-up"
-            style={'animation-delay: ' + delay + 'ms'}
-          >
+      {booksWithStats.map(({ book, bookVerses, chapters }, i) => (
+        <a 
+          href={'/books/' + book.toLowerCase().replace(/\s+/g, '-')}
+          class="bg-white rounded-xl p-6 shadow-sm border border-stone-200 hover:shadow-lg hover:border-primary-300 hover:-translate-y-1 transition-all group animate-slide-up"
+          style={'animation-delay: ' + (i * 50) + 'ms'}
+        >
             <div class="flex items-start gap-4">
               <div class="w-14 h-14 bg-primary-100 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-primary-200 transition-colors">
                 <svg class="w-7 h-7 text-primary-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
