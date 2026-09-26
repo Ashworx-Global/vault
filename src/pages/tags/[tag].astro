@@ -58,6 +58,7 @@ export async function getStaticPaths() {
 
 const { tag } = Astro.props;
 const data = tagData[tag] || { daily: [], verses: [] };
+const totalCount = data.daily.length + data.verses.length;
 ---
 
 <Layout title={"#" + tag} description={"Browse all content tagged with #" + tag}>
@@ -70,7 +71,7 @@ const data = tagData[tag] || { daily: [], verses: [] };
       </nav>
       
       <h1 class="text-3xl md:text-4xl font-bold font-serif text-stone-900 mb-3">#{tag}</h1>
-      <p class="text-stone-600 text-lg">{(data.daily.length + data.verses.length)} {(data.daily.length + data.verses.length) === 1 ? 'page' : 'pages'} tagged with this topic</p>
+      <p class="text-stone-600 text-lg">{totalCount} {totalCount === 1 ? 'page' : 'pages'} tagged with this topic</p>
     </header>
 
     {data.daily.length > 0 && (
@@ -118,7 +119,7 @@ const data = tagData[tag] || { daily: [], verses: [] };
       </section>
     )}
 
-    {(data.daily.length === 0 && data.verses.length === 0) && (
+    {totalCount === 0 && (
       <div class="text-center py-16">
         <svg class="w-16 h-16 mx-auto text-stone-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>
         <h2 class="text-xl text-stone-600 mb-2">No content with this tag</h2>

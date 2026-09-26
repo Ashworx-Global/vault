@@ -1,40 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import { bookChapters, allBooks } from '../../data/bookChapters';
 ---
-
-const bookChapters = {
-  zechariah: { 
-    title: 'Zechariah',
-    chapters: [
-      { chapter: '4', verses: ['Zechariah 4 v 6', 'Zechariah 4 v 7'] },
-      { chapter: '6', verses: ['Zechariah 6 v 1–15'] },
-      { chapter: '7', verses: ['Zechariah 7 v 1–14', 'Zechariah 7 v 5', 'Zechariah 7 v 9', 'Zechariah 7 v 10'] },
-      { chapter: '8', verses: ['Zechariah 8 v 1–23', 'Zechariah 8 v 4', 'Zechariah 8 v 5', 'Zechariah 8 v 8', 'Zechariah 8 v 13', 'Zechariah 8 v 14'] },
-      { chapter: '9', verses: ['Zechariah 9 v 1–17', 'Zechariah 9 v 9', 'Zechariah 9 v 10', 'Zechariah 9 v 16'] },
-    ]
-  },
-  acts: {
-    title: 'Acts',
-    chapters: [
-      { chapter: '22', verses: ['Acts 22 v 1–30', 'Acts 22 v 25'] },
-      { chapter: '23', verses: ['Acts 23 v 1–22', 'Acts 23 v 11', 'Acts 23 v 21–22', 'Acts 23 v 23–35'] },
-      { chapter: '24', verses: ['Acts 24 v 1–27'] },
-    ]
-  },
-  job: {
-    title: 'Job',
-    chapters: [
-      { chapter: '29', verses: ['Job 29 v 13–25'] },
-      { chapter: '30', verses: ['Job 30 v 1–15'] },
-    ]
-  },
-  haggai: { title: 'Haggai', chapters: [{ chapter: '1', verses: ['Haggai 1 v 1', 'Haggai 1 v 12', 'Haggai 1 v 14'] }, { chapter: '2', verses: ['Haggai 2 v 2', 'Haggai 2 v 23'] }] },
-  ezra: { title: 'Ezra', chapters: [{ chapter: '3', verses: ['Ezra 3 v 2', 'Ezra 3 v 8'] }, { chapter: '5', verses: ['Ezra 5 v 2'] }] },
-  isaiah: { title: 'Isaiah', chapters: [{ chapter: '30', verses: ['Isaiah 30 v 15–16'] }, { chapter: '40', verses: ['Isaiah 40 v 29–31'] }] },
-  psalm: { title: 'Psalm', chapters: [{ chapter: '20', verses: ['Psalm 20 v 7'] }, { chapter: '33', verses: ['Psalm 33 v 16 - 17'] }] },
-};
-
-const allBooks = Object.keys(bookChapters);
 
 export async function getStaticPaths() {
   return allBooks.map(book => ({ params: { book } }));
@@ -48,6 +15,24 @@ const nextBook = bookIndex < allBooks.length - 1 ? allBooks[bookIndex + 1] : nul
 
 const totalPassages = bookData.chapters.reduce((sum, c) => sum + c.verses.length, 0);
 const totalChapters = bookData.chapters.length;
+
+let navHtml = "";
+if (prevBook) {
+  navHtml += '<a href="/books/' + prevBook + '" class="px-4 py-2 bg-stone-100 text-stone-700 rounded-lg text-sm font-medium hover:bg-primary-50 hover:text-primary-700 transition-colors border border-stone-200 flex items-center gap-2"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>' + (prevBook.charAt(0).toUpperCase() + prevBook.slice(1)) + '</a>';
+}
+if (nextBook) {
+  navHtml += '<a href="/books/' + nextBook + '" class="px-4 py-2 bg-stone-100 text-stone-700 rounded-lg text-sm font-medium hover:bg-primary-50 hover:text-primary-700 transition-colors border border-stone-200 flex items-center gap-2">' + (nextBook.charAt(0).toUpperCase() + nextBook.slice(1)) + '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg></a>';
+}
+
+let chaptersHtml = "";
+for (const chapter of bookData.chapters) {
+  let versesHtml = "";
+  for (const verse of chapter.verses) {
+    const verseUrl = verse.toLowerCase().replace(/ /g, "-").replace(/–/g, "-").replace(/:/g, "");
+    versesHtml += '<article class="p-5 hover:bg-stone-50 transition-colors"><div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4"><div class="flex-1"><h3 class="font-semibold text-stone-900 mb-1"><a href="/bible/' + book + '/' + verseUrl + '" class="hover:text-primary-700 transition-colors">' + verse + '</a></h3></div></div></article>';
+  }
+  chaptersHtml += '<section class="bg-white rounded-xl shadow-sm border border-stone-200 overflow-hidden"><header class="bg-stone-50 px-6 py-4 border-b border-stone-200"><h2 class="font-semibold text-stone-900">' + bookData.title + ' ' + chapter.chapter + '</h2><p class="text-sm text-stone-600 mt-1">' + chapter.verses.length + ' verse pages in this chapter</p></header><div class="divide-y divide-stone-100">' + versesHtml + '</div></section>';
+}
 ---
 
 <Layout title={bookData.title} description={"Browse all verse pages from " + bookData.title}>
@@ -64,37 +49,12 @@ const totalChapters = bookData.chapters.length;
           <h1 class="text-3xl md:text-4xl font-bold font-serif text-stone-900">{bookData.title}</h1>
           <p class="text-stone-600 mt-2">{totalPassages} passages across {totalChapters} chapters</p>
         </div>
-        <div class="flex gap-2">
-          {prevBook ? '<a href="/books/' + prevBook + '" class="px-4 py-2 bg-stone-100 text-stone-700 rounded-lg text-sm font-medium hover:bg-primary-50 hover:text-primary-700 transition-colors border border-stone-200 flex items-center gap-2"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>' + (prevBook.charAt(0).toUpperCase() + prevBook.slice(1)) + '</a>' : ''}
-          {nextBook ? '<a href="/books/' + nextBook + '" class="px-4 py-2 bg-stone-100 text-stone-700 rounded-lg text-sm font-medium hover:bg-primary-50 hover:text-primary-700 transition-colors border border-stone-200 flex items-center gap-2">' + (nextBook.charAt(0).toUpperCase() + nextBook.slice(1)) + '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg></a>' : ''}
-        </div>
+        <div class="flex gap-2" set:html={navHtml}></div>
       </div>
     </header>
 
     <div class="space-y-6">
-      {bookData.chapters.map(chapter => (
-        '<section class="bg-white rounded-xl shadow-sm border border-stone-200 overflow-hidden">' +
-        '<header class="bg-stone-50 px-6 py-4 border-b border-stone-200">' +
-        '<h2 class="font-semibold text-stone-900">' + bookData.title + ' ' + chapter.chapter + '</h2>' +
-        '<p class="text-sm text-stone-600 mt-1">' + chapter.verses.length + ' verse pages in this chapter</p>' +
-        '</header>' +
-        '<div class="divide-y divide-stone-100">' +
-        chapter.verses.map(verse => (
-          '<article class="p-5 hover:bg-stone-50 transition-colors">' +
-          '<div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4">' +
-          '<div class="flex-1">' +
-          '<h3 class="font-semibold text-stone-900 mb-1">' +
-          '<a href="/bible/' + book + '/' + verse.toLowerCase().replace(/ /g, '-').replace(/–/g, '-').replace(/:/g, '') + '" class="hover:text-primary-700 transition-colors">' +
-          verse +
-          '</a>' +
-          '</h3>' +
-          '</div>' +
-          '</div>' +
-          '</article>'
-        )).join("") +
-        '</div>' +
-        '</section>'
-      )).join("")}
+      <span set:html={chaptersHtml}></span>
     </div>
   </div>
 </Layout>

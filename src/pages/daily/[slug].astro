@@ -1,38 +1,26 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { getDailyNotes, getPageBySlug } from '../../lib/vault';
+import { dailyNotes } from '../../data/dailyNotes';
 ---
 
 export async function getStaticPaths() {
-  const dailyNotes = await getDailyNotes();
   return dailyNotes.map(note => ({
-    params: { slug: note.slug.split('/')[1] },
+    params: { slug: note.slug },
     props: { note },
   }));
 }
-
-const { note } = Astro.props;
-const canonical = '/daily/' + note.slug.split('/')[1];
-
-// Pre-fetch verse pages
-const versePageData = await Promise.all(
-  note.versePages.map(async (verseRef) => {
-    const page = await getPageBySlug('bible/' + verseRef.toLowerCase().replace(/ /g, '-').replace(/–/g, '-').replace(/:/g, ''));
-    return { verseRef, page };
-  })
-);
 ---
 
-<Layout title={note.title} description={note.frontmatter.description || 'Daily reading: ' + note.title} canonical={canonical}>
+<Layout title={Astro.props.note.title} description={Astro.props.note.frontmatter.description || 'Daily reading: ' + Astro.props.note.title} canonical={'/daily/' + Astro.props.note.slug}>
   <article class="animate-fade-in max-w-4xl mx-auto">
     <header class="mb-8 pb-6 border-b border-stone-200">
-      <time class="text-sm text-primary-700 font-medium" datetime={note.date}>
-        {new Date(note.date).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+      <time class="text-sm text-primary-700 font-medium" datetime={Astro.props.note.date}>
+        {new Date(Astro.props.note.date).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
       </time>
-      <h1 class="mt-2 text-3xl md:text-4xl font-bold font-serif text-stone-900 mb-4">{note.title}</h1>
+      <h1 class="mt-2 text-3xl md:text-4xl font-bold font-serif text-stone-900 mb-4">{Astro.props.note.title}</h1>
       
       <div class="flex flex-wrap gap-3 mb-4">
-        {note.passages.map(passage => (
+        {Astro.props.note.passages.map(passage => (
           <span class="px-3 py-1 bg-primary-50 text-primary-700 text-sm rounded-full font-medium border border-primary-100">{passage}</span>
         ))}
       </div>
@@ -40,34 +28,31 @@ const versePageData = await Promise.all(
       <div class="flex flex-wrap items-center gap-3">
         <span class="text-xs text-stone-500">Topics:</span>
         <div class="flex flex-wrap gap-2">
-          {(note.frontmatter.tags || []).map(tag => (
-            <a href={'/tags/' + tag} class="px-3 py-1 bg-stone-100 text-stone-700 text-sm rounded-full hover:bg-primary-50 hover:text-primary-700 transition-colors border border-stone-200">#{tag}</a>
+          {(Astro.props.note.frontmatter.tags || []).map(tag => (
+            <a href="/tags/" + tag class="px-3 py-1 bg-stone-100 text-stone-700 text-sm rounded-full hover:bg-primary-50 hover:text-primary-700 transition-colors border border-stone-200">#{tag}</a>
           ))}
         </div>
       </div>
     </header>
 
     <div class="prose prose-custom prose-stone max-w-none mb-12">
-      <div class="markdown-body" set:html={note.content} />
+      <div class="markdown-body" set:html={Astro.props.note.content} />
     </div>
 
-    {note.versePages.length > 0 && (
+    {Astro.props.note.versePages.length > 0 && (
       <section class="mb-12">
         <h2 class="text-2xl font-bold text-stone-900 mb-4 flex items-center gap-2">
           <svg class="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
           Harvested Verse Pages
         </h2>
         <div class="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
-          {versePageData.map(({ verseRef, page }) => (
+          {Astro.props.note.versePages.map(verseRef => (
             <article class="bg-white rounded-xl p-5 shadow-sm border border-stone-200 hover:shadow-md transition-all">
               <h3 class="font-semibold text-stone-900 mb-2">
-                <a href={'/bible/' + verseRef.toLowerCase().replace(/ /g, '-').replace(/–/g, '-').replace(/:/g, '')} class="hover:text-primary-700 transition-colors">
+                <a href="/bible/" + verseRef.toLowerCase().replace(/ /g, '-').replace(/–/g, '-').replace(/:/g, '') class="hover:text-primary-700 transition-colors">
                   {verseRef}
                 </a>
               </h3>
-              <p class="text-stone-600 text-sm line-clamp-2">
-                {page?.content.replace(/<[^>]*>/g, '').slice(0, 100) || 'Loading...'}...
-              </p>
             </article>
           ))}
         </div>
@@ -81,7 +66,7 @@ const versePageData = await Promise.all(
           Back to Daily Notes
         </a>
         <a href="/bible" class="hover:text-primary-700 transition-colors flex items-center gap-1">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477-4.5 1.253"/></svg>
           Browse Verse Pages
         </a>
       </nav>

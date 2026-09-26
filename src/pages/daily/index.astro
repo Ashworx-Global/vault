@@ -1,9 +1,8 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { getDailyNotes } from '../../lib/vault';
+import { dailyNotes } from '../../data/dailyNotes';
 ---
 
-const dailyNotes = await getDailyNotes();
 const sortedNotes = dailyNotes.sort((a, b) => b.date.localeCompare(a.date));
 ---
 
@@ -26,7 +25,7 @@ const sortedNotes = dailyNotes.sort((a, b) => b.date.localeCompare(a.date));
                     {new Date(note.date).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
                   </time>
                   <h2 class="mt-2 text-2xl md:text-3xl font-bold text-stone-900">
-                    <a href={'/daily/' + note.slug.split('/')[1]} class="hover:text-primary-700 transition-colors">
+                    <a href={'/daily/' + note.slug} class="hover:text-primary-700 transition-colors">
                       {note.title}
                     </a>
                   </h2>
@@ -52,7 +51,7 @@ const sortedNotes = dailyNotes.sort((a, b) => b.date.localeCompare(a.date));
               </div>
               
               <div class="mt-4 pt-4 border-t border-stone-100 flex items-center justify-between">
-                <a href={'/daily/' + note.slug.split('/')[1]} class="text-primary-700 hover:text-primary-800 font-medium text-sm flex items-center gap-1">
+                <a href={'/daily/' + note.slug} class="text-primary-700 hover:text-primary-800 font-medium text-sm flex items-center gap-1">
                   Read full note <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                 </a>
                 <span class="text-xs text-stone-400">{note.versePages.length} verse pages</span>

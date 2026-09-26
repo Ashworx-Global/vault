@@ -1,10 +1,17 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { getVersePages, getBooks } from '../lib/vault';
+import { verseData } from '../../data/verses';
+import { bookChapters, allBooks } from '../../data/bookChapters';
 ---
 
-const versePages = await getVersePages();
-const books = getBooks(versePages);
+const versePages = Object.values(verseData).flatMap(book => Object.values(book));
+const books = allBooks;
+
+const booksWithStats = books.map(book => {
+  const bookVerses = versePages.filter(v => v.book === book);
+  const chapters = new Set(bookVerses.map(v => v.chapter)).size;
+  return { book, bookVerses, chapters };
+});
 ---
 
 <Layout title="Books" description="Browse verse pages by Bible book">
@@ -15,9 +22,7 @@ const books = getBooks(versePages);
     </header>
 
     <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-      {books.map((book, i) => {
-        const bookVerses = versePages.filter(v => v.book === book);
-        const chapters = new Set(bookVerses.map(v => v.chapter)).size;
+      {booksWithStats.map(({ book, bookVerses, chapters }, i) => {
         const delay = i * 50;
         return (
           <a 

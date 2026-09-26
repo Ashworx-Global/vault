@@ -2,30 +2,25 @@
 import Layout from '../layouts/Layout.astro';
 ---
 
-const versePagesData = [
-  { book: "Zechariah", count: 21, chapters: 9 },
-  { book: "Acts", count: 7, chapters: 3 },
-  { book: "Haggai", count: 5, chapters: 2 },
-  { book: "Ezra", count: 3, chapters: 2 },
-  { book: "Job", count: 2, chapters: 2 },
-  { book: "Isaiah", count: 2, chapters: 2 },
-  { book: "Psalm", count: 2, chapters: 2 },
-  { book: "1 Chronicles", count: 1, chapters: 1 },
-  { book: "1 Corinthians", count: 1, chapters: 1 },
-  { book: "1 Samuel", count: 1, chapters: 1 },
-  { book: "2 Chronicles", count: 1, chapters: 1 },
-  { book: "2 Corinthians", count: 1, chapters: 1 },
-  { book: "Deuteronomy", count: 1, chapters: 1 },
-  { book: "Hosea", count: 1, chapters: 1 },
-  { book: "Jeremiah", count: 1, chapters: 1 },
-  { book: "Luke", count: 1, chapters: 1 },
-  { book: "Matthew", count: 1, chapters: 1 },
-  { book: "Nehemiah", count: 1, chapters: 1 },
-];
-
-const bookButtonsHtml = versePagesData.map(book => 
-  '<button class="px-4 py-2 bg-stone-100 text-stone-700 rounded-full text-sm font-medium hover:bg-primary-50 hover:text-primary-700 transition-colors border border-stone-200" data-book="' + book.book.toLowerCase().replace(/\s+/g, '-') + '">' + book.book + ' (' + book.count + ')</button>'
-).join("");
+const bookButtonsHtml = 
+  '<button class="px-4 py-2 bg-stone-100 text-stone-700 rounded-full text-sm font-medium hover:bg-primary-50 hover:text-primary-700 transition-colors border border-stone-200" data-book="zechariah">Zechariah (21)</button>' +
+  '<button class="px-4 py-2 bg-stone-100 text-stone-700 rounded-full text-sm font-medium hover:bg-primary-50 hover:text-primary-700 transition-colors border border-stone-200" data-book="acts">Acts (7)</button>' +
+  '<button class="px-4 py-2 bg-stone-100 text-stone-700 rounded-full text-sm font-medium hover:bg-primary-50 hover:text-primary-700 transition-colors border border-stone-200" data-book="haggai">Haggai (5)</button>' +
+  '<button class="px-4 py-2 bg-stone-100 text-stone-700 rounded-full text-sm font-medium hover:bg-primary-50 hover:text-primary-700 transition-colors border border-stone-200" data-book="ezra">Ezra (3)</button>' +
+  '<button class="px-4 py-2 bg-stone-100 text-stone-700 rounded-full text-sm font-medium hover:bg-primary-50 hover:text-primary-700 transition-colors border border-stone-200" data-book="job">Job (2)</button>' +
+  '<button class="px-4 py-2 bg-stone-100 text-stone-700 rounded-full text-sm font-medium hover:bg-primary-50 hover:text-primary-700 transition-colors border border-stone-200" data-book="isaiah">Isaiah (2)</button>' +
+  '<button class="px-4 py-2 bg-stone-100 text-stone-700 rounded-full text-sm font-medium hover:bg-primary-50 hover:text-primary-700 transition-colors border border-stone-200" data-book="psalm">Psalm (2)</button>' +
+  '<button class="px-4 py-2 bg-stone-100 text-stone-700 rounded-full text-sm font-medium hover:bg-primary-50 hover:text-primary-700 transition-colors border border-stone-200" data-book="1-chronicles">1 Chronicles (1)</button>' +
+  '<button class="px-4 py-2 bg-stone-100 text-stone-700 rounded-full text-sm font-medium hover:bg-primary-50 hover:text-primary-700 transition-colors border border-stone-200" data-book="1-corinthians">1 Corinthians (1)</button>' +
+  '<button class="px-4 py-2 bg-stone-100 text-stone-700 rounded-full text-sm font-medium hover:bg-primary-50 hover:text-primary-700 transition-colors border border-stone-200" data-book="1-samuel">1 Samuel (1)</button>' +
+  '<button class="px-4 py-2 bg-stone-100 text-stone-700 rounded-full text-sm font-medium hover:bg-primary-50 hover:text-primary-700 transition-colors border border-stone-200" data-book="2-chronicles">2 Chronicles (1)</button>' +
+  '<button class="px-4 py-2 bg-stone-100 text-stone-700 rounded-full text-sm font-medium hover:bg-primary-50 hover:text-primary-700 transition-colors border border-stone-200" data-book="2-corinthians">2 Corinthians (1)</button>' +
+  '<button class="px-4 py-2 bg-stone-100 text-stone-700 rounded-full text-sm font-medium hover:bg-primary-50 hover:text-primary-700 transition-colors border border-stone-200" data-book="deuteronomy">Deuteronomy (1)</button>' +
+  '<button class="px-4 py-2 bg-stone-100 text-stone-700 rounded-full text-sm font-medium hover:bg-primary-50 hover:text-primary-700 transition-colors border border-stone-200" data-book="hosea">Hosea (1)</button>' +
+  '<button class="px-4 py-2 bg-stone-100 text-stone-700 rounded-full text-sm font-medium hover:bg-primary-50 hover:text-primary-700 transition-colors border border-stone-200" data-book="jeremiah">Jeremiah (1)</button>' +
+  '<button class="px-4 py-2 bg-stone-100 text-stone-700 rounded-full text-sm font-medium hover:bg-primary-50 hover:text-primary-700 transition-colors border border-stone-200" data-book="luke">Luke (1)</button>' +
+  '<button class="px-4 py-2 bg-stone-100 text-stone-700 rounded-full text-sm font-medium hover:bg-primary-50 hover:text-primary-700 transition-colors border border-stone-200" data-book="matthew">Matthew (1)</button>' +
+  '<button class="px-4 py-2 bg-stone-100 text-stone-700 rounded-full text-sm font-medium hover:bg-primary-50 hover:text-primary-700 transition-colors border border-stone-200" data-book="nehemiah">Nehemiah (1)</button>';
 ---
 
 <Layout title="Verse Pages" description="Browse all individual verse pages organized by book">
