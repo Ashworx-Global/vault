@@ -293,6 +293,8 @@ a.ext:hover{text-decoration:underline}
 .tag:hover{background:#dcfce7;color:#15803d;border-color:#bbf7d0}
 .card{background:#fff;border:1px solid #e7e5e4;border-radius:1rem;padding:1.25rem;transition:box-shadow .2s,transform .2s}
 .card:hover{box-shadow:0 10px 25px -12px rgba(0,0,0,.25);transform:translateY(-2px)}
+.card{min-width:0}
+.card p,.prose-custom p{overflow-wrap:anywhere;word-break:break-word}
 .tablewrap{overflow-x:auto;margin:1rem 0}
 table{width:100%;border-collapse:collapse;font-size:.95rem}
 th,td{border:1px solid #e7e5e4;padding:.5rem .75rem;text-align:left}
