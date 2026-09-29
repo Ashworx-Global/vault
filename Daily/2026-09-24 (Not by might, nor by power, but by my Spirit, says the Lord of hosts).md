@@ -17,8 +17,6 @@ tags:
   - obstacles
   - daily-struggles
 ---
-
-
 Not by might, nor by power, but by my Spirit, says the Lord of hosts. 
  [_The Holy Bible: English Standard Version_](https://ref.ly/logosres/esv?ref=BibleESV.Zec4.6&off=77&ctx=o+l%EF%BB%BFZerubbabel%E2%80%A2%E2%80%A2%3a+m%EF%BB%BF~Not+by+might%2c+nor+by) (Wheaton, IL: Crossway Bibles, 2025), Zec 4:6.
 

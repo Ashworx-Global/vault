@@ -9,9 +9,6 @@ tags:
   - grace
   - faithfulness
 ---
-
-_Zechariah 12:1–14:21;_ **_Acts 26:1–32_**_; Job 31:1–8_
-
  [Zec 12:1–14:21](https://ref.ly/logosres/esv?ref=BibleESV.Zec12.1&off=6118) * [Ac 26:1–32](https://ref.ly/logosres/esv?ref=BibleESV.Ac26.1&off=33&ctx=e+Before+Agrippa%0a26%C2%A0~So+l%EF%BB%BFAgrippa+said+to)  * [Job 31:1–8](https://ref.ly/logosres/esv?ref=BibleESV.Job31.1&off=22&ctx=b%E2%80%99s+Final+Appeal%0a31%C2%A0~%E2%80%9CI+have+made+a+coven) 
 
 > [!bible]- [Zechariah 12:1-14:21 - WEB-OFFLINE](https://www.biblegateway.com/passage/?search=Zechariah+12:1-14:21&version=web-offline)

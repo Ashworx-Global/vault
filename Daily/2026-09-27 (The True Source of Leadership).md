@@ -1,14 +1,13 @@
- ---
+---
 tags:
   - leadership
   - shepherds
   - false-teachers
   - stand-firm
-  - word-of-god
+  - word-of-God
   - mercy
   - affliction
 ---
-
  [Zec 10:1–11:17.](https://ref.ly/logosres/esv?ref=BibleESV.Zec10.1&off=3531)  * [Ac 25:1–27.](https://ref.ly/logosres/esv?ref=BibleESV.Ac25.1&off=26&ctx=ppeals+to+Caesar%0a25%C2%A0~Now+three+days+after) * [Job 30:16–31](https://ref.ly/logosres/esv?ref=BibleESV.Job30.16&off=0&ctx=ay+like+c%EF%BB%BFa+cloud.+%0a~+16%C2%A0+%E2%80%9CAnd+now+my+sou)
 
 > [!bible]- [Zechariah 10:1-11:17 - WEB-OFFLINE](https://www.biblegateway.com/passage/?search=Zechariah+10:1-11:17&version=web-offline)

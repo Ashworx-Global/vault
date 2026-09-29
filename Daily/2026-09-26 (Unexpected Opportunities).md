@@ -16,7 +16,6 @@ tags:
   - dependence
   - unexpected-opportunities
 ---
-
 [Zechariah 8:1–9:17](https://ref.ly/Zec8.1;esv)   [Acts 23:23–24:27](https://ref.ly/logosres/esv?ref=BibleESV.Ac23.23&off=0&ctx=+of+these+things.%E2%80%9D+%0a~Paul+Sent+to+Felix+t)  [Job 30:1–15](https://ref.ly/logosres/esv?ref=BibleESV.Job30.1&off=0&ctx=30%C2%A0~%E2%80%9CBut+now+they+i%EF%BB%BFlaugh+at+me%2c+%0amen+who)
 
 > [!bible]- [Zechariah 8:1-9:17 - WEB-OFFLINE](https://www.biblegateway.com/passage/?search=Zechariah+8:1-9:17&version=web-offline)
