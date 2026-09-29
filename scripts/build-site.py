@@ -336,7 +336,7 @@ BASE_TMPL = """<!DOCTYPE html>
 <main id="main" class="flex-1 w-full max-w-6xl mx-auto px-4 py-8">@@BODY@@</main>
 <footer class="border-t border-stone-200 bg-white mt-8">
 <div class="max-w-6xl mx-auto px-4 py-8 grid gap-6 md:grid-cols-3 text-sm text-stone-600">
-<div><h3 class="font-semibold text-stone-900 mb-2">Man of God Daily Readings</h3><p>Daily Bible notes with linked verse pages. Wikilinks mirror Obsidian; Logos ref.ly links open in your own Logos copy.</p></div>
+<div><h3 class="font-semibold text-stone-900 mb-2">Man of God Daily Readings</h3><p>A GitHub Pages site rendered from an <a class="hover:text-green-700" href="https://obsidian.md/download" target="_blank" rel="noopener">Obsidian</a> vault of daily Bible notes. Verse links mirror the vault's wikilinks, and scripture text comes from the ESV (Crossway) API. Logos links open each passage in your own Logos library — <a class="hover:text-green-700" href="https://www.logos.com/free-edition" target="_blank" rel="noopener">free with a Logos account</a>.</p></div>
 <div><h3 class="font-semibold text-stone-900 mb-2">Browse</h3><p><a class="hover:text-green-700" href="@@BASE@@/daily/">Daily notes</a> · <a class="hover:text-green-700" href="@@BASE@@/bible/">Verse pages</a> · <a class="hover:text-green-700" href="@@BASE@@/books/">Books</a> · <a class="hover:text-green-700" href="@@BASE@@/tags/">Topics</a></p></div>
 <div><h3 class="font-semibold text-stone-900 mb-2">Source</h3><p><a class="hover:text-green-700" href="https://github.com/Ashworx-Global/vault" target="_blank" rel="noopener">Ashworx-Global/vault</a> · built from Obsidian markdown, stdlib only, no npm.</p></div>
 </div>
