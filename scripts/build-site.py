@@ -439,10 +439,15 @@ def main() -> int:
         for t in p["fm"].get("tags", []):
             tag_index.setdefault(t, []).append(p)
 
+    def blurb_text(body: str, n: int) -> str:
+        t = re.sub(r"\[([^\]]*)\]\([^)]*\)", r"\1", body)  # [text](url) -> text
+        t = re.sub(r"[#>*`\[\]]", "", t)
+        return esc(re.sub(r"\s+", " ", t)[:n] + "…")
+
     def card_daily(p: dict) -> str:
         search = esc((p["title"] + " " + p.get("date", "") + " " + " ".join(p["fm"].get("tags", []))).lower())
         pills = tag_pills(p["fm"].get("tags", [])[:6])
-        blurb = esc(re.sub(r"\s+", " ", re.sub(r"[#>*`\[\]]", "", p["body"]))[:180] + "…")
+        blurb = blurb_text(p["body"], 180)
         return (f'<article class="card" data-search="{search}"><p class="text-sm text-green-700 font-medium">{esc(p.get("date",""))}</p>'
                 f'<h3 class="font-serif text-xl font-bold mt-1"><a class="hover:text-green-700" href="{p["url"]}">{esc(p["title"])}</a></h3>'
                 f'<p class="text-sm text-stone-600 mt-2">{blurb}</p><div class="mt-3">{pills}</div></article>')
@@ -450,7 +455,7 @@ def main() -> int:
     def card_verse(p: dict) -> str:
         search = esc((p["title"] + " " + " ".join(p["fm"].get("tags", []))).lower())
         pills = tag_pills(p["fm"].get("tags", [])[:4])
-        blurb = esc(re.sub(r"\s+", " ", re.sub(r"[#>*`\[\]]", "", p["body"]))[:140] + "…")
+        blurb = blurb_text(p["body"], 140)
         return (f'<article class="card" data-search="{search}"><h3 class="font-semibold"><a class="hover:text-green-700" href="{p["url"]}">{esc(p["title"])}</a></h3>'
                 f'<p class="text-sm text-stone-600 mt-2">{blurb}</p><div class="mt-3">{pills}</div></article>')
 
