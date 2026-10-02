@@ -11,9 +11,6 @@ tags:
 
 [Eze 3:16–5:17](https://ref.ly/logosres/esv?ref=BibleESV.Eze3.16) * [Rev 2:1–11](https://ref.ly/logosres/esv?ref=BibleESV.Re2.1) * [Job 32:11–22](https://ref.ly/logosres/esv?ref=BibleESV.Job32.11)
 
-* Ezekiel 3:16–5:17 
-* Revelation 2:1–11 
-* Job 32:11–22
 
 That is a hard pill to swallow, but the Lord said it so I must listen and believe what it says and submit to it. Ezekiel 3 talks of if you are a righteous person then you are obligated to speak to others of righteousness else their blood is on your hands. Father God give me the wisdom and courage to speak your Word to others.
 
