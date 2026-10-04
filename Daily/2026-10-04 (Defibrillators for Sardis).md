@@ -1,4 +1,3 @@
-
 ---
 tags:
   - repentance
@@ -9,7 +8,6 @@ tags:
   - restoration
   - sardis
 ---
-
 [Eze 9:1–11:25](https://ref.ly/logosres/esv?ref=BibleESV.Eze9.1) * [Rev 3:1–13](https://ref.ly/logosres/esv?ref=BibleESV.Re3.1) * [Job 33:8–18](https://ref.ly/logosres/esv?ref=BibleESV.Job33.8)
 
 > [!bible]- [Ezekiel 9:1-11:25 - WEB-OFFLINE](https://www.biblegateway.com/passage/?search=Ezekiel+9:1-11:25&version=web-offline)
