@@ -20,8 +20,9 @@ python3 .opencode/skills/verse-pages/harvest_verses.py --dry-run "Daily/<note>.m
 ```
 
 What it does:
-- Parses `> [!bible]- [Book C:V-R - ESV]` headers and splits multi-chapter
-  ranges into per-chapter block pages (using verses actually present).
+- Parses `> [!bible]- [Book C:V-R - Translation]` headers and splits
+  multi-chapter ranges into per-chapter block pages (using verses actually
+  present).
 - Parses per-verse lines `> [[Book C#^V|V]]. text` for verse content.
 - Parses own-line short refs (`Zec 7:5`, `Ac 23:21–22`) and ref-like
   markdown link texts (`[Zec 7:5](https://ref.ly/...)`, `[Job 29:13–25]()`)

@@ -2,7 +2,7 @@
 """Harvest Bible passages from a vault note into linked Bible/ verse pages.
 
 Reads a daily/study note containing:
-  - Bible Verse plugin callouts:  > [!bible]- [Book C:V-R - ESV](url)
+  - Bible Verse plugin callouts:  > [!bible]- [Book C:V-R - Translation](url)
     with per-verse lines:          > [[Book C#^V|V]]. verse text
   - Logos links:                   [ref or snippet](https://ref.ly/...)
   - Short refs on their own line:  Zec 7:5   /   Ac 23:21-22
@@ -185,8 +185,12 @@ def main():
             continue
         verses[(book[0], int(cm.group(2)), vnum)] = vtext
 
-    # 2. passages: bible-callout headers, split per chapter using verses present
-    header_re = re.compile(r"^>\s*\[!bible\][+-]?\s*\[(.+?)\s*-\s*ESV\]")
+    # 2. passages: bible-callout headers, split per chapter using verses present.
+    # The per-verse lines provide the actual text, so the translation label is
+    # metadata and must not restrict harvesting (for example, WEB-OFFLINE).
+    # Require whitespace around the metadata delimiter so a verse-range hyphen
+    # (for example, `17:1-18:32`) stays part of the reference.
+    header_re = re.compile(r"^>\s*\[!bible\][+-]?\s*\[(.+?)\s+-\s+[^\]]+\]")
     blocks = []  # (display, slug, chapter, [sorted verses])
     for ln in lines:
         m = header_re.match(ln)
