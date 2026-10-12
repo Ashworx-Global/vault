@@ -363,6 +363,8 @@ def parse_book_ref(stem: str) -> tuple[str, str, str]:
 # ---------------------------------------------------------------- graph
 
 GRAPH_COLORS = {"daily": "#16a34a", "verse": "#f59e0b", "book": "#2563eb", "tag": "#78716c", "concept": "#c4b5a5"}
+GRAPH_DEFAULT_ON = ("verse", "tag")  # node types shown on first load; the rest start unticked
+GRAPH_DEFAULT_QUERY = "grace"  # prefilled search: highlights matches and their neighbours
 GRAPH_LABELS = {"daily": "Daily notes", "verse": "Verse pages", "book": "Books", "tag": "Topics", "concept": "Unlinked concepts"}
 
 
@@ -432,12 +434,12 @@ const links=data.links.map(([a,b])=>({s:byId.get(a),t:byId.get(b)})).filter(l=>l
 const adj=new Map(nodes.map(n=>[n,new Set()]));
 links.forEach(l=>{adj.get(l.s).add(l.t);adj.get(l.t).add(l.s);});
 const visibleTypes=new Set([...document.querySelectorAll('[data-gtype]')].filter(c=>c.checked).map(c=>c.dataset.gtype));
-let query='',hover=null,drag=null,alpha=1,W=0,H=0,dpr=1,view={x:0,y:0,k:1},panning=null;
+let query=document.getElementById('graph-search').value.trim().toLowerCase(),hover=null,drag=null,alpha=1,W=0,H=0,dpr=1,view={x:0,y:0,k:1},panning=null;
 const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 function resize(){const r=cv.getBoundingClientRect();dpr=devicePixelRatio||1;W=r.width;H=r.height;cv.width=W*dpr;cv.height=H*dpr;if(!view.set){view.x=W/2;view.y=H/2;view.set=true;}draw();}
 function vis(n){return visibleTypes.has(n.type)&&(!query||n.label.toLowerCase().includes(query));}
-function matchSet(){return query?new Set(nodes.filter(n=>vis(n))):null;}
+function matchSet(){if(!query)return null;const m=new Set();nodes.filter(vis).forEach(n=>{m.add(n);adj.get(n).forEach(x=>m.add(x));});return m;}
 
 function tick(){
   const vn=nodes.filter(n=>visibleTypes.has(n.type));
@@ -506,7 +508,7 @@ def render_graph_page(pages: list[dict], linkmap: dict, books: set[str], tag_ind
     for n in g["nodes"]:
         counts[n["type"]] = counts.get(n["type"], 0) + 1
     legend = "".join(
-        f'<label class="inline-flex items-center gap-2 text-sm cursor-pointer"><input type="checkbox"{"" if k == "tag" else " checked"} data-gtype="{k}">'
+        f'<label class="inline-flex items-center gap-2 text-sm cursor-pointer"><input type="checkbox"{" checked" if k in GRAPH_DEFAULT_ON else ""} data-gtype="{k}">'
         f'<span class="inline-block w-3 h-3 rounded-full" style="background:{GRAPH_COLORS[k]}"></span>{GRAPH_LABELS[k]} ({counts.get(k, 0)})</label>'
         for k in GRAPH_COLORS if counts.get(k))
     data = json.dumps(g, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
@@ -515,7 +517,7 @@ def render_graph_page(pages: list[dict], linkmap: dict, books: set[str], tag_ind
         '<h1 class="font-serif text-3xl font-black mb-2">Graph</h1>'
         f'<p class="text-stone-600 mb-4">{len(g["nodes"])} nodes, {len(g["links"])} connections. Hover to see what a note touches, drag nodes to rearrange, scroll to zoom, click to open.</p>'
         '<div class="flex flex-wrap items-center gap-x-5 gap-y-2 mb-4">'
-        '<input id="graph-search" type="search" placeholder="Find a node…" aria-label="Find a node" class="border border-stone-300 rounded-lg px-4 py-2 w-full md:w-64">'
+        f'<input id="graph-search" type="search" placeholder="Find a node…" value="{GRAPH_DEFAULT_QUERY}" aria-label="Find a node" class="border border-stone-300 rounded-lg px-4 py-2 w-full md:w-64">'
         f'{legend}<button id="graph-reset" type="button" class="tag">Reset view</button></div>'
         '<div class="relative card !p-0 overflow-hidden"><canvas id="graph" class="w-full block touch-none cursor-grab" style="height:70vh;min-height:420px" '
         'role="img" aria-label="Interactive graph of connections between notes, verses, books and topics"></canvas>'
