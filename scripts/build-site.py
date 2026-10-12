@@ -22,6 +22,7 @@ Usage:
 from __future__ import annotations
 
 import html
+import json
 import os
 import re
 import shutil
@@ -329,6 +330,7 @@ BASE_TMPL = """<!DOCTYPE html>
 <a class="hover:text-green-700" href="@@BASE@@/bible/">Bible</a>
 <a class="hover:text-green-700" href="@@BASE@@/books/">Books</a>
 <a class="hover:text-green-700" href="@@BASE@@/tags/">Topics</a>
+<a class="hover:text-green-700" href="@@BASE@@/graph/">Graph</a>
 <a class="hover:text-green-700" href="https://github.com/Ashworx-Global/vault" target="_blank" rel="noopener">GitHub</a>
 </div>
 </nav>
@@ -337,7 +339,7 @@ BASE_TMPL = """<!DOCTYPE html>
 <footer class="border-t border-stone-200 bg-white mt-8">
 <div class="max-w-6xl mx-auto px-4 py-8 grid gap-6 md:grid-cols-3 text-sm text-stone-600">
 <div><h3 class="font-semibold text-stone-900 mb-2">Man of God Daily Readings</h3><p>A GitHub Pages site rendered from an <a class="hover:text-green-700" href="https://obsidian.md/" target="_blank" rel="noopener">Obsidian</a> vault of daily Bible notes. Verse links mirror the vault's wikilinks, and scripture text comes from the ESV via the <a class="hover:text-green-700" href="https://api.esv.org/" target="_blank" rel="noopener">Crossway API</a>. Logos links open each passage in your own Logos library — <a class="hover:text-green-700" href="https://www.logos.com/free-edition" target="_blank" rel="noopener">get Logos free</a>.</p></div>
-<div><h3 class="font-semibold text-stone-900 mb-2">Browse</h3><p><a class="hover:text-green-700" href="@@BASE@@/daily/">Daily notes</a> · <a class="hover:text-green-700" href="@@BASE@@/bible/">Verse pages</a> · <a class="hover:text-green-700" href="@@BASE@@/books/">Books</a> · <a class="hover:text-green-700" href="@@BASE@@/tags/">Topics</a></p></div>
+<div><h3 class="font-semibold text-stone-900 mb-2">Browse</h3><p><a class="hover:text-green-700" href="@@BASE@@/daily/">Daily notes</a> · <a class="hover:text-green-700" href="@@BASE@@/bible/">Verse pages</a> · <a class="hover:text-green-700" href="@@BASE@@/books/">Books</a> · <a class="hover:text-green-700" href="@@BASE@@/tags/">Topics</a> · <a class="hover:text-green-700" href="@@BASE@@/graph/">Graph</a></p></div>
 <div><h3 class="font-semibold text-stone-900 mb-2">Source</h3><p><a class="hover:text-green-700" href="https://github.com/Ashworx-Global/vault" target="_blank" rel="noopener">Ashworx-Global/vault</a> · built from Obsidian markdown, stdlib only, no npm.</p></div>
 </div>
 </footer>
@@ -356,6 +358,171 @@ def parse_book_ref(stem: str) -> tuple[str, str, str]:
     if not m:
         return stem, "", ""
     return m.group(1).strip(), m.group(2).strip(), m.group(3).strip()
+
+
+# ---------------------------------------------------------------- graph
+
+GRAPH_COLORS = {"daily": "#16a34a", "verse": "#f59e0b", "book": "#2563eb", "tag": "#78716c", "concept": "#c4b5a5"}
+GRAPH_LABELS = {"daily": "Daily notes", "verse": "Verse pages", "book": "Books", "tag": "Topics", "concept": "Unlinked concepts"}
+
+
+def build_graph(pages: list[dict], linkmap: dict, books: set[str], tag_index: dict, base: str) -> dict:
+    """Nodes + edges from wikilinks and tags, the same relationships Obsidian's graph shows.
+
+    Wikilinks to a real page link page-to-page; to a Bible book (or "Book 8" chapter
+    refs) link to the book node; anything else becomes a "concept" node (Obsidian's
+    unresolved-link ghost), because names like [[Zerubbabel]] are the real connective tissue.
+    """
+    nodes: dict[str, dict] = {}
+    edges: set[tuple[str, str]] = set()
+    url_to_id = {p["url"]: f'{p["kind"]}:{p["slug"]}' for p in pages}
+
+    def add(nid: str, label: str, kind: str, url: str = "") -> str:
+        nodes.setdefault(nid, {"id": nid, "label": label, "type": kind, "url": url})
+        return nid
+
+    for p in pages:
+        kind = "daily" if p["kind"] == "daily" else "verse"
+        add(url_to_id[p["url"]], p["title"], kind, p["url"])
+    for t in tag_index:
+        add(f"tag:{slugify(t)}", f"#{t}", "tag", f"{base}/tags/{quote(slugify(t))}/")
+
+    def target(raw: str) -> str | None:
+        key = raw.strip().lower()
+        url = linkmap.get(key) or linkmap.get(slugify(raw))
+        if url:
+            return url_to_id.get(url)
+        m = re.match(r"^(.*?)(?:\s+\d+)?$", raw.strip())
+        book = (m.group(1) if m else raw).strip()
+        if book.lower() in books:
+            return add(f"book:{slugify(book)}", book, "book", f"{base}/books/{slugify(book)}/")
+        return add(f"concept:{slugify(raw)}", raw.strip(), "concept") if slugify(raw) else None
+
+    for p in pages:
+        src = url_to_id[p["url"]]
+        for m in WIKILINK_RE.finditer(OBSIDIAN_COMMENT_RE.sub("", p["body"])):
+            raw = m.group(1).split("|", 1)[0].split("#", 1)[0]
+            dst = target(raw)
+            if dst and dst != src:
+                edges.add(tuple(sorted((src, dst))))
+        for t in p["fm"].get("tags", []):
+            edges.add(tuple(sorted((src, f"tag:{slugify(t)}"))))
+        if p["kind"] == "bible" and p["book"]:  # every verse page belongs to its book
+            edges.add(tuple(sorted((src, target(p["book"])))))
+
+    degree: dict[str, int] = {}
+    for a, b in edges:
+        degree[a] = degree.get(a, 0) + 1
+        degree[b] = degree.get(b, 0) + 1
+    live = [n for n in nodes.values() if degree.get(n["id"])]  # drop orphans
+    for n in live:
+        n["deg"] = degree[n["id"]]
+    return {"nodes": live, "links": [list(e) for e in sorted(edges)]}
+
+
+GRAPH_JS = r"""
+(function(){
+const data=JSON.parse(document.getElementById('graph-data').textContent);
+const COLORS=@@COLORS@@, LABELS=@@LABELS@@;
+const cv=document.getElementById('graph'), ctx=cv.getContext('2d');
+const tip=document.getElementById('graph-tip');
+const nodes=data.nodes.map((n,i)=>({...n,i,x:Math.cos(i)*200+Math.random()*50,y:Math.sin(i)*200+Math.random()*50,vx:0,vy:0,r:4+Math.sqrt(n.deg)*2.2}));
+const byId=new Map(nodes.map(n=>[n.id,n]));
+const links=data.links.map(([a,b])=>({s:byId.get(a),t:byId.get(b)})).filter(l=>l.s&&l.t);
+const adj=new Map(nodes.map(n=>[n,new Set()]));
+links.forEach(l=>{adj.get(l.s).add(l.t);adj.get(l.t).add(l.s);});
+const visibleTypes=new Set([...document.querySelectorAll('[data-gtype]')].filter(c=>c.checked).map(c=>c.dataset.gtype));
+let query='',hover=null,drag=null,alpha=1,W=0,H=0,dpr=1,view={x:0,y:0,k:1},panning=null;
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+function resize(){const r=cv.getBoundingClientRect();dpr=devicePixelRatio||1;W=r.width;H=r.height;cv.width=W*dpr;cv.height=H*dpr;if(!view.set){view.x=W/2;view.y=H/2;view.set=true;}draw();}
+function vis(n){return visibleTypes.has(n.type)&&(!query||n.label.toLowerCase().includes(query));}
+function matchSet(){return query?new Set(nodes.filter(n=>vis(n))):null;}
+
+function tick(){
+  const vn=nodes.filter(n=>visibleTypes.has(n.type));
+  for(let a=0;a<vn.length;a++){const p=vn[a];
+    p.vx-=p.x*0.004;p.vy-=p.y*0.004; // gentle pull to centre
+    for(let b=a+1;b<vn.length;b++){const q=vn[b];let dx=p.x-q.x,dy=p.y-q.y,d2=dx*dx+dy*dy+0.01;
+      if(d2>90000)continue;const f=900/d2,d=Math.sqrt(d2);dx=dx/d*f;dy=dy/d*f;p.vx+=dx;p.vy+=dy;q.vx-=dx;q.vy-=dy;}}
+  links.forEach(l=>{if(!visibleTypes.has(l.s.type)||!visibleTypes.has(l.t.type))return;
+    const dx=l.t.x-l.s.x,dy=l.t.y-l.s.y,d=Math.sqrt(dx*dx+dy*dy)||1,f=(d-60)*0.02*alpha+ (d-60)*0.01;
+    const fx=dx/d*f,fy=dy/d*f;l.s.vx+=fx;l.s.vy+=fy;l.t.vx-=fx;l.t.vy-=fy;});
+  vn.forEach(n=>{if(n===drag)return;n.vx*=0.82;n.vy*=0.82;n.x+=n.vx*alpha;n.y+=n.vy*alpha;});
+  alpha=Math.max(alpha*0.992,0.02);
+}
+
+function draw(){
+  ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H);
+  ctx.translate(view.x,view.y);ctx.scale(view.k,view.k);
+  const focus=hover||null,ms=matchSet();
+  const lit=n=>!focus?(!ms||ms.has(n)):(n===focus||adj.get(focus).has(n));
+  ctx.lineWidth=1/view.k;
+  links.forEach(l=>{if(!visibleTypes.has(l.s.type)||!visibleTypes.has(l.t.type))return;
+    const on=focus?(l.s===focus||l.t===focus):(!ms||(ms.has(l.s)&&ms.has(l.t)));
+    ctx.strokeStyle=on?(focus?'rgba(21,128,61,.75)':'rgba(120,113,108,.35)'):'rgba(120,113,108,.07)';
+    ctx.beginPath();ctx.moveTo(l.s.x,l.s.y);ctx.lineTo(l.t.x,l.t.y);ctx.stroke();});
+  nodes.forEach(n=>{if(!visibleTypes.has(n.type))return;
+    ctx.globalAlpha=lit(n)?1:0.15;ctx.fillStyle=COLORS[n.type];
+    ctx.beginPath();ctx.arc(n.x,n.y,n.r,0,6.2832);ctx.fill();
+    if(n===focus){ctx.lineWidth=2/view.k;ctx.strokeStyle='#1c1917';ctx.stroke();}});
+  ctx.globalAlpha=1;ctx.font=`${11/Math.max(view.k,0.6)}px Inter,system-ui,sans-serif`;ctx.textAlign='center';ctx.fillStyle='#44403c';
+  nodes.forEach(n=>{if(!visibleTypes.has(n.type)||!lit(n))return;
+    const show=n===focus||(focus&&adj.get(focus).has(n))||(ms&&ms.has(n))||(!focus&&!ms&&(n.deg>=8||view.k>1.8));
+    if(show)ctx.fillText(n.label.length>34?n.label.slice(0,33)+'…':n.label,n.x,n.y+n.r+12/Math.max(view.k,0.6));});
+}
+
+let raf=0;function loop(){if(!reduce&&alpha>0.021)tick();draw();raf=requestAnimationFrame(loop);}
+if(reduce){for(let i=0;i<400;i++)tick();alpha=0.02;}
+
+function toWorld(e){const r=cv.getBoundingClientRect();return{x:(e.clientX-r.left-view.x)/view.k,y:(e.clientY-r.top-view.y)/view.k};}
+function pick(e){const p=toWorld(e);let best=null,bd=1e9;nodes.forEach(n=>{if(!visibleTypes.has(n.type))return;const d=Math.hypot(n.x-p.x,n.y-p.y);if(d<n.r+4/view.k&&d<bd){best=n;bd=d;}});return best;}
+let moved=false;
+cv.addEventListener('pointerdown',e=>{cv.setPointerCapture(e.pointerId);moved=false;const n=pick(e);if(n){drag=n;alpha=Math.max(alpha,0.4);}else panning={x:e.clientX-view.x,y:e.clientY-view.y};});
+cv.addEventListener('pointermove',e=>{
+  if(drag){moved=true;const p=toWorld(e);drag.x=p.x;drag.y=p.y;drag.vx=drag.vy=0;alpha=Math.max(alpha,0.3);}
+  else if(panning){moved=true;view.x=e.clientX-panning.x;view.y=e.clientY-panning.y;}
+  else{hover=pick(e);cv.style.cursor=hover?(hover.url?'pointer':'default'):'grab';
+    if(hover){tip.hidden=false;tip.textContent=`${hover.label} · ${LABELS[hover.type]} · ${hover.deg} link${hover.deg===1?'':'s'}`;}else tip.hidden=true;}
+  if(reduce)draw();});
+cv.addEventListener('pointerup',e=>{if(drag&&!moved&&drag.url)location.href=drag.url;drag=null;panning=null;});
+cv.addEventListener('pointerleave',()=>{hover=null;tip.hidden=true;});
+cv.addEventListener('wheel',e=>{e.preventDefault();const r=cv.getBoundingClientRect(),mx=e.clientX-r.left,my=e.clientY-r.top;
+  const k=Math.min(4,Math.max(0.2,view.k*Math.exp(-e.deltaY*0.0015)));view.x=mx-(mx-view.x)*(k/view.k);view.y=my-(my-view.y)*(k/view.k);view.k=k;if(reduce)draw();},{passive:false});
+
+document.querySelectorAll('[data-gtype]').forEach(cb=>cb.addEventListener('change',()=>{
+  cb.checked?visibleTypes.add(cb.dataset.gtype):visibleTypes.delete(cb.dataset.gtype);alpha=Math.max(alpha,0.5);if(reduce)draw();}));
+document.getElementById('graph-search').addEventListener('input',e=>{query=e.target.value.trim().toLowerCase();if(reduce)draw();});
+document.getElementById('graph-reset').addEventListener('click',()=>{view={x:W/2,y:H/2,k:1,set:true};alpha=1;if(reduce)draw();});
+addEventListener('resize',resize);resize();loop();
+})();
+"""
+
+
+def render_graph_page(pages: list[dict], linkmap: dict, books: set[str], tag_index: dict, base: str) -> str:
+    """Body HTML for /graph/: filters, a canvas, and the graph data embedded as JSON."""
+    g = build_graph(pages, linkmap, books, tag_index, base)
+    counts: dict[str, int] = {}
+    for n in g["nodes"]:
+        counts[n["type"]] = counts.get(n["type"], 0) + 1
+    legend = "".join(
+        f'<label class="inline-flex items-center gap-2 text-sm cursor-pointer"><input type="checkbox"{"" if k == "tag" else " checked"} data-gtype="{k}">'
+        f'<span class="inline-block w-3 h-3 rounded-full" style="background:{GRAPH_COLORS[k]}"></span>{GRAPH_LABELS[k]} ({counts.get(k, 0)})</label>'
+        for k in GRAPH_COLORS if counts.get(k))
+    data = json.dumps(g, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
+    js = GRAPH_JS.replace("@@COLORS@@", json.dumps(GRAPH_COLORS)).replace("@@LABELS@@", json.dumps(GRAPH_LABELS))
+    return (
+        '<h1 class="font-serif text-3xl font-black mb-2">Graph</h1>'
+        f'<p class="text-stone-600 mb-4">{len(g["nodes"])} nodes, {len(g["links"])} connections. Hover to see what a note touches, drag nodes to rearrange, scroll to zoom, click to open.</p>'
+        '<div class="flex flex-wrap items-center gap-x-5 gap-y-2 mb-4">'
+        '<input id="graph-search" type="search" placeholder="Find a node…" aria-label="Find a node" class="border border-stone-300 rounded-lg px-4 py-2 w-full md:w-64">'
+        f'{legend}<button id="graph-reset" type="button" class="tag">Reset view</button></div>'
+        '<div class="relative card !p-0 overflow-hidden"><canvas id="graph" class="w-full block touch-none cursor-grab" style="height:70vh;min-height:420px" '
+        'role="img" aria-label="Interactive graph of connections between notes, verses, books and topics"></canvas>'
+        '<div id="graph-tip" hidden class="absolute left-3 bottom-3 bg-white/95 border border-stone-200 rounded-lg px-3 py-1.5 text-sm shadow pointer-events-none"></div></div>'
+        f'<noscript><p class="mt-4 text-stone-600">The graph needs JavaScript. Browse <a class="text-green-700" href="{base}/tags/">Topics</a> instead.</p></noscript>'
+        f'<script id="graph-data" type="application/json">{data}</script><script>{js}</script>'
+    )
 
 
 def main() -> int:
@@ -544,6 +711,10 @@ def main() -> int:
         cards = "".join(card_daily(p) if p["kind"] == "daily" else card_verse(p) for p in plist)
         write(f"tags/{slugify(t)}", f"#{t}", f"Pages tagged {t}",
               f'<p class="text-sm"><a class="text-green-700" href="{base}/tags/">Topics</a> / #{esc(t)}</p><h1 class="font-serif text-3xl font-black mt-1 mb-4">#{esc(t)}</h1><div class="grid gap-4 md:grid-cols-2">{cards}</div>')
+
+    # ---- graph (Obsidian-style relationship view)
+    write("graph", "Graph", "Interactive map of how daily notes, verses, books and topics connect.",
+          render_graph_page(pages, linkmap, books, tag_index, base))
 
     # ---- misc
     (out / "404.html").write_text(render_page("Not found", "Page not found",
