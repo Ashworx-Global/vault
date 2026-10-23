@@ -1,4 +1,3 @@
-
 ---
 tags:
   - gog-magog
@@ -11,6 +10,9 @@ tags:
   - sovereignty
   - dawn
 ---
+
+A note to start the morning reading, what is the big picture or the goal of life?
+Father God in heaven, I humbly come to your word and ask for insight and understanding, Holy Spirit work in your way the things that need to be made plan to me, show me the Father and Son in the words I read and help me to engrave them in my heart so that I may follow and draw closer to the Father, I ask this in Jesus name.
 
 [Eze 38:1–39:24](https://ref.ly/logosres/esv?ref=BibleESV.Eze38.1) * [Rev 19:1–10](https://ref.ly/logosres/esv?ref=BibleESV.Re19.1) * [Job 38:12–24](https://ref.ly/logosres/esv?ref=BibleESV.Job38.12)
 
@@ -98,7 +100,7 @@ Father God, maker of everything, Holy Spirit helper sent by Jesus, help me to le
  %% #Revelation #Revelation19 %%>
   [[Revelation]] [[Revelation 19]]
 
-Let us rejoice and exult and give him the glory, for _a_the marriage of the Lamb has come, and his Bride has made herself ready; 
+Let us rejoice and exult and give him the glory, for the marriage of the Lamb has come, and his Bride has made herself ready; 
 **8** it was granted her to clothe herself with fine linen, bright and pure” for the fine linen is the righteous deeds of the saints
  [_The Holy Bible: English Standard Version_](https://ref.ly/logosres/esv?ref=BibleESV.Re19.7&off=4&ctx=ghty+z%EF%BB%BFreigns.+%0a+7%C2%A0+~Let+us+rejoice+and+e) (Wheaton, IL: Crossway Bibles, 2025), Re 19:7-8.
 
