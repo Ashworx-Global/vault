@@ -39,8 +39,102 @@ SITE_NAME = "Man of God Daily Readings"
 SITE_URL = "https://ashworx-global.github.io/vault"
 VERSE = "Not by might, nor by power, but by my Spirit, says the Lord of hosts. — Zechariah 4:6"
 
+# ---------------------------------------------------------------- theme (matches shop)
+THEME_CSS = """
+:root {
+  --color-ink: #0b0f14;
+  --color-panel: #121821;
+  --color-gold: #c8a24a;
+  --color-gold-dark: #a8832f;
+  --font-display: "Georgia", "Times New Roman", serif;
+}
+body { background: var(--color-ink); color: #e7e5e4; font-family: Inter, system-ui, sans-serif; }
+.font-display { font-family: var(--font-display); }
+.btn { display: inline-block; border-radius: .375rem; background: var(--color-gold); padding: .625rem 1.25rem; text-align: center; font-weight: 600; color: var(--color-ink); transition: background .2s; }
+.btn:hover { background: var(--color-gold-dark); }
+.btn:disabled { opacity: .5; }
+.btn-sm { border-radius: .375rem; border: 1px solid var(--color-gold); background: transparent; padding: .375rem .75rem; font-size: .875rem; color: var(--color-gold); transition: all .2s; }
+.btn-sm:hover { background: var(--color-gold); color: var(--color-ink); }
+.input { width: 100%; border-radius: .375rem; border: 1px solid #3f3f46; background: var(--color-panel); padding: .5rem .75rem; color: #fafafa; }
+.input:focus { border-color: var(--color-gold); outline: none; }
+.card { border-radius: .5rem; border: 1px solid #292524; background: var(--color-panel); padding: 1.25rem; min-width: 0; }
+.card p, .prose-custom p { overflow-wrap: anywhere; word-break: break-word; }
+a { color: var(--color-gold); text-underline-offset: 2px; }
+a:hover { text-decoration: underline; }
+.wikilink { color: var(--color-gold); font-weight: 500; text-underline-offset: 2px; }
+.wikilink:hover { text-decoration: underline; }
+.wikilink-unresolved { color: #78716c; border-bottom: 1px dotted #a8a29e; }
+a.ext { color: var(--color-gold); font-weight: 500; }
+a.ext:hover { text-decoration: underline; }
+.tag { display: inline-block; background: #292524; border: 1px solid #44403c; color: #d6d3d1; border-radius: 9999px; padding: .15rem .7rem; font-size: .8rem; margin: .15rem .2rem; text-decoration: none; }
+.tag:hover { background: var(--color-gold); color: var(--color-ink); border-color: var(--color-gold); }
+.tablewrap { overflow-x: auto; margin: 1rem 0; }
+table { width: 100%; border-collapse: collapse; font-size: .95rem; }
+th, td { border: 1px solid #292524; padding: .5rem .75rem; text-align: left; }
+th { background: #1c1917; }
+pre { background: #0b0f14; color: #fafafa; border-radius: .5rem; padding: 1rem; overflow-x: auto; }
+code { font-family: 'JetBrains Mono', ui-monospace, monospace; }
+p code { background: #1c1917; color: var(--color-gold); padding: .1rem .35rem; border-radius: .25rem; font-size: .85em; }
+.prose-custom { line-height: 1.75; }
+.prose-custom p { margin-bottom: 1rem; color: #d6d3d1; }
+.prose-custom h1, .prose-custom h2, .prose-custom h3 { font-family: var(--font-display); color: #fafafa; }
+.prose-custom blockquote { border-left: 4px solid var(--color-gold); background: rgba(200,162,74,.1); padding: .75rem 1.25rem; border-radius: 0 .75rem .75rem 0; margin: 1.25rem 0; font-style: italic; color: #d6d3d1; }
+details.bible { border: 1px solid #292524; background: var(--color-panel); border-radius: .5rem; margin: 1rem 0; overflow: hidden; }
+details.bible summary { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: .8rem 1.1rem; font-weight: 600; color: var(--color-gold); cursor: pointer; list-style: none; }
+details.bible summary::-webkit-details-marker { display: none; }
+details.bible .bible-body { padding: 0 1.1rem 1.1rem; }
+p.verse { display: flex; gap: .7rem; background: rgba(200,162,74,.1); border-left: 4px solid var(--color-gold); padding: .55rem .9rem; border-radius: 0 .6rem .6rem 0; margin: .5rem 0; }
+.verse-num { font-weight: 700; color: var(--color-gold); min-width: 2ch; }
+img { border-radius: .5rem; box-shadow: 0 1px 3px rgba(0,0,0,.3); margin: 1.5rem 0; max-width: 100%; }
+footer { border-top: 1px solid #292524; background: var(--color-panel); }
+header { background: rgba(18,24,33,.95); backdrop-filter: blur(8px); border-bottom: 1px solid #292524; position: sticky; top: 0; z-index: 40; }
+"""
 
-# ---------------------------------------------------------------- frontmatter
+BASE_TMPL = """<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>@@TITLE@@ | Man of God Daily Readings</title>
+<meta name="description" content="@@DESC@@">
+<link rel="icon" type="image/svg+xml" href="@@BASE@@/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>@@THEME_CSS@@</style>
+</head>
+<body class="min-h-screen flex flex-col antialiased">
+<a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 z-50 px-4 py-2 bg-gold text-ink rounded-lg">Skip to content</a>
+<header>
+<nav class="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
+<a href="@@BASE@@/" class="font-display text-2xl tracking-wide" style="color: var(--color-gold);">Man Of God</a>
+<div class="flex items-center gap-5 text-sm">
+<a href="@@BASE@@/daily/" class="hover:text-gold transition">Daily</a>
+<a href="@@BASE@@/bible/" class="hover:text-gold transition">Bible</a>
+<a href="@@BASE@@/books/" class="hover:text-gold transition">Books</a>
+<a href="@@BASE@@/tags/" class="hover:text-gold transition">Topics</a>
+<a href="@@BASE@@/graph/" class="hover:text-gold transition">Graph</a>
+<a href="https://manofgod.online/shop/" target="_blank" rel="noopener" class="btn-sm">Shop</a>
+<a href="https://github.com/Ashworx-Global/vault" target="_blank" rel="noopener" class="btn-sm">GitHub</a>
+</div>
+</nav>
+</header>
+<main id="main" class="flex-1 w-full max-w-6xl mx-auto px-4 py-8">@@BODY@@</main>
+<footer>
+<div class="max-w-6xl mx-auto px-4 py-8 grid gap-6 md:grid-cols-3 text-sm" style="color: #a8a29e;">
+<div><h3 class="font-display text-gold mb-2">Man of God Daily Readings</h3><p>A GitHub Pages site rendered from an <a class="hover:text-gold" href="https://obsidian.md/" target="_blank" rel="noopener">Obsidian</a> vault of daily Bible notes. Verse links mirror the vault's wikilinks, and scripture text comes from the ESV via the <a class="hover:text-gold" href="https://api.esv.org/" target="_blank" rel="noopener">Crossway API</a>. Logos links open each passage in your own Logos library — <a class="hover:text-gold" href="https://www.logos.com/free-edition" target="_blank" rel="noopener">get Logos free</a>.</p></div>
+<div><h3 class="font-display text-gold mb-2">Browse</h3><p><a class="hover:text-gold" href="@@BASE@@/daily/">Daily notes</a> · <a class="hover:text-gold" href="@@BASE@@/bible/">Verse pages</a> · <a class="hover:text-gold" href="@@BASE@@/books/">Books</a> · <a class="hover:text-gold" href="@@BASE@@/tags/">Topics</a> · <a class="hover:text-gold" href="@@BASE@@/graph/">Graph</a></p></div>
+<div><h3 class="font-display text-gold mb-2">Source</h3><p><a class="hover:text-gold" href="https://github.com/Ashworx-Global/vault" target="_blank" rel="noopener">Ashworx-Global/vault</a> · built from Obsidian markdown, stdlib only, no npm.</p></div>
+</div>
+</footer>
+<script>
+const q=document.getElementById('filter');
+if(q){q.addEventListener('input',()=>{const s=q.value.toLowerCase();document.querySelectorAll('[data-search]').forEach(el=>{el.style.display=el.dataset.search.includes(s)?'':'none';});});}
+</script>
+</body>
+</html>
+"""
 
 def split_frontmatter(text: str) -> tuple[dict, str]:
     if text.startswith("---"):
@@ -305,52 +399,6 @@ code{font-family:'JetBrains Mono',ui-monospace,monospace}
 p code{background:#dcfce7;color:#14532d;padding:.1rem .35rem;border-radius:.35rem;font-size:.85em}
 """
 
-BASE_TMPL = """<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>@@TITLE@@ | Man of God Daily Readings</title>
-<meta name="description" content="@@DESC@@">
-<link rel="icon" type="image/svg+xml" href="@@BASE@@/favicon.svg">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:wght@400;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<script src="https://cdn.tailwindcss.com"></script>
-<script>tailwind.config={theme:{extend:{colors:{primary:{DEFAULT:'#16a34a'}}}}}</script>
-<style>@@CSS@@</style>
-</head>
-<body class="min-h-screen flex flex-col bg-stone-50 text-stone-800 antialiased">
-<a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 z-50 px-4 py-2 bg-green-700 text-white rounded-lg">Skip to content</a>
-<header class="bg-white/90 backdrop-blur border-b border-stone-200 sticky top-0 z-40">
-<nav class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-4" aria-label="Main">
-<a href="@@BASE@@/" class="flex items-center gap-2 font-serif font-bold text-lg text-stone-900"><span aria-hidden="true">✝</span><span>Man of God Daily Readings</span></a>
-<div class="flex flex-wrap gap-4 text-sm font-medium text-stone-600">
-<a class="hover:text-green-700" href="@@BASE@@/daily/">Daily</a>
-<a class="hover:text-green-700" href="@@BASE@@/bible/">Bible</a>
-<a class="hover:text-green-700" href="@@BASE@@/books/">Books</a>
-<a class="hover:text-green-700" href="@@BASE@@/tags/">Topics</a>
-<a class="hover:text-green-700" href="@@BASE@@/graph/">Graph</a>
-<a class="hover:text-green-700" href="https://github.com/Ashworx-Global/vault" target="_blank" rel="noopener">GitHub</a>
-</div>
-</nav>
-</header>
-<main id="main" class="flex-1 w-full max-w-6xl mx-auto px-4 py-8">@@BODY@@</main>
-<footer class="border-t border-stone-200 bg-white mt-8">
-<div class="max-w-6xl mx-auto px-4 py-8 grid gap-6 md:grid-cols-3 text-sm text-stone-600">
-<div><h3 class="font-semibold text-stone-900 mb-2">Man of God Daily Readings</h3><p>A GitHub Pages site rendered from an <a class="hover:text-green-700" href="https://obsidian.md/" target="_blank" rel="noopener">Obsidian</a> vault of daily Bible notes. Verse links mirror the vault's wikilinks, and scripture text comes from the ESV via the <a class="hover:text-green-700" href="https://api.esv.org/" target="_blank" rel="noopener">Crossway API</a>. Logos links open each passage in your own Logos library — <a class="hover:text-green-700" href="https://www.logos.com/free-edition" target="_blank" rel="noopener">get Logos free</a>.</p></div>
-<div><h3 class="font-semibold text-stone-900 mb-2">Browse</h3><p><a class="hover:text-green-700" href="@@BASE@@/daily/">Daily notes</a> · <a class="hover:text-green-700" href="@@BASE@@/bible/">Verse pages</a> · <a class="hover:text-green-700" href="@@BASE@@/books/">Books</a> · <a class="hover:text-green-700" href="@@BASE@@/tags/">Topics</a> · <a class="hover:text-green-700" href="@@BASE@@/graph/">Graph</a></p></div>
-<div><h3 class="font-semibold text-stone-900 mb-2">Source</h3><p><a class="hover:text-green-700" href="https://github.com/Ashworx-Global/vault" target="_blank" rel="noopener">Ashworx-Global/vault</a> · built from Obsidian markdown, stdlib only, no npm.</p></div>
-</div>
-</footer>
-<script>
-const q=document.getElementById('filter');
-if(q){q.addEventListener('input',()=>{const s=q.value.toLowerCase();document.querySelectorAll('[data-search]').forEach(el=>{el.style.display=el.dataset.search.includes(s)?'':'none';});});}
-</script>
-</body>
-</html>
-"""
-
 
 def parse_book_ref(stem: str) -> tuple[str, str, str]:
     # "<Book> <C> v <R>": "Zechariah 9 v 1–17" -> (Zechariah, 9, 1–17)
@@ -584,7 +632,7 @@ def main() -> int:
             linkmap.setdefault(a.strip().lower(), p["url"])
 
     def render_page(title: str, desc: str, body_html: str) -> str:
-        h = BASE_TMPL.replace("@@TITLE@@", esc(title)).replace("@@DESC@@", esc(desc[:160])).replace("@@BASE@@", base).replace("@@CSS@@", CSS_EXTRA).replace("@@BODY@@", body_html)
+        h = BASE_TMPL.replace("@@TITLE@@", esc(title)).replace("@@DESC@@", esc(desc[:160])).replace("@@BASE@@", base).replace("@@THEME_CSS@@", THEME_CSS).replace("@@BODY@@", body_html)
         return h
 
     def tag_pills(tags: list[str]) -> str:
@@ -617,40 +665,41 @@ def main() -> int:
         search = esc((p["title"] + " " + p.get("date", "") + " " + " ".join(p["fm"].get("tags", []))).lower())
         pills = tag_pills(p["fm"].get("tags", [])[:6])
         blurb = blurb_text(p["body"], 180)
-        return (f'<article class="card" data-search="{search}"><p class="text-sm text-green-700 font-medium">{esc(p.get("date",""))}</p>'
-                f'<h3 class="font-serif text-xl font-bold mt-1"><a class="hover:text-green-700" href="{p["url"]}">{esc(p["title"])}</a></h3>'
-                f'<p class="text-sm text-stone-600 mt-2">{blurb}</p><div class="mt-3">{pills}</div></article>')
+        return (f'<article class="card" data-search="{search}"><p class="text-sm font-medium" style="color: var(--color-gold);">{esc(p.get("date",""))}</p>'
+                f'<h3 class="font-display text-xl font-bold mt-1"><a class="hover:text-gold transition" href="{p["url"]}">{esc(p["title"])}</a></h3>'
+                f'<p class="text-sm mt-2" style="color: #a8a29e;">{blurb}</p><div class="mt-3">{pills}</div></article>')
 
     def card_verse(p: dict) -> str:
         search = esc((p["title"] + " " + " ".join(p["fm"].get("tags", []))).lower())
         pills = tag_pills(p["fm"].get("tags", [])[:4])
         blurb = blurb_text(p["body"], 140)
-        return (f'<article class="card" data-search="{search}"><h3 class="font-semibold"><a class="hover:text-green-700" href="{p["url"]}">{esc(p["title"])}</a></h3>'
-                f'<p class="text-sm text-stone-600 mt-2">{blurb}</p><div class="mt-3">{pills}</div></article>')
+        return (f'<article class="card" data-search="{search}"><h3 class="font-semibold"><a class="hover:text-gold transition" href="{p["url"]}">{esc(p["title"])}</a></h3>'
+                f'<p class="text-sm mt-2" style="color: #a8a29e;">{blurb}</p><div class="mt-3">{pills}</div></article>')
 
     # ---- home
     stats = (f'<div class="grid grid-cols-2 md:grid-cols-4 gap-4">'
-             f'<div class="card text-center"><p class="text-3xl font-bold">{len(daily)}</p><p class="text-sm text-stone-600">Daily notes</p></div>'
-             f'<div class="card text-center"><p class="text-3xl font-bold">{len(bible)}</p><p class="text-sm text-stone-600">Verse pages</p></div>'
-             f'<div class="card text-center"><p class="text-3xl font-bold">{len(by_book)}</p><p class="text-sm text-stone-600">Books</p></div>'
-             f'<div class="card text-center"><p class="text-3xl font-bold">{len(tag_index)}</p><p class="text-sm text-stone-600">Topics</p></div></div>')
-    hero = (f'<section class="rounded-2xl p-8 md:p-12 text-white mb-8" style="background:linear-gradient(135deg,#15803d,#14532d)">'
-            f'<h1 class="font-serif text-4xl md:text-5xl font-black leading-tight">Man of God<br>Daily Readings</h1>'
-            f'<p class="mt-4 text-lg text-green-100 max-w-2xl">Daily Bible notes with linked verse pages — the same links you use in Obsidian, rendered for the web. Logos links open in your own Logos copy.</p>'
-            f'<div class="mt-6 flex flex-wrap gap-3"><a class="bg-white text-green-800 font-semibold px-5 py-2.5 rounded-lg" href="{base}/daily/">Browse daily notes</a>'
-            f'<a class="border border-green-200 px-5 py-2.5 rounded-lg font-semibold" href="{base}/bible/">Explore verse pages</a></div></section>'
-            f'<blockquote class="bg-amber-50 border-l-4 border-amber-400 p-6 rounded-r-xl mb-8"><p class="font-serif text-xl md:text-2xl text-amber-900">“{esc(VERSE)}”</p></blockquote>'
+             f'<div class="card text-center"><p class="text-3xl font-bold" style="color: var(--color-gold);">{len(daily)}</p><p class="text-sm" style="color: #a8a29e;">Daily notes</p></div>'
+             f'<div class="card text-center"><p class="text-3xl font-bold" style="color: var(--color-gold);">{len(bible)}</p><p class="text-sm" style="color: #a8a29e;">Verse pages</p></div>'
+             f'<div class="card text-center"><p class="text-3xl font-bold" style="color: var(--color-gold);">{len(by_book)}</p><p class="text-sm" style="color: #a8a29e;">Books</p></div>'
+             f'<div class="card text-center"><p class="text-3xl font-bold" style="color: var(--color-gold);">{len(tag_index)}</p><p class="text-sm" style="color: #a8a29e;">Topics</p></div></div>')
+    hero = (f'<section class="rounded-2xl p-8 md:p-12 text-white mb-8" style="background:linear-gradient(135deg,var(--color-ink),var(--color-panel))">'
+            f'<p class="mb-4 text-sm uppercase tracking-[0.3em]" style="color: var(--color-gold);">Faith · Strength · Brotherhood</p>'
+            f'<h1 class="font-display text-5xl md:text-7xl">Man of God</h1>'
+            f'<p class="mx-auto mt-6 max-w-xl text-lg" style="color: #a8a29e;">Daily Bible notes with linked verse pages — the same links you use in Obsidian, rendered for the web. Logos links open in your own Logos copy.</p>'
+            f'<div class="mt-8 flex justify-center gap-4"><a class="btn" href="{base}/daily/">Browse daily notes</a>'
+            f'<a class="btn-sm py-2.5" href="{base}/bible/">Explore verse pages</a></div></section>'
+            f'<blockquote class="card mb-8" style="border-left: 4px solid var(--color-gold);"><p class="font-display text-xl md:text-2xl" style="color: var(--color-gold);">“{esc(VERSE)}”</p></blockquote>'
             f'{stats}'
-            f'<div class="flex items-center justify-between mt-10 mb-4"><h2 class="font-serif text-2xl font-bold">Recent daily notes</h2><a class="text-green-700 font-medium" href="{base}/daily/">View all →</a></div>'
+            f'<div class="flex items-center justify-between mt-10 mb-4"><h2 class="font-display text-2xl font-bold">Recent daily notes</h2><a class="text-gold font-medium hover:underline" href="{base}/daily/">View all →</a></div>'
             f'<div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">{"".join(card_daily(p) for p in daily[:6])}</div>'
-            f'<div class="flex items-center justify-between mt-10 mb-4"><h2 class="font-serif text-2xl font-bold">Recent verse pages</h2><a class="text-green-700 font-medium" href="{base}/bible/">View all →</a></div>'
+            f'<div class="flex items-center justify-between mt-10 mb-4"><h2 class="font-display text-2xl font-bold">Recent verse pages</h2><a class="text-gold font-medium hover:underline" href="{base}/bible/">View all →</a></div>'
             f'<div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">{"".join(card_verse(p) for p in bible[-8:][::-1])}</div>')
     write("", SITE_NAME, VERSE, hero)
 
     # ---- daily index + pages
     write("daily", "Daily notes", "Chronological daily Bible reading notes.",
-          f'<h1 class="font-serif text-3xl font-black mb-2">Daily notes</h1><p class="text-stone-600 mb-6">Newest first. Open any note to read reflections, verse inserts, and harvested verse pages.</p>'
-          f'<input id="filter" placeholder="Filter notes…" class="w-full md:max-w-sm border border-stone-300 rounded-lg px-4 py-2 mb-6">'
+          f'<h1 class="font-display text-3xl font-black mb-2">Daily notes</h1><p class="mb-6" style="color: #a8a29e;">Newest first. Open any note to read reflections, verse inserts, and harvested verse pages.</p>'
+          f'<input id="filter" placeholder="Filter notes…" class="input mb-6">'
           f'<div class="grid gap-4 md:grid-cols-2">{"".join(card_daily(p) for p in daily)}</div>')
     for p in daily:
         html_body = render_blocks(p["body"], linkmap, base, {b for b in books})
@@ -660,20 +709,20 @@ def main() -> int:
             u = linkmap.get(ref.lower()) or linkmap.get(slugify(ref))
             if u:
                 links.append(f'<a class="tag" href="{u}">{esc(ref)}</a>')
-        body_html = (f'<p class="text-sm text-green-700 font-medium">{esc(p.get("date",""))}</p>'
-                     f'<h1 class="font-serif text-3xl md:text-4xl font-black mb-3">{esc(p["title"])}</h1>'
+        body_html = (f'<p class="text-sm font-medium" style="color: var(--color-gold);">{esc(p.get("date",""))}</p>'
+                     f'<h1 class="font-display text-3xl md:text-4xl font-black mb-3">{esc(p["title"])}</h1>'
                      f'<div class="mb-6">{tag_pills(p["fm"].get("tags", []))}</div>'
                      f'<div class="prose-custom">{html_body}</div>'
-                     + (f'<h2 class="font-serif text-2xl font-bold mt-10 mb-3">Harvested verse pages</h2><div>{"".join(links)}</div>' if links else "")
-                     + f'<p class="mt-10 text-sm"><a class="text-green-700" href="{base}/daily/">← All daily notes</a></p>')
+                     + (f'<h2 class="font-display text-2xl font-bold mt-10 mb-3">Harvested verse pages</h2><div>{"".join(links)}</div>' if links else "")
+                     + f'<p class="mt-10 text-sm"><a class="text-gold hover:underline" href="{base}/daily/">← All daily notes</a></p>')
         write(f"daily/{p['slug']}", p["title"], p["title"], body_html)
 
     # ---- bible index + pages
     books_sorted = sorted(by_book)
     opts = "".join(f'<button data-book="{esc(slugify(b))}" class="tag">{esc(b)} ({len(by_book[b])})</button>' for b in books_sorted)
     write("bible", "Verse pages", "Every harvested verse page, grouped by book.",
-          f'<h1 class="font-serif text-3xl font-black mb-2">Verse pages</h1><p class="text-stone-600 mb-4">{len(bible)} pages across {len(books_sorted)} books.</p>'
-          f'<input id="filter" placeholder="Filter passages…" class="w-full md:max-w-sm border border-stone-300 rounded-lg px-4 py-2 mb-4">'
+          f'<h1 class="font-display text-3xl font-black mb-2">Verse pages</h1><p class="mb-4" style="color: #a8a29e;">{len(bible)} pages across {len(books_sorted)} books.</p>'
+          f'<input id="filter" placeholder="Filter passages…" class="input mb-4">'
           f'<div class="flex flex-wrap gap-2 mb-6"><button data-book="all" class="tag">All</button>{opts}</div>'
           f'<div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">' + "".join(
               f'<div data-search="{esc((p["title"] + " " + " ".join(p["fm"].get("tags", []))).lower())}" data-book="{esc(slugify(p["book"]))}">{card_verse(p)}</div>'
@@ -683,36 +732,36 @@ def main() -> int:
         html_body = render_blocks(p["body"], linkmap, base, books)
         related = [q for q in by_book.get(p["book"], []) if q["slug"] != p["slug"] and q["chapter"] == p["chapter"]][:8]
         aliases = "".join(f"<li>{esc(a)}</li>" for a in p["fm"].get("aliases", []))
-        body_html = (f'<p class="text-sm"><a class="text-green-700" href="{base}/bible/">Verse pages</a> / <a class="text-green-700" href="{base}/books/{slugify(p["book"])}/">{esc(p["book"])}</a></p>'
-                     f'<h1 class="font-serif text-3xl md:text-4xl font-black mt-1 mb-3">{esc(p["title"])}</h1>'
+        body_html = (f'<p class="text-sm"><a class="text-gold hover:underline" href="{base}/bible/">Verse pages</a> / <a class="text-gold hover:underline" href="{base}/books/{slugify(p["book"])}/">{esc(p["book"])}</a></p>'
+                     f'<h1 class="font-display text-3xl md:text-4xl font-black mt-1 mb-3">{esc(p["title"])}</h1>'
                      f'<div class="mb-6">{tag_pills(p["fm"].get("tags", []))}</div>'
                      f'<div class="prose-custom">{html_body}</div>'
-                     + (f'<div class="mt-6 p-4 bg-green-50 border border-green-100 rounded-xl"><h3 class="font-semibold text-green-900">Also known as</h3><ul class="list-disc ml-5 text-green-900">{aliases}</ul></div>' if aliases else "")
-                     + ("".join(f'<h2 class="font-serif text-2xl font-bold mt-10 mb-3">More in {esc(p["book"])} {esc(p["chapter"])}</h2><div class="grid gap-3 md:grid-cols-2 lg:grid-cols-3">' + "".join(card_verse(q) for q in related) + "</div>" if related else "")))
+                     + (f'<div class="mt-6 p-4 card" style="border-left: 4px solid var(--color-gold);"><h3 class="font-semibold text-gold">Also known as</h3><ul class="list-disc ml-5" style="color: #a8a29e;">{aliases}</ul></div>' if aliases else "")
+                     + ("".join(f'<h2 class="font-display text-2xl font-bold mt-10 mb-3">More in {esc(p["book"])} {esc(p["chapter"])}</h2><div class="grid gap-3 md:grid-cols-2 lg:grid-cols-3">' + "".join(card_verse(q) for q in related) + "</div>" if related else "")))
         write(f"bible/{p['slug']}", p["title"], p["title"], body_html)
 
     # ---- books
     write("books", "Books", "Verse pages grouped by Bible book.",
-          '<h1 class="font-serif text-3xl font-black mb-2">Books</h1><p class="text-stone-600 mb-6">Verse pages grouped by Bible book.</p><div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">'
-          + "".join(f'<a class="card" href="{base}/books/{slugify(b)}/"><h3 class="font-bold">{esc(b.title()) if b.islower() else esc(b)}</h3><p class="text-sm text-stone-600">{len(by_book[b])} passages</p></a>' for b in books_sorted) + "</div>")
+          '<h1 class="font-display text-3xl font-black mb-2">Books</h1><p class="mb-6" style="color: #a8a29e;">Verse pages grouped by Bible book.</p><div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">'
+          + "".join(f'<a class="card" href="{base}/books/{slugify(b)}/"><h3 class="font-bold">{esc(b.title()) if b.islower() else esc(b)}</h3><p class="text-sm" style="color: #a8a29e;">{len(by_book[b])} passages</p></a>' for b in books_sorted) + "</div>")
     for b in books_sorted:
         groups: dict[str, list[dict]] = {}
         for p in by_book[b]:
             groups.setdefault(p["chapter"] or "—", []).append(p)
         secs = ""
         for ch in sorted(groups, key=lambda c: int(c) if c.isdigit() else 999):
-            items = "".join(f'<a class="card block" href="{q["url"]}"><strong>{esc(q["title"])}</strong><br><span class="text-sm text-stone-600">{" ".join(q["fm"].get("tags", [])[:4])}</span></a>' for q in groups[ch])
+            items = "".join(f'<a class="card block" href="{q["url"]}"><strong>{esc(q["title"])}</strong><br><span class="text-sm" style="color: #a8a29e;">{" ".join(q["fm"].get("tags", [])[:4])}</span></a>' for q in groups[ch])
             secs += f'<section class="card mb-6"><h2 class="font-bold text-lg mb-3">{esc(b)} {esc(ch)}</h2><div class="grid gap-3 md:grid-cols-2">{items}</div></section>'
-        write(f"books/{slugify(b)}", b, f"Verse pages in {b}", f'<p class="text-sm"><a class="text-green-700" href="{base}/books/">Books</a> / {esc(b)}</p><h1 class="font-serif text-3xl font-black mt-1 mb-4">{esc(b)}</h1>{secs}')
+        write(f"books/{slugify(b)}", b, f"Verse pages in {b}", f'<p class="text-sm"><a class="text-gold hover:underline" href="{base}/books/">Books</a> / {esc(b)}</p><h1 class="font-display text-3xl font-black mt-1 mb-4">{esc(b)}</h1>{secs}')
 
     # ---- tags
     write("tags", "Topics", "Browse by theme.",
-          '<h1 class="font-serif text-3xl font-black mb-2">Topics</h1><p class="text-stone-600 mb-6">Themes from passages and reflections.</p><div class="flex flex-wrap gap-2">'
+          '<h1 class="font-display text-3xl font-black mb-2">Topics</h1><p class="mb-6" style="color: #a8a29e;">Themes from passages and reflections.</p><div class="flex flex-wrap gap-2">'
           + "".join(f'<a class="tag" href="{base}/tags/{slugify(t)}/">#{esc(t)} ({len(tag_index[t])})</a>' for t in sorted(tag_index)) + "</div>")
     for t, plist in tag_index.items():
         cards = "".join(card_daily(p) if p["kind"] == "daily" else card_verse(p) for p in plist)
         write(f"tags/{slugify(t)}", f"#{t}", f"Pages tagged {t}",
-              f'<p class="text-sm"><a class="text-green-700" href="{base}/tags/">Topics</a> / #{esc(t)}</p><h1 class="font-serif text-3xl font-black mt-1 mb-4">#{esc(t)}</h1><div class="grid gap-4 md:grid-cols-2">{cards}</div>')
+              f'<p class="text-sm"><a class="text-gold hover:underline" href="{base}/tags/">Topics</a> / #{esc(t)}</p><h1 class="font-display text-3xl font-black mt-1 mb-4">#{esc(t)}</h1><div class="grid gap-4 md:grid-cols-2">{cards}</div>')
 
     # ---- graph (Obsidian-style relationship view)
     write("graph", "Graph", "Interactive map of how daily notes, verses, books and topics connect.",
@@ -720,7 +769,7 @@ def main() -> int:
 
     # ---- misc
     (out / "404.html").write_text(render_page("Not found", "Page not found",
-        '<div class="text-center py-16"><h1 class="font-serif text-5xl font-black">404</h1><p class="text-stone-600 mt-2">That page is not in this vault.</p><p class="mt-6"><a class="text-green-700 font-semibold" href="' + base + '/">← Home</a></p></div>'), encoding="utf-8")
+        '<div class="text-center py-16"><h1 class="font-display text-5xl font-black" style="color: var(--color-gold);">404</h1><p class="mt-2" style="color: #a8a29e;">That page is not in this vault.</p><p class="mt-6"><a class="text-gold font-semibold hover:underline" href="' + base + '/">← Home</a></p></div>'), encoding="utf-8")
     (out / ".nojekyll").write_text("", encoding="utf-8")
     (out / "robots.txt").write_text("User-agent: *\nAllow: /\n", encoding="utf-8")
     fav = REPO / "public" / "favicon.svg"
