@@ -49,7 +49,13 @@ jobs:
           PATREON_API_TOKEN: ${{ secrets.PATREON_API_TOKEN }}
           FACEBOOK_PAGE_TOKEN: ${{ secrets.FACEBOOK_PAGE_TOKEN }}
           FACEBOOK_PAGE_ID: ${{ vars.FACEBOOK_PAGE_ID }}
-        run: python3 scripts/social_publisher.py
+        run: |
+          echo "🔍 Debugging: Checking environment..."
+          echo "PATREON_API_TOKEN set: $([[ -n "$PATREON_API_TOKEN" ]] && echo 'yes' || echo 'no')"
+          echo "FACEBOOK_PAGE_TOKEN set: $([[ -n "$FACEBOOK_PAGE_TOKEN" ]] && echo 'yes' || echo 'no')"
+          echo "FACEBOOK_PAGE_ID: $FACEBOOK_PAGE_ID"
+          echo ""
+          python3 scripts/social_publisher.py
       - name: Setup Pages
         uses: actions/configure-pages@v6
       - name: Upload artifact

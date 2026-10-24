@@ -98,17 +98,24 @@ def publish_to_patreon(title: str, content_text: str, published_content: Publish
     
     # Get campaign ID
     try:
+        print(f"  [DEBUG] Fetching campaigns...")
         resp = requests.get("https://www.patreon.com/api/oauth2/v2/campaigns", headers=headers)
+        print(f"  [DEBUG] Campaigns response: {resp.status_code}")
         if resp.status_code != 200:
             print(f"  ✗ Patreon: Failed to get campaign ({resp.status_code})")
+            print(f"  [DEBUG] Response body: {resp.text[:500]}")
             return None
         campaigns = resp.json().get("data", [])
         if not campaigns:
             print("  ✗ Patreon: No campaigns found")
+            print(f"  [DEBUG] Full response: {resp.json()}")
             return None
         campaign_id = campaigns[0]["id"]
+        print(f"  [DEBUG] Campaign ID: {campaign_id}")
     except Exception as e:
         print(f"  ✗ Patreon: Error fetching campaign: {e}")
+        import traceback
+        traceback.print_exc()
         return None
     
     payload = {
@@ -127,10 +134,16 @@ def publish_to_patreon(title: str, content_text: str, published_content: Publish
     if post_id:
         url = f"https://www.patreon.com/api/oauth2/v2/posts/{post_id}"
         print(f"📝 Updating Patreon: {title}")
+        print(f"  [DEBUG] PATCH {url}")
         resp = requests.patch(url, json=payload, headers=headers)
     else:
         print(f"📢 Publishing to Patreon: {title}")
+        print(f"  [DEBUG] POST {url}")
+        print(f"  [DEBUG] Payload: {json.dumps(payload)[:200]}...")
         resp = requests.post(url, json=payload, headers=headers)
+    
+    print(f"  [DEBUG] Response status: {resp.status_code}")
+    print(f"  [DEBUG] Response body: {resp.text[:500]}")
     
     if resp.status_code in [200, 201]:
         data = resp.json()
@@ -174,10 +187,16 @@ def publish_to_facebook(title: str, content_text: str, url_link: str,
     if post_id:
         url = f"https://graph.facebook.com/v18.0/{post_id}"
         print(f"📝 Updating Facebook: {title}")
+        print(f"  [DEBUG] POST {url}")
         resp = requests.post(url, data=payload)
     else:
         print(f"📢 Publishing to Facebook: {title}")
+        print(f"  [DEBUG] POST {url}")
+        print(f"  [DEBUG] Message length: {len(message)} chars")
         resp = requests.post(url, data=payload)
+    
+    print(f"  [DEBUG] Response status: {resp.status_code}")
+    print(f"  [DEBUG] Response body: {resp.text[:500]}")
     
     if resp.status_code in [200, 201]:
         data = resp.json()
