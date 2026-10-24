@@ -1,5 +1,5 @@
 ---
-description: Extract a Daily devotional note into linked Bible verse pages with tags, verify the vault site, then commit and push using this repository's local GPG key.
+description: Extract a Daily devotional note into linked Bible verse pages with tags, verify the vault site, commit and push using this repository's local GPG key, then post it to Patreon through the browser.
 ---
 
 Run the verse-pages skill workflow against one Daily note in the current
@@ -25,3 +25,10 @@ Steps:
 5. **Daily note frontmatter.** Prepend thematic tags (lowercase) matching the note's threads. `---` MUST be line 1 - if the file starts with blank lines, remove them in the same edit (a leading blank line breaks frontmatter parsing and renders tags as page text).
 6. **Verify the site build.** Run `python3 scripts/build-site.py --base /vault --out site/dist` and confirm the page count grew; spot-check the new `bible/...` and `daily/...` URLs exist. Then remove `site/` (build output is git-ignored and never pushed).
 7. **Commit and push.** Stage ONLY the changed `Bible/` and `Daily/` files (never `.obsidian/` editor noise). Confirm `git config --local --get user.signingkey` returns a key and `git config --local --get commit.gpgsign` returns `true`. Commits MUST be GPG-signed with message `vault: harvest verse pages for <YYYY-MM-DD>`. Set `GPG_TTY`, commit explicitly with `-S`, verify with `git log -1 --show-signature`, then `git push origin main` (push auto-triggers the Pages deploy). Do not source a shell profile or modify global Git/GPG configuration: this repository's local `gpg.program` wrapper and signing key are authoritative.
+8. **Post to Patreon (browser).** The Patreon API is read-only, so this is done in the user's default browser, which is already signed in. Do this only after step 7's push succeeded.
+   - Build the post: `python3 scripts/patreon_post.py "<note path>" --out "$TMPDIR/patreon-<YYYY-MM-DD>" --copy`. It prints JSON (`title`, `date`, `tags`, `site_url`) and puts the formatted body on the clipboard. The body is the intro, then per reading a heading linked to its `[!bible]` BibleGateway link, the quoted verses with their `ref.ly` links, and the user's comments, then the site link. The site link is `https://ashworx-global.github.io/vault/daily/<slugified note name>/`, for example `.../daily/2026-10-19-big-picture-hope/`. Do not paste the full verse text from the callouts.
+   - Open `https://www.patreon.com/c/ManOfGodSA` in the default browser (`open`; at the time of writing that is Edge) and click "Make your first post" or "Create"/"Make a post", whichever the page shows. Drive the page with AppleScript `execute javascript` (Edge/Chrome need View > Developer > Allow JavaScript from Apple Events). If that is not enabled, stop and tell the user rather than guessing at coordinates.
+   - Fill in: title = `title`; body = paste the clipboard (Cmd+V) and check the links and headings survived; "Add tags" = the `tags` list; audience = leave on the default free option and confirm it reads free; "Set publish date" = `date`.
+   - Inspect the real DOM for each control before using it, and re-read the field afterwards to confirm it took. If any field cannot be confirmed, stop before publishing and report which one.
+   - Click Publish, then confirm the post appears on the creator page. Report the post URL. Never retry Publish blindly: check the creator page first so a post is not duplicated.
+   - Skip this step and say so if the user passed no Patreon intent (`--no-patreon` in `$ARGUMENTS`).

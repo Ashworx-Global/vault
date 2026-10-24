@@ -4,70 +4,84 @@
     "type": "split",
     "children": [
       {
-        "id": "9b7b33e76d7451ac",
-        "type": "tabs",
+        "id": "42d7e475305e182f",
+        "type": "split",
         "children": [
           {
-            "id": "4d6b686902c88359",
-            "type": "leaf",
-            "pinned": true,
-            "state": {
-              "type": "terminal:terminal",
-              "state": {
-                "terminal:terminal": {
-                  "cwd": "/Users/lee-roy.ashworth/Ashworx/vault",
-                  "focus": false,
-                  "profile": {
-                    "args": [
-                      "--login"
-                    ],
-                    "environment": [],
-                    "executable": "/bin/zsh",
-                    "followTheme": true,
-                    "name": "",
-                    "platforms": {
-                      "darwin": true
-                    },
-                    "pythonExecutable": "python3",
-                    "restoreHistory": false,
-                    "rightClickAction": "copyPaste",
-                    "successExitCodes": [
-                      "0",
-                      "SIGINT",
-                      "SIGTERM"
-                    ],
-                    "terminalOptions": {
-                      "documentOverride": null
-                    },
-                    "type": "integrated",
-                    "win32Backend": "conpty"
+            "id": "9b7b33e76d7451ac",
+            "type": "tabs",
+            "dimension": 35.32934131736527,
+            "children": [
+              {
+                "id": "2a79cbfd3d180ac6",
+                "type": "leaf",
+                "state": {
+                  "type": "markdown",
+                  "state": {
+                    "file": "Daily/2026-10-16 ( Mercy and Judgment ).md",
+                    "mode": "source",
+                    "source": false
                   },
-                  "profileSourceId": "darwinIntegratedDefault",
-                  "serial": null,
-                  "userTitle": ""
+                  "icon": "lucide-file",
+                  "title": "2026-10-16 ( Mercy and Judgment )"
                 }
-              },
-              "pinned": true,
-              "icon": "terminal",
-              "title": "vault"
-            }
+              }
+            ]
           },
           {
-            "id": "2a79cbfd3d180ac6",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Daily/2026-10-18 (A New Way of Being).md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "2026-10-18 (A New Way of Being)"
-            }
+            "id": "63e5bffb12b8e974",
+            "type": "tabs",
+            "dimension": 64.67065868263472,
+            "children": [
+              {
+                "id": "a5527c8ab3fc5650",
+                "type": "leaf",
+                "pinned": true,
+                "state": {
+                  "type": "terminal:terminal",
+                  "state": {
+                    "terminal:terminal": {
+                      "cwd": "/Users/lee-roy.ashworth/Ashworx/vault",
+                      "focus": false,
+                      "profile": {
+                        "args": [
+                          "--login"
+                        ],
+                        "environment": [],
+                        "executable": "/bin/zsh",
+                        "followTheme": true,
+                        "name": "",
+                        "platforms": {
+                          "darwin": true
+                        },
+                        "pythonExecutable": "python3",
+                        "restoreHistory": false,
+                        "rightClickAction": "copyPaste",
+                        "successExitCodes": [
+                          "0",
+                          "SIGINT",
+                          "SIGTERM"
+                        ],
+                        "terminalOptions": {
+                          "documentOverride": null
+                        },
+                        "type": "integrated",
+                        "win32Backend": "conpty"
+                      },
+                      "profileSourceId": "darwinIntegratedDefault",
+                      "serial": null,
+                      "userTitle": ""
+                    }
+                  },
+                  "pinned": true,
+                  "icon": "terminal",
+                  "title": "✳ PSD publishing script"
+                }
+              }
+            ]
           }
         ],
-        "currentTab": 1
+        "direction": "horizontal"
       }
     ],
     "direction": "vertical"
@@ -140,7 +154,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 528
+    "width": 478.390625
   },
   "right": {
     "id": "c555f33fd70aef3f",
@@ -294,25 +308,37 @@
   },
   "active": "efdc2a45cf68d3fb",
   "lastOpenFiles": [
-    "site/dist/sitemap.xml",
+    "site/dist/tags/sardis/index.html",
+    "site/dist/tags/sardis",
+    "site/dist/tags/song-of-moses",
+    "site/dist/tags/victory/index.html",
+    "site/dist/tags/victory",
+    "site/dist/tags/perseverance/index.html",
+    "site/dist/tags/perseverance",
+    "site/dist/tags/christ-reigns/index.html",
+    "site/dist/tags/christ-reigns",
+    "site/dist/tags/king/index.html",
+    "site/dist/tags/king",
+    "site/dist/logos/social-og.png",
+    "site/dist/logos/icon-512.png",
+    "site/dist/logos/icon-256.png",
+    "site/dist/logos/icon-128.png",
+    "site/dist/logos/icon-1024.png",
+    "site/dist/logos/favicon-64.png",
+    "site/dist/logos/favicon-32.png",
+    "site/dist/art/eyes-study/sketches-eyes.png",
+    "site/dist/art/colour-indiana-jones-train-scene/Indiana Jones1 Train Scene.png",
     "site/dist/favicon.svg",
-    "site/dist/robots.txt",
-    "site/dist/404.html",
-    "site/dist/graph/index.html",
-    "site/dist/graph",
-    "site/dist/tags/renewal/index.html",
-    "site/dist/tags/renewal",
-    "site/dist/tags/godly-leadership/index.html",
-    "site/dist/tags/godly-leadership",
-    "site/dist/tags/love/index.html",
-    "site/dist/tags/love",
+    "Daily/2026-10-16 ( Mercy and Judgment ).md",
+    "Bible/Ezekiel 33 v 13.md",
+    "Bible/Ezekiel 33 v 11.md",
+    "Daily/2026-10-18 (A New Way of Being).md",
     "Bible/Revelation 18 v 1–24.md",
     "Bible/Micah 5 v 2.md",
     "Bible/Job 38 v 1–11.md",
     "Bible/Ezekiel 37 v 1–28.md",
     "Bible/Ezekiel 36 v 1–38.md",
     "Daily/2026-10-17 (Shepherding Is a Tough Business.md",
-    "Daily/2026-10-18 (A New Way of Being).md",
     "Bible/Revelation 17 v 1–18.md",
     "Bible/Job 37 v 16–24.md",
     "Bible/Ezekiel 35 v 1–15.md",
@@ -328,10 +354,6 @@
     "Bible/Ezekiel 32 v 1–32.md",
     "Daily/2026-10-16 (Mercy and Judgment).md",
     "Daily/2026-10-15 (Picturing God).md",
-    "Daily/2026-10-09 (Judgment It’s Tricky).md",
-    "Bible/Revelation 15 v 1–8.md",
-    "Bible/Revelation 14 v 14–20.md",
-    "public/favicon.svg",
     "Untitled 1.canvas",
     "Untitled.canvas"
   ]

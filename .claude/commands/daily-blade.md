@@ -1,0 +1,1 @@
+../../.opencode/commands/daily-blade.md
