@@ -129,7 +129,7 @@ BASE_TMPL = """<!DOCTYPE html>
 <a href="@@BASE@@/tags/" class="hover:text-gold transition">Topics</a>
 <a href="@@BASE@@/art/" class="hover:text-gold transition">Art</a>
 <a href="@@BASE@@/graph/" class="hover:text-gold transition">Graph</a>
-<a href="https://manofgod.online/shop/" target="_blank" rel="noopener" class="btn-sm">Shop</a>
+<a href="@@BASE@@/shop/" class="btn-sm">Shop</a>
 <a href="https://github.com/Ashworx-Global/vault" target="_blank" rel="noopener" class="btn-sm">GitHub</a>
 <a href="https://www.patreon.com/cw/ManOfGodSA" target="_blank" rel="noopener" class="btn-sm">Patreon</a>
 <a href="https://www.facebook.com/profile.php?id=61596013522180" target="_blank" rel="noopener" class="btn-sm">Facebook</a>
@@ -740,7 +740,7 @@ def main() -> int:
     hero = (f'<section class="rounded-2xl p-8 md:p-12 text-white mb-8" style="background:linear-gradient(135deg,var(--color-ink),var(--color-panel))">'
             f'<p class="mb-4 text-sm uppercase tracking-[0.3em]" style="color: var(--color-gold);">Faith · Strength · Brotherhood</p>'
             f'<h1 class="font-display text-5xl md:text-7xl">Man of God</h1>'
-            f'<p class="mx-auto mt-6 max-w-xl text-lg" style="color: #a8a29e;">Daily Bible notes with linked verse pages — the same links you use in Obsidian, rendered for the web. Logos links open in your own Logos copy.</p>'
+            f'<p class="mx-auto mt-6 max-w-2xl text-lg" style="color: #a8a29e;">This is a site that is a collection of daily readings with some thoughts on the verses, they are my thoughts and are not truth, The Word is truth and you should read for yourself, but maybe some thoughts could help, or draw you closer to reading the Bible for yourself. Man of God, is a site to help men have a relationship with God and challenge each other to draw closer to God through His Word.</p>'
             f'<div class="mt-8 flex justify-center gap-4"><a class="btn" href="{base}/daily/">Browse daily notes</a>'
             f'<a class="btn-sm py-2.5" href="{base}/bible/">Explore verse pages</a></div></section>'
             f'<blockquote class="card mb-8" style="border-left: 4px solid var(--color-gold);"><p class="font-display text-xl md:text-2xl" style="color: var(--color-gold);">“{esc(VERSE)}”</p></blockquote>'
@@ -817,6 +817,12 @@ def main() -> int:
         cards = "".join(card_daily(p) if p["kind"] == "daily" else card_verse(p) for p in plist)
         write(f"tags/{slugify(t)}", f"#{t}", f"Pages tagged {t}",
               f'<p class="text-sm"><a class="text-gold hover:underline" href="{base}/tags/">Topics</a> / #{esc(t)}</p><h1 class="font-display text-3xl font-black mt-1 mb-4">#{esc(t)}</h1><div class="grid gap-4 md:grid-cols-2">{cards}</div>')
+
+    # ---- shop (placeholder until the store opens)
+    write("shop", "Shop", "The Man of God shop is coming soon.",
+          '<div class="text-center py-16"><h1 class="font-display text-5xl font-black" style="color: var(--color-gold);">Coming Soon</h1>'
+          '<p class="mt-4" style="color: #a8a29e;">The Man of God shop is on its way. Check back soon.</p>'
+          f'<p class="mt-6"><a class="text-gold font-semibold hover:underline" href="{base}/">← Home</a></p></div>')
 
     # ---- graph (Obsidian-style relationship view)
     write("graph", "Graph", "Interactive map of how daily notes, verses, books and topics connect.",
