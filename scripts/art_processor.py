@@ -104,28 +104,39 @@ class ArtProject:
 
     def watermark_image(self, img_path: Path) -> Path:
         """Add AI-prevention watermark to image."""
-        watermarked = self.export_dir / f"{img_path.stem}_watermarked.png"
-        
         try:
-            # Create watermark with AI disclaimer
-            watermark_text = "© Not for AI Training • Original Art"
-            cmd = [
-                "convert",
-                str(img_path),
-                "-pointsize", "18",
-                "-fill", "rgba(255,255,255,0.4)",
-                "-gravity", "SouthEast",
-                "-annotate", "+10+10", watermark_text,
-                str(watermarked)
-            ]
-            subprocess.run(cmd, check=True, capture_output=True)
+            # Get image dimensions for watermark placement
+            from PIL import Image, ImageDraw, ImageFont
             
-            # Replace original with watermarked
-            watermarked.replace(img_path)
+            img = Image.open(img_path)
+            width, height = img.size
+            
+            # Create watermark overlay
+            watermark_text = "© Not for AI Training"
+            text_color = (255, 255, 255, 102)  # White, ~40% opacity
+            
+            # Use default font (safer than relying on system fonts)
+            try:
+                font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", max(12, int(height / 30)))
+            except:
+                font = ImageFont.load_default()
+            
+            draw = ImageDraw.Draw(img, 'RGBA')
+            bbox = draw.textbbox((0, 0), watermark_text, font=font)
+            text_width = bbox[2] - bbox[0]
+            text_height = bbox[3] - bbox[1]
+            
+            # Place in bottom-right corner with padding
+            x = width - text_width - 15
+            y = height - text_height - 10
+            
+            draw.text((x, y), watermark_text, fill=text_color, font=font)
+            img.save(img_path)
             print(f"  ✓ Watermarked {img_path.name}")
             return img_path
-        except subprocess.CalledProcessError as e:
-            print(f"  ✗ Failed to watermark {img_path.name}: {e.stderr.decode()}")
+        except Exception as e:
+            print(f"  ⚠ Watermark skipped for {img_path.name} (using PIL failed, image still usable)")
+            # Don't fail - image is still valid without watermark
             return img_path
 
     def process(self) -> bool:
