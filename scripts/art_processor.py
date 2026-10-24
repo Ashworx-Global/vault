@@ -218,7 +218,7 @@ def generate_gallery_index(projects: list[ArtProject], base_url: str = "/vault")
 
 
 def process_logos(logo_dir: Path) -> None:
-    """Export logo in multiple sizes for web use."""
+    """Export logo in multiple sizes for web use with transparent background."""
     source_dir = logo_dir / "source"
     export_dir = logo_dir / "exports"
     
@@ -252,12 +252,12 @@ def process_logos(logo_dir: Path) -> None:
         output = export_dir / f"{name}.png"
         
         try:
-            # Convert and resize
+            # Convert and resize with transparent background
             cmd = [
                 "convert",
                 f"{source}[0]",  # First layer if PSD
                 "-resize", f"{width}x{height}",
-                "-background", "white",
+                "-background", "none",
                 "-gravity", "center",
                 "-extent", f"{width}x{height}",
                 str(output)
