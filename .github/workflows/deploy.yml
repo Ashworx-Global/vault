@@ -35,8 +35,12 @@ jobs:
         uses: actions/setup-python@v7
         with:
           python-version: "3.12"
+      - name: Install Python dependencies (PIL for watermarking)
+        run: pip install Pillow
       - name: Install ImageMagick (for PSD conversion)
         run: sudo apt-get update && sudo apt-get install -y imagemagick
+      - name: Convert PSD files to PNG (art gallery exports)
+        run: python3 scripts/art_processor.py
       - name: Build static site (stdlib only, no npm)
         run: python3 scripts/build-site.py --base /vault --out site/dist
       - name: Setup Pages
