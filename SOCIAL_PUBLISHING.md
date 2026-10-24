@@ -13,7 +13,29 @@ Your vault now automatically publishes daily notes and art projects to Patreon a
 - Optionally add `PUBLISH_PATREON` (default: `true`)
 - Optionally add `PUBLISH_FACEBOOK` (default: `true`)
 
-## Feature Flags
+## ⚠️ Important: Patreon API Limitation
+
+The **Patreon API v2 is strictly read-only**. It does not support POST/PATCH requests to create or publish new posts. This means:
+
+- ❌ **Cannot automate Patreon posting** (official API limitation)
+- ✅ Can still automate Facebook posting
+- 🔧 You can manually post to Patreon: https://www.patreon.com/c/ManOfGodSA
+
+**Current Status:**
+- `PUBLISH_PATREON` defaults to `false` (disabled)
+- If you enable it, posts will fail with 405 errors
+- Consider using Patreon's website interface for manual posting
+
+**Workaround options:**
+1. **Manual posting** - Post to Patreon web interface when you want
+2. **Facebook automation** - Use automated Facebook posts instead
+3. **Future API** - If Patreon releases write APIs, we can re-enable
+
+## Facebook Publishing
+
+Facebook automation works and is enabled by default once you fix the token/permissions issues.
+
+---
 
 You can enable/disable publishing to each platform independently via GitHub Variables:
 
@@ -23,7 +45,7 @@ Go to **Settings → Variables** and add (or edit):
 
 | Variable | Default | Values | Purpose |
 |----------|---------|--------|---------|
-| `PUBLISH_PATREON` | `true` | `true`, `false` | Enable/disable Patreon publishing |
+| `PUBLISH_PATREON` | `false` | `true`, `false` | Enable/disable Patreon publishing (API limitation: read-only) |
 | `PUBLISH_FACEBOOK` | `true` | `true`, `false` | Enable/disable Facebook publishing |
 
 ### Examples

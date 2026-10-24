@@ -315,12 +315,15 @@ if __name__ == "__main__":
     ART_DIR = REPO / "Art"
     TRACK_FILE = REPO / ".published-content.json"
     
-    publish_patreon = os.getenv("PUBLISH_PATREON", "true").lower() in ["true", "1", "yes"]
+    publish_patreon = os.getenv("PUBLISH_PATREON", "false").lower() in ["true", "1", "yes"]
     publish_facebook = os.getenv("PUBLISH_FACEBOOK", "true").lower() in ["true", "1", "yes"]
     
     print("📱 Publishing to Patreon and Facebook...\n")
     print("Platform Status:")
-    print(f"  Patreon:  {'✓ Enabled' if publish_patreon else '✗ Disabled'}")
+    if publish_patreon:
+        print(f"  Patreon:  ⚠️  Enabled (but API is read-only - posts will fail)")
+    else:
+        print(f"  Patreon:  ✗ Disabled (API limitation: v2 is read-only)")
     print(f"  Facebook: {'✓ Enabled' if publish_facebook else '✗ Disabled'}")
     print()
     
