@@ -862,7 +862,11 @@ def main() -> int:
                         gallery_html += f'<a href="#" data-lightbox="{base}/art/{slug}/{img}" class="card !p-0 overflow-hidden group"><img src="{base}/art/{slug}/{img}" alt="Image {idx+1}" class="w-full h-48 object-cover group-hover:opacity-90 transition" style="user-select: none;" data-no-save /></a>'
                     gallery_html += '</div>'
                     
-                    notes_html = f'<div class="prose-custom mb-8">{notes}</div>' if notes else ""
+                    # Convert markdown notes to HTML
+                    notes_html = ""
+                    if notes:
+                        notes_rendered = render_blocks(notes, linkmap, base, books)
+                        notes_html = f'<div class="prose-custom mb-8">{notes_rendered}</div>'
                     
                     write(f"art/{slug}", folder.name, f"Art project: {folder.name}",
                           f'<p class="text-sm"><a class="text-gold hover:underline" href="{base}/art/">Art</a> / {esc(folder.name)}</p><h1 class="font-display text-3xl font-black mt-1 mb-6">{esc(folder.name)}</h1>{notes_html}{gallery_html}')
