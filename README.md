@@ -226,4 +226,4 @@ Each verse page includes:
 
 ---
 
-*Last updated: 2026-09-26 • Generated from vault structure • [View on GitHub](https://github.com/lee-royashworth/AshworX-Vault)*
+*Last updated: 2026-09-26 • Generated from vault structure • [View on GitHub](https://github.com/lee-royashworth/AshworX-Vault)*# Test social publishing setup
