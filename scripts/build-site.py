@@ -98,6 +98,8 @@ img { border-radius: .5rem; box-shadow: 0 1px 3px rgba(0,0,0,.3); margin: 1.5rem
 #lightbox-close { position: absolute; top: 1rem; right: 1rem; background: rgba(200,162,74,.2); border: 1px solid var(--color-gold); color: var(--color-gold); width: 2rem; height: 2rem; border-radius: .25rem; display: flex; align-items: center; justify-content: center; cursor: pointer; user-select: none; }
 #lightbox-close:hover { background: rgba(200,162,74,.4); }
 footer { border-top: 1px solid #292524; background: var(--color-panel); }
+header img { margin: 0; box-shadow: none; }
+@media (max-width: 640px) { header { position: static; } main { overflow-wrap: anywhere; } details.bible summary { flex-wrap: wrap; } p.verse { padding: .5rem .7rem; } h1 { overflow-wrap: anywhere; } }
 header { background: rgba(18,24,33,.95); backdrop-filter: blur(8px); border-bottom: 1px solid #292524; position: sticky; top: 0; z-index: 40; }
 """
 
@@ -118,9 +120,9 @@ BASE_TMPL = """<!DOCTYPE html>
 <body class="min-h-screen flex flex-col antialiased">
 <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 z-50 px-4 py-2 bg-gold text-ink rounded-lg">Skip to content</a>
 <header>
-<nav class="mx-auto flex max-w-6xl items-center justify-between px-4 py-0">
-<a href="@@BASE@@/" class="flex items-center"><img src="@@BASE@@/logos/icon-256.png" alt="Man Of God" class="h-28 w-auto"></a>
-<div class="flex items-center gap-5 text-sm">
+<nav class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-x-4 gap-y-2 px-4 py-2 md:py-0">
+<a href="@@BASE@@/" class="flex items-center shrink-0"><img src="@@BASE@@/logos/icon-256.png" alt="Man Of God" class="h-16 md:h-28 w-auto"></a>
+<div class="flex flex-wrap items-center justify-end gap-x-4 gap-y-2 text-sm md:gap-5">
 <a href="@@BASE@@/daily/" class="hover:text-gold transition">Daily</a>
 <a href="@@BASE@@/bible/" class="hover:text-gold transition">Bible</a>
 <a href="@@BASE@@/books/" class="hover:text-gold transition">Books</a>
