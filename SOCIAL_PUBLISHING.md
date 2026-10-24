@@ -4,30 +4,58 @@ Your vault now automatically publishes daily notes and art projects to Patreon a
 
 ## Setup
 
-### 1. GitHub Secrets (already done)
+### 1. GitHub Secrets
 - ✅ `PATREON_API_TOKEN` - Your Patreon creator API token
+- Add `FACEBOOK_PAGE_TOKEN` - Your Facebook page access token
 
-### 2. Add Facebook Page Token
-GitHub → Repository → Settings → Secrets → New repository secret:
-- Name: `FACEBOOK_PAGE_TOKEN`
-- Value: [Get from Facebook](https://developers.facebook.com/docs/facebook-login/access-tokens)
-  - Go to Facebook App Dashboard → Tools → Access Token Tool
-  - Or use your page permanent access token
+### 2. GitHub Variables
+- Add `FACEBOOK_PAGE_ID` - Your Facebook page ID (numeric)
+- Optionally add `PUBLISH_PATREON` (default: `true`)
+- Optionally add `PUBLISH_FACEBOOK` (default: `true`)
 
-### 3. Add Facebook Page ID (as variable, not secret)
-GitHub → Repository → Settings → Variables → New repository variable:
-- Name: `FACEBOOK_PAGE_ID`
-- Value: `61596013522180`
+## Feature Flags
+
+You can enable/disable publishing to each platform independently via GitHub Variables:
+
+### Publishing Flags
+
+Go to **Settings → Variables** and add (or edit):
+
+| Variable | Default | Values | Purpose |
+|----------|---------|--------|---------|
+| `PUBLISH_PATREON` | `true` | `true`, `false` | Enable/disable Patreon publishing |
+| `PUBLISH_FACEBOOK` | `true` | `true`, `false` | Enable/disable Facebook publishing |
+
+### Examples
+
+**Disable Facebook (while debugging):**
+```
+PUBLISH_FACEBOOK = false
+PUBLISH_PATREON = true
+```
+
+**Disable all publishing temporarily:**
+```
+PUBLISH_PATREON = false
+PUBLISH_FACEBOOK = false
+```
+
+**Re-enable after fix:**
+```
+PUBLISH_PATREON = true
+PUBLISH_FACEBOOK = true
+```
 
 ## How It Works
 
 **On each git push:**
-1. GitHub Actions builds your site (scripts/art_processor.py, scripts/build-site.py)
+1. GitHub Actions builds your site
 2. After successful build, scripts/social_publisher.py runs
-3. New daily notes are posted to Patreon + Facebook
-4. New art projects are posted to Patreon + Facebook
-5. Existing art projects are updated when you add more images
-6. Published content is tracked in `.published-content.json` to prevent duplicates
+3. Checks enabled platforms (via `PUBLISH_PATREON` and `PUBLISH_FACEBOOK`)
+4. New daily notes are posted to enabled platforms
+5. New art projects are posted to enabled platforms
+6. Existing art projects are updated when you add more images
+7. Published content is tracked to prevent duplicates
 
 ## What Gets Posted
 
@@ -44,24 +72,33 @@ GitHub → Repository → Settings → Variables → New repository variable:
 
 ## Disabling Publishing
 
-If you want to skip publishing for a commit, just don't push. Publishing only runs on GitHub Actions.
+To skip all publishing without editing variables, delete the secrets/variables from GitHub.
+
+For a single push, you can also disable in variables temporarily and re-enable later.
 
 ## Troubleshooting
 
 **"PATREON_API_TOKEN not set"**
-- Add the secret to GitHub repo settings
+- Add to GitHub repo Settings → Secrets
 
 **"FACEBOOK_PAGE_TOKEN not set"**
-- Add the secret to GitHub repo settings
+- Add to GitHub repo Settings → Secrets
 
 **"FACEBOOK_PAGE_ID not set"**
-- Add the variable to GitHub repo settings (use `61596013522180`)
+- Add to GitHub repo Settings → Variables
 
 **Posts not appearing**
 - Check GitHub Actions logs for errors
 - Verify tokens are correct and have proper permissions
-- Patreon: Token must have "creator" scope
-- Facebook: Token must have "pages_manage_posts" permission
+- Check the feature flags (`PUBLISH_PATREON`, `PUBLISH_FACEBOOK`)
+
+**Patreon 405 errors**
+- Token may lack creator permissions
+- Verify at https://www.patreon.com/settings/apps
+
+**Facebook 400 errors**
+- Token may lack `pages_manage_posts` permission
+- Disable with `PUBLISH_FACEBOOK = false` and debug separately
 
 ## Manual Publishing
 
@@ -70,5 +107,9 @@ To publish manually without pushing:
 PATREON_API_TOKEN=your_token \
 FACEBOOK_PAGE_TOKEN=your_token \
 FACEBOOK_PAGE_ID=61596013522180 \
+PUBLISH_PATREON=true \
+PUBLISH_FACEBOOK=false \
 python3 scripts/social_publisher.py
 ```
+
+All publishing flags are optional and default to `true` if not set.

@@ -245,6 +245,13 @@ def get_art_projects(art_dir: Path) -> list[tuple[str, str]]:
 def publish_daily_notes(daily_dir: Path, published_content: PublishedContent,
                        base_url: str = "https://ashworx-global.github.io/vault"):
     """Publish new or updated daily notes to Patreon and Facebook."""
+    publish_patreon = os.getenv("PUBLISH_PATREON", "true").lower() in ["true", "1", "yes"]
+    publish_facebook = os.getenv("PUBLISH_FACEBOOK", "true").lower() in ["true", "1", "yes"]
+    
+    if not publish_patreon and not publish_facebook:
+        print("⚠ Both PUBLISH_PATREON and PUBLISH_FACEBOOK disabled")
+        return
+    
     for slug, title, _ in get_daily_notes(daily_dir):
         post_url = f"{base_url}/daily/{slug}/"
         
@@ -262,13 +269,22 @@ def publish_daily_notes(daily_dir: Path, published_content: PublishedContent,
         post_content = f"{content}\n\nRead more: {post_url}"
         post_text = strip_html_tags(post_content)[:500]
         
-        publish_to_patreon(title, post_content, published_content, "daily", slug)
-        publish_to_facebook(title, post_text, post_url, published_content, "daily", slug)
+        if publish_patreon:
+            publish_to_patreon(title, post_content, published_content, "daily", slug)
+        
+        if publish_facebook:
+            publish_to_facebook(title, post_text, post_url, published_content, "daily", slug)
 
 
 def publish_art_projects(art_dir: Path, published_content: PublishedContent,
                         base_url: str = "https://ashworx-global.github.io/vault"):
     """Publish new or updated art projects to Patreon and Facebook."""
+    publish_patreon = os.getenv("PUBLISH_PATREON", "true").lower() in ["true", "1", "yes"]
+    publish_facebook = os.getenv("PUBLISH_FACEBOOK", "true").lower() in ["true", "1", "yes"]
+    
+    if not publish_patreon and not publish_facebook:
+        return
+    
     for slug, title in get_art_projects(art_dir):
         post_url = f"{base_url}/art/{slug}/"
         
@@ -286,8 +302,11 @@ def publish_art_projects(art_dir: Path, published_content: PublishedContent,
         post_content = f"{content}\n\n🖼️ {image_count} image{'s' if image_count != 1 else ''}\n\nView project: {post_url}"
         post_text = strip_html_tags(post_content)[:500]
         
-        publish_to_patreon(f"Art: {title}", post_content, published_content, "art", slug)
-        publish_to_facebook(f"Art: {title}", post_text, post_url, published_content, "art", slug)
+        if publish_patreon:
+            publish_to_patreon(f"Art: {title}", post_content, published_content, "art", slug)
+        
+        if publish_facebook:
+            publish_to_facebook(f"Art: {title}", post_text, post_url, published_content, "art", slug)
 
 
 if __name__ == "__main__":
@@ -296,7 +315,14 @@ if __name__ == "__main__":
     ART_DIR = REPO / "Art"
     TRACK_FILE = REPO / ".published-content.json"
     
+    publish_patreon = os.getenv("PUBLISH_PATREON", "true").lower() in ["true", "1", "yes"]
+    publish_facebook = os.getenv("PUBLISH_FACEBOOK", "true").lower() in ["true", "1", "yes"]
+    
     print("📱 Publishing to Patreon and Facebook...\n")
+    print("Platform Status:")
+    print(f"  Patreon:  {'✓ Enabled' if publish_patreon else '✗ Disabled'}")
+    print(f"  Facebook: {'✓ Enabled' if publish_facebook else '✗ Disabled'}")
+    print()
     
     published = PublishedContent(TRACK_FILE)
     
