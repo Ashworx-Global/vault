@@ -1,3 +1,11 @@
+---
+tags:
+  - mercy
+  - judgment
+  - repentance
+  - watchman
+  - covenant
+---
 
 > [!bible]- [Ezekiel 32:1-33:33 - WEB-OFFLINE](https://www.biblegateway.com/passage/?search=Ezekiel+32:1-33:33&version=web-offline)
 > [[Ezekiel 32#^1|1]]. In the twelfth year, in the twelfth month, in the first day of the month, “Yahweh’s word came to me, saying,
@@ -129,3 +137,7 @@ My deeds are like filthy rags my Lord, Holy Spirit, I ask for your guidance for 
 > [[Job 37#^15|15]]. Do you know how God controls them, and causes the lightning of his cloud to shine?
  %% #Job #Job37 %%>
   [[Job]] [[Job 37]]
+
+## Harvested verse pages
+%% harvested-verse-pages %%
+[[Ezekiel 33 v 11]] · [[Ezekiel 33 v 13]]
