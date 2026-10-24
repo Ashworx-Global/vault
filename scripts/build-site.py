@@ -21,6 +21,7 @@ Usage:
 
 from __future__ import annotations
 
+import hashlib
 import html
 import json
 import os
@@ -855,7 +856,12 @@ def main() -> int:
                             images.append(img.name)
                 
                 if images:
-                    project = {"slug": slug, "title": folder.name, "images": images, "notes": notes}
+                    # Content-hash query string so a changed export busts the browser/CDN cache
+                    urls = {
+                        img: f"{base}/art/{slug}/{img}?v={hashlib.md5((export_dir / img).read_bytes()).hexdigest()[:8]}"
+                        for img in images
+                    }
+                    project = {"slug": slug, "title": folder.name, "images": images, "urls": urls, "notes": notes}
                     art_projects.append(project)
                     
                     # Copy images to dist
@@ -869,7 +875,7 @@ def main() -> int:
                     # Generate project page
                     gallery_html = '<div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">'
                     for idx, img in enumerate(images):
-                        gallery_html += f'<a href="#" data-lightbox="{base}/art/{slug}/{img}" class="card !p-0 overflow-hidden group"><img src="{base}/art/{slug}/{img}" alt="Image {idx+1}" class="w-full h-48 object-cover group-hover:opacity-90 transition" style="user-select: none;" data-no-save /></a>'
+                        gallery_html += f'<a href="#" data-lightbox="{urls[img]}" class="card !p-0 overflow-hidden group"><img src="{urls[img]}" alt="Image {idx+1}" class="w-full h-48 object-cover group-hover:opacity-90 transition" style="user-select: none;" data-no-save /></a>'
                     gallery_html += '</div>'
                     
                     # Convert markdown notes to HTML
@@ -886,7 +892,7 @@ def main() -> int:
         cards_html = '<div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">'
         for proj in art_projects:
             first_img = proj["images"][0]
-            cards_html += f'<a href="{base}/art/{proj["slug"]}/" class="card !p-0 overflow-hidden group"><div class="relative w-full h-48 bg-panel rounded mb-3 overflow-hidden"><img src="{base}/art/{proj["slug"]}/{first_img}" alt="{proj["title"]}" class="w-full h-full object-cover group-hover:scale-105 transition" style="user-select: none;" data-no-save /></div><div class="p-4"><h3 class="font-bold text-lg">{esc(proj["title"])}</h3><p class="text-sm" style="color: #a8a29e;">{len(proj["images"])} image{"s" if len(proj["images"]) != 1 else ""}</p></div></a>'
+            cards_html += f'<a href="{base}/art/{proj["slug"]}/" class="card !p-0 overflow-hidden group"><div class="relative w-full h-48 bg-panel rounded mb-3 overflow-hidden"><img src="{proj["urls"][first_img]}" alt="{proj["title"]}" class="w-full h-full object-cover group-hover:scale-105 transition" style="user-select: none;" data-no-save /></div><div class="p-4"><h3 class="font-bold text-lg">{esc(proj["title"])}</h3><p class="text-sm" style="color: #a8a29e;">{len(proj["images"])} image{"s" if len(proj["images"]) != 1 else ""}</p></div></a>'
         cards_html += '</div>'
         gallery_index = f'<h1 class="font-display text-3xl font-black mb-2">Art & Investigations</h1><p class="mb-6" style="color: #a8a29e;">Creative explorations, design studies, and artistic investigations. Images are watermarked to prevent AI training use.</p>{cards_html}'
     else:
