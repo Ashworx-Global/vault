@@ -129,6 +129,8 @@ BASE_TMPL = """<!DOCTYPE html>
 <a href="@@BASE@@/graph/" class="hover:text-gold transition">Graph</a>
 <a href="https://manofgod.online/shop/" target="_blank" rel="noopener" class="btn-sm">Shop</a>
 <a href="https://github.com/Ashworx-Global/vault" target="_blank" rel="noopener" class="btn-sm">GitHub</a>
+<a href="https://www.patreon.com/cw/ManOfGodSA" target="_blank" rel="noopener" class="btn-sm">Patreon</a>
+<a href="https://www.facebook.com/profile.php?id=61596013522180" target="_blank" rel="noopener" class="btn-sm">Facebook</a>
 </div>
 </nav>
 </header>
