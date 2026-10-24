@@ -749,10 +749,7 @@
         "description": "A frontier open-weight model.",
         "toolCall": true,
         "reasoning": true,
-        "reasoningEfforts": [
-          "none",
-          "high"
-        ],
+        "reasoningEfforts": [],
         "modalities": {
           "input": [
             "text"
@@ -810,10 +807,7 @@
         "description": "The July 2026 DeepSeek V4 Flash snapshot: fast, cheap, and broadly capable.",
         "toolCall": true,
         "reasoning": true,
-        "reasoningEfforts": [
-          "none",
-          "high"
-        ],
+        "reasoningEfforts": [],
         "modalities": {
           "input": [
             "text"

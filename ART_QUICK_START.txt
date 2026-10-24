@@ -1,0 +1,139 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                     🎨 ART GALLERY - QUICK START GUIDE                       ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+✅ SYSTEM READY TO USE!
+
+Your markdown-driven site now has a complete art gallery with:
+  ✓ Auto-convert PSD → High-res PNG (300 DPI)
+  ✓ AI-prevention watermark: "© Not for AI Training • Original Art"
+  ✓ Right-click protection (disable save, drag-drop)
+  ✓ Modern lightbox gallery with keyboard navigation
+  ✓ Journal-style README.md for process notes
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. CREATE A NEW PROJECT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  mkdir -p Art/my-project-name/source Art/my-project-name/exports
+
+  # Write your process notes:
+  # Art/my-project-name/README.md
+
+  # Add images:
+  # Option A: Copy PSD/Krita to source/ (auto-converts on build)
+  # Option B: Export as PNG to exports/ (watermark applied on build)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2. BUILD AND VIEW LOCALLY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  python3 scripts/build-site.py
+  open site/dist/art/my-project-name/index.html
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+3. PUBLISH TO GITHUB PAGES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  git add Art/
+  git commit -m "Add my project name"
+  git push origin main
+
+  # View at: https://ashworx-global.github.io/vault/art/
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📁 FOLDER STRUCTURE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Art/
+  ├── README.md              ← Overview
+  ├── SETUP.md               ← Full documentation (read this!)
+  ├── sample-study-01/       ← Example (delete when ready)
+  └── your-project/
+      ├── README.md          (📝 Process notes, journal entries)
+      ├── source/            (🔒 PSD/Krita files, local only)
+      └── exports/           (🖼️ High-res watermarked PNGs)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🎨 WHAT HAPPENS DURING BUILD
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Your PSD files in source/
+         ↓
+  Automatically convert to PNG (300 DPI high-res)
+         ↓
+  Add watermark: "© Not for AI Training • Original Art"
+         ↓
+  Generate gallery page with lightbox
+         ↓
+  Published to web with right-click protection enabled
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🔐 SECURITY FEATURES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ✓ Watermark → Visual declaration for AI prevention
+  ✓ Right-click disabled → No "Save image as..."
+  ✓ Drag-drop disabled → Cannot drag images to desktop
+  ✓ Together → Clear message: "Not for AI training"
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📚 DOCUMENTATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  File                        Purpose
+  ─────────────────────────   ──────────────────────────────────
+  Art/SETUP.md                Complete setup & troubleshooting
+  Art/README.md               Project overview
+  ART_IMPLEMENTATION.md       Technical details
+  ART_QUICK_START.txt         This file!
+
+  Sample project: Art/sample-study-01/ (working example)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⚙️ CONFIGURATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Edit scripts/art_processor.py to change:
+    • Watermark text (line ~110)
+    • Export resolution/DPI (line ~87)
+    • Enable/disable watermark
+
+  Or edit SETUP.md section "Configuration" for details.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+❓ COMMON QUESTIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Q: Do I need to export from Photoshop?
+  A: No! Put PSDs in source/, they auto-convert to PNG (300 DPI).
+
+  Q: What if I manually export PNG?
+  A: Put in exports/, watermark still applied automatically.
+
+  Q: Can I delete the sample project?
+  A: Yes! It's just an example. Delete Art/sample-study-01/ when ready.
+
+  Q: How do I change the watermark?
+  A: Edit scripts/art_processor.py line ~110.
+
+  Q: Can users bypass right-click protection?
+  A: Yes, tech-savvy users can, but it discourages casual copying + watermark is always there.
+
+  Q: Site not updating?
+  A: Hard-refresh: Cmd+Shift+R (Mac) or Ctrl+Shift+R (Windows/Linux)
+     GitHub build takes 2-3 minutes.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🎯 NEXT STEPS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  1. Read Art/SETUP.md for full documentation
+  2. Create your first project folder
+  3. Add images or PSDs
+  4. Write process notes in README.md
+  5. Run: python3 scripts/build-site.py
+  6. Push to GitHub: git add Art/ && git push
+  7. View at: https://ashworx-global.github.io/vault/art/
+
+Happy creating! 🎨✨

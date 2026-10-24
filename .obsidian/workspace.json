@@ -49,10 +49,25 @@
               },
               "pinned": true,
               "icon": "terminal",
-              "title": "OC | Harvesting verse pages for 2026-10-16…"
+              "title": "vault"
+            }
+          },
+          {
+            "id": "2a79cbfd3d180ac6",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Daily/2026-10-18 (A New Way of Being).md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "2026-10-18 (A New Way of Being)"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -277,7 +292,7 @@
       "obsidian-full-calendar:Open Full Calendar": false
     }
   },
-  "active": "4d6b686902c88359",
+  "active": "efdc2a45cf68d3fb",
   "lastOpenFiles": [
     "site/dist/sitemap.xml",
     "site/dist/favicon.svg",
@@ -285,12 +300,23 @@
     "site/dist/404.html",
     "site/dist/graph/index.html",
     "site/dist/graph",
+    "site/dist/tags/renewal/index.html",
+    "site/dist/tags/renewal",
     "site/dist/tags/godly-leadership/index.html",
     "site/dist/tags/godly-leadership",
     "site/dist/tags/love/index.html",
     "site/dist/tags/love",
-    "site/dist/tags/return-of-jesus/index.html",
-    "site/dist/tags/return-of-jesus",
+    "Bible/Revelation 18 v 1–24.md",
+    "Bible/Micah 5 v 2.md",
+    "Bible/Job 38 v 1–11.md",
+    "Bible/Ezekiel 37 v 1–28.md",
+    "Bible/Ezekiel 36 v 1–38.md",
+    "Daily/2026-10-17 (Shepherding Is a Tough Business.md",
+    "Daily/2026-10-18 (A New Way of Being).md",
+    "Bible/Revelation 17 v 1–18.md",
+    "Bible/Job 37 v 16–24.md",
+    "Bible/Ezekiel 35 v 1–15.md",
+    "Bible/Ezekiel 34 v 1–31.md",
     "Bible/Revelation 16 v 1–21.md",
     "Bible/Revelation 16 v 17.md",
     "Bible/John 19 v 30.md",
@@ -305,17 +331,6 @@
     "Daily/2026-10-09 (Judgment It’s Tricky).md",
     "Bible/Revelation 15 v 1–8.md",
     "Bible/Revelation 14 v 14–20.md",
-    "Bible/Job 37 v 5.md",
-    "Bible/Job 37 v 1–8.md",
-    "Bible/Ezekiel 32 v 4.md",
-    "Bible/Ezekiel 31 v 1–18.md",
-    "Bible/Ezekiel 31 v 13.md",
-    "Bible/Ezekiel 30 v 1–26.md",
-    "Daily/2026-10-14 ( Persist, Don’t Just Exist).md",
-    "Daily/2026-10-13 (The Last Person You Would Expect).md",
-    "Bible/Revelation 14 v 1–13.md",
-    "Bible/Revelation 13 v 11–18.md",
-    "Bible/Job 36 v 32.md",
     "public/favicon.svg",
     "Untitled 1.canvas",
     "Untitled.canvas"

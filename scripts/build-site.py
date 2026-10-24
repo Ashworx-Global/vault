@@ -34,6 +34,7 @@ from urllib.parse import quote
 REPO = Path(__file__).resolve().parent.parent
 DAILY_DIR = REPO / "Daily"
 BIBLE_DIR = REPO / "Bible"
+ART_DIR = REPO / "Art"
 
 SITE_NAME = "Man of God Daily Readings"
 SITE_URL = "https://ashworx-global.github.io/vault"
@@ -86,6 +87,16 @@ details.bible .bible-body { padding: 0 1.1rem 1.1rem; }
 p.verse { display: flex; gap: .7rem; background: rgba(200,162,74,.1); border-left: 4px solid var(--color-gold); padding: .55rem .9rem; border-radius: 0 .6rem .6rem 0; margin: .5rem 0; }
 .verse-num { font-weight: 700; color: var(--color-gold); min-width: 2ch; }
 img { border-radius: .5rem; box-shadow: 0 1px 3px rgba(0,0,0,.3); margin: 1.5rem 0; max-width: 100%; }
+[data-lightbox] { cursor: pointer; user-select: none; }
+[data-lightbox]:hover { opacity: .9; }
+#lightbox { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,.95); z-index: 50; align-items: center; justify-content: center; }
+#lightbox-img { max-width: 90%; max-height: 90vh; border-radius: .5rem; user-select: none; pointer-events: none; }
+.lightbox-nav { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(200,162,74,.2); border: 1px solid var(--color-gold); color: var(--color-gold); padding: .5rem .75rem; cursor: pointer; border-radius: .25rem; font-size: 1.5rem; user-select: none; }
+.lightbox-nav:hover { background: rgba(200,162,74,.4); }
+#lightbox-prev { left: 1rem; }
+#lightbox-next { right: 1rem; }
+#lightbox-close { position: absolute; top: 1rem; right: 1rem; background: rgba(200,162,74,.2); border: 1px solid var(--color-gold); color: var(--color-gold); width: 2rem; height: 2rem; border-radius: .25rem; display: flex; align-items: center; justify-content: center; cursor: pointer; user-select: none; }
+#lightbox-close:hover { background: rgba(200,162,74,.4); }
 footer { border-top: 1px solid #292524; background: var(--color-panel); }
 header { background: rgba(18,24,33,.95); backdrop-filter: blur(8px); border-bottom: 1px solid #292524; position: sticky; top: 0; z-index: 40; }
 """
@@ -114,6 +125,7 @@ BASE_TMPL = """<!DOCTYPE html>
 <a href="@@BASE@@/bible/" class="hover:text-gold transition">Bible</a>
 <a href="@@BASE@@/books/" class="hover:text-gold transition">Books</a>
 <a href="@@BASE@@/tags/" class="hover:text-gold transition">Topics</a>
+<a href="@@BASE@@/art/" class="hover:text-gold transition">Art</a>
 <a href="@@BASE@@/graph/" class="hover:text-gold transition">Graph</a>
 <a href="https://manofgod.online/shop/" target="_blank" rel="noopener" class="btn-sm">Shop</a>
 <a href="https://github.com/Ashworx-Global/vault" target="_blank" rel="noopener" class="btn-sm">GitHub</a>
@@ -124,13 +136,51 @@ BASE_TMPL = """<!DOCTYPE html>
 <footer>
 <div class="max-w-6xl mx-auto px-4 py-8 grid gap-6 md:grid-cols-3 text-sm" style="color: #a8a29e;">
 <div><h3 class="font-display text-gold mb-2">Man of God Daily Readings</h3><p>A GitHub Pages site rendered from an <a class="hover:text-gold" href="https://obsidian.md/" target="_blank" rel="noopener">Obsidian</a> vault of daily Bible notes. Verse links mirror the vault's wikilinks, and scripture text comes from the ESV via the <a class="hover:text-gold" href="https://api.esv.org/" target="_blank" rel="noopener">Crossway API</a>. Logos links open each passage in your own Logos library — <a class="hover:text-gold" href="https://www.logos.com/free-edition" target="_blank" rel="noopener">get Logos free</a>.</p></div>
-<div><h3 class="font-display text-gold mb-2">Browse</h3><p><a class="hover:text-gold" href="@@BASE@@/daily/">Daily notes</a> · <a class="hover:text-gold" href="@@BASE@@/bible/">Verse pages</a> · <a class="hover:text-gold" href="@@BASE@@/books/">Books</a> · <a class="hover:text-gold" href="@@BASE@@/tags/">Topics</a> · <a class="hover:text-gold" href="@@BASE@@/graph/">Graph</a></p></div>
+<div><h3 class="font-display text-gold mb-2">Browse</h3><p><a class="hover:text-gold" href="@@BASE@@/daily/">Daily notes</a> · <a class="hover:text-gold" href="@@BASE@@/bible/">Verse pages</a> · <a class="hover:text-gold" href="@@BASE@@/books/">Books</a> · <a class="hover:text-gold" href="@@BASE@@/tags/">Topics</a> · <a class="hover:text-gold" href="@@BASE@@/art/">Art</a> · <a class="hover:text-gold" href="@@BASE@@/graph/">Graph</a></p></div>
 <div><h3 class="font-display text-gold mb-2">Source</h3><p><a class="hover:text-gold" href="https://github.com/Ashworx-Global/vault" target="_blank" rel="noopener">Ashworx-Global/vault</a> · built from Obsidian markdown, stdlib only, no npm.</p></div>
 </div>
 </footer>
+<div id="lightbox">
+  <button id="lightbox-close">✕</button>
+  <button id="lightbox-prev" class="lightbox-nav">‹</button>
+  <img id="lightbox-img" src="" alt="Enlarged view" style="user-select: none;" data-no-save />
+  <button id="lightbox-next" class="lightbox-nav">›</button>
+</div>
 <script>
 const q=document.getElementById('filter');
 if(q){q.addEventListener('input',()=>{const s=q.value.toLowerCase();document.querySelectorAll('[data-search]').forEach(el=>{el.style.display=el.dataset.search.includes(s)?'':'none';});});}
+// Lightbox for art gallery
+document.addEventListener('DOMContentLoaded',()=>{
+  const lightbox=document.getElementById('lightbox');
+  const lightboxImg=document.getElementById('lightbox-img');
+  const lightboxClose=document.getElementById('lightbox-close');
+  const lightboxPrev=document.getElementById('lightbox-prev');
+  const lightboxNext=document.getElementById('lightbox-next');
+  if(!lightbox)return;
+  let currentIdx=0,images=[];
+  document.querySelectorAll('[data-lightbox]').forEach((el,idx)=>{
+    el.addEventListener('click',(e)=>{e.preventDefault();currentIdx=idx;showImage();});
+    images.push(el.dataset.lightbox);
+  });
+  function showImage(){
+    lightboxImg.src=images[currentIdx];
+    lightbox.style.display='flex';
+  }
+  function closeBox(){lightbox.style.display='none';}
+  lightboxClose?.addEventListener('click',closeBox);
+  lightboxPrev?.addEventListener('click',()=>{currentIdx=(currentIdx-1+images.length)%images.length;showImage();});
+  lightboxNext?.addEventListener('click',()=>{currentIdx=(currentIdx+1)%images.length;showImage();});
+  lightbox?.addEventListener('click',(e)=>{if(e.target===lightbox)closeBox();});
+  document.addEventListener('keydown',(e)=>{if(lightbox.style.display==='flex'){
+    if(e.key==='Escape')closeBox();
+    if(e.key==='ArrowLeft')lightboxPrev?.click();
+    if(e.key==='ArrowRight')lightboxNext?.click();
+  }});
+});
+// Prevent right-click on gallery images
+document.addEventListener('contextmenu',(e)=>{if(e.target.closest('[data-lightbox]')||e.target.closest('[data-no-save]'))e.preventDefault();});
+// Prevent drag-save
+document.addEventListener('dragstart',(e)=>{if(e.target.closest('[data-lightbox]')||e.target.closest('[data-no-save]'))e.preventDefault();});
 </script>
 </body>
 </html>
@@ -593,6 +643,7 @@ def main() -> int:
     (out / "bible").mkdir(parents=True)
     (out / "books").mkdir(parents=True)
     (out / "tags").mkdir(parents=True)
+    (out / "art").mkdir(parents=True)
 
     daily_files = sorted(DAILY_DIR.glob("*.md")) if DAILY_DIR.exists() else []
     bible_files = sorted(BIBLE_DIR.glob("*.md")) if BIBLE_DIR.exists() else []
@@ -766,6 +817,69 @@ def main() -> int:
     # ---- graph (Obsidian-style relationship view)
     write("graph", "Graph", "Interactive map of how daily notes, verses, books and topics connect.",
           render_graph_page(pages, linkmap, books, tag_index, base))
+
+    # ---- art gallery
+    art_projects = []
+    if ART_DIR.exists():
+        for folder in sorted(ART_DIR.iterdir()):
+            if folder.is_dir() and folder.name != "__pycache__":
+                slug = slugify(folder.name)
+                readme = folder / "README.md"
+                export_dir = folder / "exports"
+                
+                # Load metadata from README
+                notes = ""
+                if readme.exists():
+                    content = readme.read_text(encoding="utf-8", errors="replace")
+                    lines = content.split("\n")
+                    if lines and lines[0].startswith("#"):
+                        notes = "\n".join(lines[1:]).strip()
+                    else:
+                        notes = content.strip()
+                
+                # Find exported images
+                images = []
+                if export_dir.exists():
+                    for img in sorted(export_dir.glob("*.png")) + sorted(export_dir.glob("*.jpg")) + sorted(export_dir.glob("*.jpeg")):
+                        if not img.stem.endswith("_watermarked"):
+                            images.append(img.name)
+                
+                if images:
+                    project = {"slug": slug, "title": folder.name, "images": images, "notes": notes}
+                    art_projects.append(project)
+                    
+                    # Copy images to dist
+                    proj_out = out / "art" / slug
+                    proj_out.mkdir(parents=True, exist_ok=True)
+                    for img in images:
+                        src = export_dir / img
+                        dst = proj_out / img
+                        shutil.copy2(src, dst)
+                    
+                    # Generate project page
+                    gallery_html = '<div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">'
+                    for idx, img in enumerate(images):
+                        gallery_html += f'<a href="#" data-lightbox="{base}/art/{slug}/{img}" class="card !p-0 overflow-hidden group"><img src="{base}/art/{slug}/{img}" alt="Image {idx+1}" class="w-full h-48 object-cover group-hover:opacity-90 transition" style="user-select: none;" data-no-save /></a>'
+                    gallery_html += '</div>'
+                    
+                    notes_html = f'<div class="prose-custom mb-8">{notes}</div>' if notes else ""
+                    
+                    write(f"art/{slug}", folder.name, f"Art project: {folder.name}",
+                          f'<p class="text-sm"><a class="text-gold hover:underline" href="{base}/art/">Art</a> / {esc(folder.name)}</p><h1 class="font-display text-3xl font-black mt-1 mb-6">{esc(folder.name)}</h1>{notes_html}{gallery_html}')
+    
+    # Art gallery index
+    if art_projects:
+        cards_html = '<div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">'
+        for proj in art_projects:
+            first_img = proj["images"][0]
+            cards_html += f'<a href="{base}/art/{proj["slug"]}/" class="card !p-0 overflow-hidden group"><div class="relative w-full h-48 bg-panel rounded mb-3 overflow-hidden"><img src="{base}/art/{proj["slug"]}/{first_img}" alt="{proj["title"]}" class="w-full h-full object-cover group-hover:scale-105 transition" style="user-select: none;" data-no-save /></div><div class="p-4"><h3 class="font-bold text-lg">{esc(proj["title"])}</h3><p class="text-sm" style="color: #a8a29e;">{len(proj["images"])} image{"s" if len(proj["images"]) != 1 else ""}</p></div></a>'
+        cards_html += '</div>'
+        gallery_index = f'<h1 class="font-display text-3xl font-black mb-2">Art & Investigations</h1><p class="mb-6" style="color: #a8a29e;">Creative explorations, design studies, and artistic investigations. Images are watermarked to prevent AI training use.</p>{cards_html}'
+    else:
+        gallery_index = '<h1 class="font-display text-3xl font-black mb-2">Art & Investigations</h1><p style="color: #a8a29e;">No art projects yet. Add folders to the Art/ directory to get started.</p>'
+    
+    write("art", "Art & Investigations", "Art projects, explorations, and investigations",
+          gallery_index)
 
     # ---- misc
     (out / "404.html").write_text(render_page("Not found", "Page not found",
