@@ -8,6 +8,9 @@ build/
 Art/*/exports/
 logo/exports/
 
+# Social publishing (tracked during workflow)
+.published-content.json
+
 # Python
 __pycache__/
 *.pyc

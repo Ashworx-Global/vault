@@ -36,13 +36,20 @@ jobs:
         with:
           python-version: "3.12"
       - name: Install Python dependencies (PIL for watermarking)
-        run: pip install Pillow
+        run: pip install Pillow requests
       - name: Install ImageMagick (for PSD conversion)
         run: sudo apt-get update && sudo apt-get install -y imagemagick
       - name: Convert PSD files to PNG (art gallery exports)
         run: python3 scripts/art_processor.py
       - name: Build static site (stdlib only, no npm)
         run: python3 scripts/build-site.py --base /vault --out site/dist
+      - name: Publish to Patreon and Facebook
+        if: success()
+        env:
+          PATREON_API_TOKEN: ${{ secrets.PATREON_API_TOKEN }}
+          FACEBOOK_PAGE_TOKEN: ${{ secrets.FACEBOOK_PAGE_TOKEN }}
+          FACEBOOK_PAGE_ID: ${{ vars.FACEBOOK_PAGE_ID }}
+        run: python3 scripts/social_publisher.py
       - name: Setup Pages
         uses: actions/configure-pages@v6
       - name: Upload artifact
