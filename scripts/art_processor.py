@@ -1,17 +1,20 @@
 #!/usr/bin/env python3
-"""Art gallery processor — Convert PSDs to PNG, watermark, and organize.
+"""Asset processor — Convert PSDs to PNG, process logos in multiple sizes.
 
 Reads:
   Art/*/source/       PSD, Krita, or image files
   Art/*/README.md     Journal notes and metadata
+  logo/source/        Logo source files
 
 Writes:
   Art/*/exports/      High-res watermarked PNG exports
+  logo/exports/       Logo in multiple sizes (favicon, icons, social)
   site/dist/art/      Generated HTML gallery pages
 
 Features:
   - Auto-convert PSD→PNG via ImageMagick
-  - Add AI-prevention watermark
+  - Add AI-prevention watermark to art
+  - Export logos in multiple sizes (32, 64, 128, 256, 512, 1024, 1200)
   - Organize into lightbox gallery
   - Parse README.md for journal notes
 """
@@ -214,8 +217,80 @@ def generate_gallery_index(projects: list[ArtProject], base_url: str = "/vault")
     return f'<div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">{"".join(cards)}</div>'
 
 
+def process_logos(logo_dir: Path) -> None:
+    """Export logo in multiple sizes for web use."""
+    source_dir = logo_dir / "source"
+    export_dir = logo_dir / "exports"
+    
+    if not source_dir.exists():
+        print("ℹ No logo/source/ folder found")
+        return
+    
+    # Find logo source file (PNG or other format)
+    logo_files = list(source_dir.glob("*.png")) + list(source_dir.glob("*.jpg")) + list(source_dir.glob("*.psd"))
+    if not logo_files:
+        print("ℹ No logo source files found")
+        return
+    
+    source = logo_files[0]  # Use first found logo
+    export_dir.mkdir(parents=True, exist_ok=True)
+    
+    print("\n🎨 Processing logo...")
+    
+    # Logo sizes: (width, height, name)
+    sizes = [
+        (32, 32, "favicon-32"),
+        (64, 64, "favicon-64"),
+        (128, 128, "icon-128"),
+        (256, 256, "icon-256"),
+        (512, 512, "icon-512"),
+        (1024, 1024, "icon-1024"),
+        (1200, 630, "social-og"),  # Open Graph / social media
+    ]
+    
+    for width, height, name in sizes:
+        output = export_dir / f"{name}.png"
+        
+        try:
+            # Convert and resize
+            cmd = [
+                "convert",
+                f"{source}[0]",  # First layer if PSD
+                "-resize", f"{width}x{height}",
+                "-background", "white",
+                "-gravity", "center",
+                "-extent", f"{width}x{height}",
+                str(output)
+            ]
+            subprocess.run(cmd, check=True, capture_output=True)
+            print(f"  ✓ Exported {width}x{height} → {name}.png")
+        except subprocess.CalledProcessError as e:
+            print(f"  ✗ Failed to export {name}: {e.stderr.decode()}")
+
+
+def copy_logos_to_dist(logo_dir: Path, dist_dir: Path) -> None:
+    """Copy exported logos to site/dist for web serving."""
+    export_dir = logo_dir / "exports"
+    
+    if not export_dir.exists():
+        return
+    
+    logos_dist = dist_dir / "logos"
+    logos_dist.mkdir(parents=True, exist_ok=True)
+    
+    import shutil
+    for logo_file in export_dir.glob("*.png"):
+        dst = logos_dist / logo_file.name
+        shutil.copy2(logo_file, dst)
+
+
 if __name__ == "__main__":
     REPO = Path(__file__).resolve().parent.parent
     ART_DIR = REPO / "Art"
+    LOGO_DIR = REPO / "logo"
+    
     projects = process_all_art(ART_DIR)
     print(f"\n✅ Processed {len(projects)} art projects")
+    
+    # Process logos
+    process_logos(LOGO_DIR)

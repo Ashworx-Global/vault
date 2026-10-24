@@ -885,6 +885,15 @@ def main() -> int:
     write("art", "Art & Investigations", "Art projects, explorations, and investigations",
           gallery_index)
 
+    # Copy exported logos to dist
+    logo_dir = REPO / "logo"
+    logo_exports = logo_dir / "exports"
+    if logo_exports.exists():
+        logos_out = out / "logos"
+        logos_out.mkdir(parents=True, exist_ok=True)
+        for logo_file in logo_exports.glob("*.png"):
+            shutil.copy2(logo_file, logos_out / logo_file.name)
+
     # ---- misc
     (out / "404.html").write_text(render_page("Not found", "Page not found",
         '<div class="text-center py-16"><h1 class="font-display text-5xl font-black" style="color: var(--color-gold);">404</h1><p class="mt-2" style="color: #a8a29e;">That page is not in this vault.</p><p class="mt-6"><a class="text-gold font-semibold hover:underline" href="' + base + '/">← Home</a></p></div>'), encoding="utf-8")
