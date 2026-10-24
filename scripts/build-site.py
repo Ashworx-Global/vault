@@ -119,7 +119,7 @@ BASE_TMPL = """<!DOCTYPE html>
 <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 z-50 px-4 py-2 bg-gold text-ink rounded-lg">Skip to content</a>
 <header>
 <nav class="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
-<a href="@@BASE@@/" class="font-display text-2xl tracking-wide" style="color: var(--color-gold);">Man Of God</a>
+<a href="@@BASE@@/" class="flex items-center"><img src="@@BASE@@/logos/icon-128.png" alt="Man Of God" class="h-10 w-auto"></a>
 <div class="flex items-center gap-5 text-sm">
 <a href="@@BASE@@/daily/" class="hover:text-gold transition">Daily</a>
 <a href="@@BASE@@/bible/" class="hover:text-gold transition">Bible</a>
