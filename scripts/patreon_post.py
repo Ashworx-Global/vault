@@ -64,10 +64,20 @@ def inline(line: str) -> str:
 
 
 def paragraphs(lines):
-    """Group consecutive non-blank lines into <p> blocks (line breaks kept)."""
+    """Group consecutive non-blank lines into <p> blocks (line breaks kept).
+
+    A markdown heading line (``#### Daily Prayer``) ends the current block and
+    becomes its own <h4>, so it never shows up as literal ``####`` text.
+    """
     blocks, cur = [], []
     for ln in lines + [""]:
-        if ln.strip():
+        heading = re.fullmatch(r"#{1,6}\s+(.+)", ln.strip())
+        if heading:
+            if cur:
+                blocks.append("<p>" + "<br>".join(inline(c) for c in cur) + "</p>")
+                cur = []
+            blocks.append(f"<h4>{inline(heading.group(1))}</h4>")
+        elif ln.strip():
             cur.append(ln.strip())
         elif cur:
             blocks.append("<p>" + "<br>".join(inline(c) for c in cur) + "</p>")

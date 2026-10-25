@@ -4,37 +4,37 @@
     "type": "split",
     "children": [
       {
-        "id": "42d7e475305e182f",
+        "id": "8efaadbc75c53e4f",
         "type": "split",
         "children": [
           {
-            "id": "9b7b33e76d7451ac",
+            "id": "46c8f255c991aa12",
             "type": "tabs",
-            "dimension": 35.32934131736527,
+            "dimension": 52.57510729613733,
             "children": [
               {
-                "id": "2a79cbfd3d180ac6",
+                "id": "9f9d7a65a0e809aa",
                 "type": "leaf",
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "Daily/2026-10-16 ( Mercy and Judgment ).md",
+                    "file": "Art/README.md",
                     "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "2026-10-16 ( Mercy and Judgment )"
+                  "title": "README"
                 }
               }
             ]
           },
           {
-            "id": "63e5bffb12b8e974",
+            "id": "31a4fc3b0c7f2f0c",
             "type": "tabs",
-            "dimension": 64.67065868263472,
+            "dimension": 47.42489270386266,
             "children": [
               {
-                "id": "a5527c8ab3fc5650",
+                "id": "6655a48d016d4275",
                 "type": "leaf",
                 "pinned": true,
                 "state": {
@@ -75,7 +75,7 @@
                   },
                   "pinned": true,
                   "icon": "terminal",
-                  "title": "✳ PSD publishing script"
+                  "title": "✳ Resources area on the site"
                 }
               }
             ]
@@ -306,19 +306,9 @@
       "obsidian-full-calendar:Open Full Calendar": false
     }
   },
-  "active": "efdc2a45cf68d3fb",
+  "active": "6655a48d016d4275",
   "lastOpenFiles": [
-    "site/dist/tags/sardis/index.html",
-    "site/dist/tags/sardis",
-    "site/dist/tags/song-of-moses",
-    "site/dist/tags/victory/index.html",
-    "site/dist/tags/victory",
-    "site/dist/tags/perseverance/index.html",
-    "site/dist/tags/perseverance",
-    "site/dist/tags/christ-reigns/index.html",
-    "site/dist/tags/christ-reigns",
-    "site/dist/tags/king/index.html",
-    "site/dist/tags/king",
+    "site/dist/404.html",
     "site/dist/logos/social-og.png",
     "site/dist/logos/icon-512.png",
     "site/dist/logos/icon-256.png",
@@ -326,34 +316,44 @@
     "site/dist/logos/icon-1024.png",
     "site/dist/logos/favicon-64.png",
     "site/dist/logos/favicon-32.png",
+    "site/dist/logos",
+    "site/dist/accept-jesus/index.html",
+    "site/dist/accept-jesus",
+    "site/dist/resources/scripture-images/index.html",
+    "site/dist/resources/scripture-images/ezekiel-40-4-widescreen.png",
+    "site/dist/resources/sample-mere-christianity/index.html",
+    "site/dist/resources/sample-bible-project/index.html",
+    "site/dist/resources/scripture-images",
+    "site/dist/resources/sample-mere-christianity",
+    "site/dist/resources/sample-bible-project",
+    "site/dist/resources/index.html",
     "site/dist/art/eyes-study/sketches-eyes.png",
-    "site/dist/art/colour-indiana-jones-train-scene/Indiana Jones1 Train Scene.png",
-    "site/dist/favicon.svg",
+    "Pages/accept-jesus.md",
+    "Art/README.md",
+    "Art/SETUP.md",
+    "Daily/2026-10-20 (It Has Been Granted to You).md",
+    "public/favicon.svg",
+    "Resources/sample-bible-project.md",
+    "Resources/sample-mere-christianity.md",
+    "Bible/Revelation 20 v 1–6.md",
+    "Bible/Revelation 19 v 11–21.md",
+    "Bible/Job 38 v 25–33.md",
+    "Bible/Ezekiel 40 v 3–4.md",
+    "Bible/Ezekiel 40 v 3.md",
+    "Bible/Ezekiel 40 v 1–49.md",
+    "Bible/Ezekiel 39 v 25–29.md",
+    "Daily/2026-10-18 (A New Way of Being).md",
+    "Resources/zz-test2.md",
+    "Resources/zz-test.md",
+    "Resources/_TEMPLATE.md",
     "Daily/2026-10-16 ( Mercy and Judgment ).md",
     "Bible/Ezekiel 33 v 13.md",
     "Bible/Ezekiel 33 v 11.md",
-    "Daily/2026-10-18 (A New Way of Being).md",
     "Bible/Revelation 18 v 1–24.md",
     "Bible/Micah 5 v 2.md",
     "Bible/Job 38 v 1–11.md",
     "Bible/Ezekiel 37 v 1–28.md",
     "Bible/Ezekiel 36 v 1–38.md",
-    "Daily/2026-10-17 (Shepherding Is a Tough Business.md",
-    "Bible/Revelation 17 v 1–18.md",
-    "Bible/Job 37 v 16–24.md",
-    "Bible/Ezekiel 35 v 1–15.md",
-    "Bible/Ezekiel 34 v 1–31.md",
-    "Bible/Revelation 16 v 1–21.md",
-    "Bible/Revelation 16 v 17.md",
-    "Bible/John 19 v 30.md",
-    "Bible/Job 37 v 9–15.md",
-    "Bible/Job 37 v 14.md",
-    "Bible/Ezekiel 33 v 6.md",
-    "Bible/Ezekiel 33 v 4.md",
-    "Bible/Ezekiel 33 v 1–33.md",
-    "Bible/Ezekiel 32 v 1–32.md",
-    "Daily/2026-10-16 (Mercy and Judgment).md",
-    "Daily/2026-10-15 (Picturing God).md",
     "Untitled 1.canvas",
     "Untitled.canvas"
   ]
