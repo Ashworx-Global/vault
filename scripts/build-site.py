@@ -40,6 +40,7 @@ BIBLE_DIR = REPO / "Bible"
 ART_DIR = REPO / "Art"
 RESOURCE_DIR = REPO / "Resources"
 SCRIPTURE_IMG_DIR = RESOURCE_DIR / "Scripture-Images"
+PAGES_DIR = REPO / "Pages"
 
 # Resource `type:` values and the label shown on the filter buttons
 RESOURCE_TYPES = {"book": "Books", "podcast": "Podcasts", "youtube": "YouTube", "other": "Other"}
@@ -803,8 +804,9 @@ def main() -> int:
     hero = (f'<section class="rounded-2xl p-8 md:p-12 text-white mb-8" style="background:linear-gradient(135deg,var(--color-ink),var(--color-panel))">'
             f'<p class="mb-4 text-sm uppercase tracking-[0.3em]" style="color: var(--color-gold);">Faith · Strength · Brotherhood</p>'
             f'<h1 class="font-display text-5xl md:text-7xl">Man of God</h1>'
-            f'<p class="mx-auto mt-6 max-w-2xl text-lg" style="color: #a8a29e;">This is a site that is a collection of daily readings with some thoughts on the verses, they are my thoughts and are not truth, The Word is truth and you should read for yourself, but maybe some thoughts could help, or draw you closer to reading the Bible for yourself. Man of God, is a site to help men have a relationship with God and challenge each other to draw closer to God through His Word.</p>'
-            f'<div class="mt-8 flex justify-center gap-4"><a class="btn" href="{base}/daily/">Browse daily notes</a>'
+            f'<p class="mx-auto mt-6 max-w-2xl text-lg" style="color: #a8a29e;">Man of God, is a site that is a collection of daily readings with some thoughts on the verses, they are my thoughts and are not truth, The Word is truth and you should read for yourself, but maybe some thoughts could help, or draw you closer to reading the Bible for yourself. We would like to help men have a relationship with God and challenge each other to draw closer to God through His Word. We have added some resources and links to help build your faith and understanding.</p>'
+            f'<div class="mt-8 flex flex-wrap justify-center gap-4"><a class="btn" href="{base}/accept-jesus/">Accept Jesus</a>'
+            f'<a class="btn-sm py-2.5" href="{base}/daily/">Browse daily notes</a>'
             f'<a class="btn-sm py-2.5" href="{base}/bible/">Explore verse pages</a></div></section>'
             f'<blockquote class="card mb-8" style="border-left: 4px solid var(--color-gold);"><p class="font-display text-xl md:text-2xl" style="color: var(--color-gold);">“{esc(VERSE)}”</p></blockquote>'
             f'{stats}'
@@ -1054,6 +1056,23 @@ def main() -> int:
               f'<div class="my-4">{res_links(r)}</div>'
               f'<div class="prose-custom">{render_blocks(r["body"], linkmap, base, books)}</div>'
               f'<div class="mt-4">{"".join(f"<span class=tag>#{esc(t)}</span>" for t in r["tags"])}</div></div></div>')
+
+    # ---- standalone pages: Pages/<slug>.md (frontmatter: title, description) -> /<slug>/
+    if PAGES_DIR.exists():
+        for f in sorted(PAGES_DIR.glob("*.md")):
+            if f.name.startswith("_"):
+                continue
+            text = f.read_text(encoding="utf-8", errors="replace")
+            parts = text.split("---", 2)
+            if not text.startswith("---") or len(parts) < 3:
+                print(f"  ⚠ {f.name}: no frontmatter, skipped")
+                continue
+            fm = {k.strip().lower(): v.strip().strip('"').strip("'")
+                  for k, _, v in (ln.partition(":") for ln in parts[1].splitlines() if ":" in ln)}
+            title = fm.get("title") or f.stem
+            write(slugify(f.stem), title, fm.get("description", title),
+                  f'<h1 class="font-display text-3xl md:text-4xl font-black mb-6">{esc(title)}</h1>'
+                  f'<div class="prose-custom">{render_blocks(parts[2].lstrip(chr(10)).replace("@@BASE@@", base), linkmap, base, books)}</div>')
 
     # Copy exported logos to dist
     logo_dir = REPO / "logo"
