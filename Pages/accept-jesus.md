@@ -25,9 +25,3 @@ Plug into community, find a local church, so that with the daily reading you get
 - [Linc Church](https://lincchurch.com/)
 - [Destiny Life Church](https://www.destinylifechurch.co.za/)
 
-<!-- ## Ask us a question
-
-Have questions about faith, the Bible, or what you just prayed? Send us a message and we'll get back to you.
-
-<!-- TODO: create a free form (e.g. Google Forms or Tally) and put its link here -->
-- [Send us a message](https://example.com) -->
