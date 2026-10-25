@@ -308,6 +308,8 @@
   },
   "active": "6655a48d016d4275",
   "lastOpenFiles": [
+    "site/dist/sitemap.xml",
+    "site/dist/robots.txt",
     "site/dist/404.html",
     "site/dist/logos/social-og.png",
     "site/dist/logos/icon-512.png",
@@ -325,8 +327,6 @@
     "site/dist/resources/sample-bible-project/index.html",
     "site/dist/resources/scripture-images",
     "site/dist/resources/sample-mere-christianity",
-    "site/dist/resources/sample-bible-project",
-    "site/dist/resources/index.html",
     "site/dist/art/eyes-study/sketches-eyes.png",
     "Pages/accept-jesus.md",
     "Art/README.md",
