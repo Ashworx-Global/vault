@@ -10,7 +10,7 @@
           {
             "id": "46c8f255c991aa12",
             "type": "tabs",
-            "dimension": 52.57510729613733,
+            "dimension": 24.570815450643778,
             "children": [
               {
                 "id": "9f9d7a65a0e809aa",
@@ -31,7 +31,7 @@
           {
             "id": "31a4fc3b0c7f2f0c",
             "type": "tabs",
-            "dimension": 47.42489270386266,
+            "dimension": 75.42918454935622,
             "children": [
               {
                 "id": "6655a48d016d4275",
@@ -306,10 +306,8 @@
       "obsidian-full-calendar:Open Full Calendar": false
     }
   },
-  "active": "6655a48d016d4275",
+  "active": "efdc2a45cf68d3fb",
   "lastOpenFiles": [
-    "site/dist/sitemap.xml",
-    "site/dist/robots.txt",
     "site/dist/404.html",
     "site/dist/logos/social-og.png",
     "site/dist/logos/icon-512.png",
@@ -321,18 +319,20 @@
     "site/dist/logos",
     "site/dist/accept-jesus/index.html",
     "site/dist/accept-jesus",
+    "site/dist/resources/scripture-images/habakkuk-2-3-widescreen.png",
+    "site/dist/resources/scripture-images/zephaniah-3-9-widescreen.png",
+    "site/dist/resources/scripture-images/zephaniah-3-5-widescreen.png",
     "site/dist/resources/scripture-images/index.html",
-    "site/dist/resources/scripture-images/ezekiel-40-4-widescreen.png",
-    "site/dist/resources/sample-mere-christianity/index.html",
     "site/dist/resources/sample-bible-project/index.html",
+    "site/dist/resources/sample-mere-christianity/index.html",
     "site/dist/resources/scripture-images",
     "site/dist/resources/sample-mere-christianity",
-    "site/dist/art/eyes-study/sketches-eyes.png",
+    "site/dist/resources/sample-bible-project",
+    "site/dist/resources/index.html",
     "Pages/accept-jesus.md",
     "Art/README.md",
     "Art/SETUP.md",
     "Daily/2026-10-20 (It Has Been Granted to You).md",
-    "public/favicon.svg",
     "Resources/sample-bible-project.md",
     "Resources/sample-mere-christianity.md",
     "Bible/Revelation 20 v 1–6.md",

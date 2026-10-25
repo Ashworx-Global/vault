@@ -1032,7 +1032,7 @@ def main() -> int:
     # Scripture images: Resources/Scripture-Images/*.png|jpg, shown as a lightbox gallery
     scripture_imgs = []
     if SCRIPTURE_IMG_DIR.exists():
-        for img in sorted(p for p in SCRIPTURE_IMG_DIR.iterdir() if p.suffix.lower() in (".png", ".jpg", ".jpeg", ".webp")):
+        for img in sorted(p for p in SCRIPTURE_IMG_DIR.iterdir() if not p.name.startswith(".") and p.suffix.lower() in (".png", ".jpg", ".jpeg", ".webp")):
             fname = slugify(img.stem) + img.suffix.lower()
             si_out = out / "resources" / "scripture-images"
             si_out.mkdir(parents=True, exist_ok=True)
