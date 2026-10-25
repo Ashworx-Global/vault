@@ -48,6 +48,11 @@ RESOURCE_TYPES = {"book": "Books", "podcast": "Podcasts", "youtube": "YouTube", 
 SITE_NAME = "Man of God Daily Readings"
 SITE_URL = "https://ashworx-global.github.io/vault"
 VERSE = "Not by might, nor by power, but by my Spirit, says the Lord of hosts. — Zechariah 4:6"
+# Scriptures shown prominently above the home page intro: (text, reference)
+HERO_VERSES = [
+    ("Be watchful, stand firm in the faith, act like men, be strong. Let all that you do be done in love.", "1 Corinthians 16:13–14"),
+    ("As for me and my house, we will serve the Lord.", "Joshua 24:15"),
+]
 
 # ---------------------------------------------------------------- theme (matches shop)
 THEME_CSS = """
@@ -804,6 +809,10 @@ def main() -> int:
     hero = (f'<section class="rounded-2xl p-8 md:p-12 text-white mb-8" style="background:linear-gradient(135deg,var(--color-ink),var(--color-panel))">'
             f'<p class="mb-4 text-sm uppercase tracking-[0.3em]" style="color: var(--color-gold);">Faith · Strength · Brotherhood</p>'
             f'<h1 class="font-display text-5xl md:text-7xl">Man of God</h1>'
+            f'<div class="mx-auto mt-8 grid max-w-3xl gap-4 md:grid-cols-2 text-left">' + "".join(
+                f'<blockquote class="rounded-lg p-5" style="border-left: 4px solid var(--color-gold); background: rgba(0,0,0,.25);">'
+                f'<p class="font-display text-lg md:text-xl" style="color: var(--color-gold);">“{esc(t)}”</p>'
+                f'<footer class="mt-2 text-sm" style="color: #a8a29e;">— {esc(ref)}</footer></blockquote>' for t, ref in HERO_VERSES) + '</div>'
             f'<p class="mx-auto mt-6 max-w-2xl text-lg" style="color: #a8a29e;">Man of God, is a site that is a collection of daily readings with some thoughts on the verses, they are my thoughts and are not truth, The Word is truth and you should read for yourself, but maybe some thoughts could help, or draw you closer to reading the Bible for yourself. We would like to help men have a relationship with God and challenge each other to draw closer to God through His Word. We have added some resources and links to help build your faith and understanding.</p>'
             f'<div class="mt-8 flex flex-wrap justify-center gap-4"><a class="btn" href="{base}/accept-jesus/">Accept Jesus</a>'
             f'<a class="btn-sm py-2.5" href="{base}/daily/">Browse daily notes</a>'
