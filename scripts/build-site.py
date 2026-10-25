@@ -4,6 +4,8 @@
 Reads:
   Daily/*.md          daily reading notes (Obsidian markdown + verse inserts)
   Bible/*.md          harvested verse pages (one file per passage)
+  Resources/*.md      recommended books / podcasts / YouTube channels (one file each,
+                      files starting with _ are skipped; see Resources/_TEMPLATE.md)
 
 Writes:
   site/dist/**        static HTML ready for GitHub Pages (Tailwind via CDN)
@@ -30,12 +32,17 @@ import shutil
 import sys
 from datetime import date
 from pathlib import Path
-from urllib.parse import quote
+from urllib.parse import quote, urlsplit
 
 REPO = Path(__file__).resolve().parent.parent
 DAILY_DIR = REPO / "Daily"
 BIBLE_DIR = REPO / "Bible"
 ART_DIR = REPO / "Art"
+RESOURCE_DIR = REPO / "Resources"
+SCRIPTURE_IMG_DIR = RESOURCE_DIR / "Scripture-Images"
+
+# Resource `type:` values and the label shown on the filter buttons
+RESOURCE_TYPES = {"book": "Books", "podcast": "Podcasts", "youtube": "YouTube", "other": "Other"}
 
 SITE_NAME = "Man of God Daily Readings"
 SITE_URL = "https://ashworx-global.github.io/vault"
@@ -129,6 +136,7 @@ BASE_TMPL = """<!DOCTYPE html>
 <a href="@@BASE@@/books/" class="hover:text-gold transition">Books</a>
 <a href="@@BASE@@/tags/" class="hover:text-gold transition">Topics</a>
 <a href="@@BASE@@/art/" class="hover:text-gold transition">Art</a>
+<a href="@@BASE@@/resources/" class="hover:text-gold transition">Resources</a>
 <a href="@@BASE@@/graph/" class="hover:text-gold transition">Graph</a>
 <a href="@@BASE@@/shop/" class="btn-sm">Shop</a>
 <a href="https://github.com/Ashworx-Global/vault" target="_blank" rel="noopener" class="btn-sm">GitHub</a>
@@ -141,7 +149,7 @@ BASE_TMPL = """<!DOCTYPE html>
 <footer>
 <div class="max-w-6xl mx-auto px-4 py-8 grid gap-6 md:grid-cols-3 text-sm" style="color: #a8a29e;">
 <div><h3 class="font-display text-gold mb-2">Man of God Daily Readings</h3><p>A GitHub Pages site rendered from an <a class="hover:text-gold" href="https://obsidian.md/" target="_blank" rel="noopener">Obsidian</a> vault of daily Bible notes. Verse links mirror the vault's wikilinks, and scripture text comes from the ESV via the <a class="hover:text-gold" href="https://api.esv.org/" target="_blank" rel="noopener">Crossway API</a>. Logos links open each passage in your own Logos library — <a class="hover:text-gold" href="https://www.logos.com/free-edition" target="_blank" rel="noopener">get Logos free</a>.</p></div>
-<div><h3 class="font-display text-gold mb-2">Browse</h3><p><a class="hover:text-gold" href="@@BASE@@/daily/">Daily notes</a> · <a class="hover:text-gold" href="@@BASE@@/bible/">Verse pages</a> · <a class="hover:text-gold" href="@@BASE@@/books/">Books</a> · <a class="hover:text-gold" href="@@BASE@@/tags/">Topics</a> · <a class="hover:text-gold" href="@@BASE@@/art/">Art</a> · <a class="hover:text-gold" href="@@BASE@@/graph/">Graph</a></p></div>
+<div><h3 class="font-display text-gold mb-2">Browse</h3><p><a class="hover:text-gold" href="@@BASE@@/daily/">Daily notes</a> · <a class="hover:text-gold" href="@@BASE@@/bible/">Verse pages</a> · <a class="hover:text-gold" href="@@BASE@@/books/">Books</a> · <a class="hover:text-gold" href="@@BASE@@/tags/">Topics</a> · <a class="hover:text-gold" href="@@BASE@@/art/">Art</a> · <a class="hover:text-gold" href="@@BASE@@/resources/">Resources</a> · <a class="hover:text-gold" href="@@BASE@@/graph/">Graph</a></p></div>
 <div><h3 class="font-display text-gold mb-2">Source</h3><p><a class="hover:text-gold" href="https://github.com/Ashworx-Global/vault" target="_blank" rel="noopener">Ashworx-Global/vault</a> · built from Obsidian markdown, stdlib only, no npm.</p></div>
 </div>
 </footer>
@@ -216,6 +224,58 @@ def split_frontmatter(text: str) -> tuple[dict, str]:
                     cur = None
             return fm, body.lstrip("\n")
     return {"tags": [], "aliases": []}, text
+
+
+def parse_resource(path: Path) -> dict | None:
+    """Parse one Resources/*.md file (frontmatter + markdown summary).
+
+    Frontmatter keys: title, type (book|podcast|youtube|other), by, image (path relative
+    to Resources/), links (list of `Label: https://...`), tags (list). Only http(s) links
+    are kept, and the image must exist inside Resources/. Returns None if the file has no
+    frontmatter.
+    """
+    text = path.read_text(encoding="utf-8", errors="replace")
+    if not text.startswith("---"):
+        print(f"  ⚠ {path.name}: no frontmatter, skipped")
+        return None
+    parts = text.split("---", 2)
+    if len(parts) < 3:
+        print(f"  ⚠ {path.name}: unterminated frontmatter, skipped")
+        return None
+    fm: dict = {"links": [], "tags": []}
+    cur = None
+    for line in parts[1].splitlines():
+        s = line.strip()
+        if not s or s.startswith("#"):
+            continue
+        if s.startswith("- ") and cur in ("links", "tags"):
+            fm[cur].append(s[2:].strip().strip('"').strip("'"))
+        elif ":" in s:
+            key, val = s.split(":", 1)
+            key, val = key.strip().lower(), val.strip().strip('"').strip("'")
+            cur = key if key in ("links", "tags") else None
+            if cur is None:
+                fm[key] = val
+    links = []
+    for raw in fm["links"]:
+        label, sep, url = raw.partition(": ")
+        if not sep:
+            label, url = urlsplit(raw).netloc, raw
+        if urlsplit(url.strip()).scheme in ("http", "https"):
+            links.append((label.strip(), url.strip()))
+        else:
+            print(f"  ⚠ {path.name}: link '{raw}' is not an http(s) URL, skipped")
+    image = None
+    if fm.get("image"):
+        cand = (RESOURCE_DIR / fm["image"]).resolve()
+        if cand.is_file() and RESOURCE_DIR.resolve() in cand.parents:
+            image = cand
+        else:
+            print(f"  ⚠ {path.name}: image '{fm['image']}' not found in Resources/, skipped")
+    rtype = fm.get("type", "other").lower()
+    return {"slug": slugify(path.stem), "title": fm.get("title") or path.stem,
+            "type": rtype if rtype in RESOURCE_TYPES else "other", "by": fm.get("by", ""),
+            "image": image, "links": links, "tags": fm["tags"], "body": parts[2].lstrip("\n")}
 
 
 # ---------------------------------------------------------------- slugs/urls
@@ -900,6 +960,98 @@ def main() -> int:
     
     write("art", "Art & Investigations", "Art projects, explorations, and investigations",
           gallery_index)
+
+    # ---- resources (books, podcasts, YouTube channels)
+    def qa(t: str) -> str:
+        return html.escape(t, quote=True)
+
+    resources = []
+    if RESOURCE_DIR.exists():
+        for f in sorted(RESOURCE_DIR.glob("*.md")):
+            if f.name.startswith("_") or f.name.lower() == "readme.md":
+                continue
+            r = parse_resource(f)
+            if r:
+                resources.append(r)
+    resources.sort(key=lambda r: (list(RESOURCE_TYPES).index(r["type"]), r["title"].lower()))
+
+    img_out = out / "resources" / "images"
+    for r in resources:
+        r["img_url"] = ""
+        if r["image"]:
+            img_out.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(r["image"], img_out / r["image"].name)
+            # content hash busts the browser/CDN cache when the image is replaced
+            r["img_url"] = f"{base}/resources/images/{quote(r['image'].name)}?v={hashlib.md5(r['image'].read_bytes()).hexdigest()[:8]}"
+
+    def res_image(r: dict, cls: str) -> str:
+        if r["img_url"]:
+            return f'<img src="{r["img_url"]}" alt="{qa(r["title"])}" class="{cls}" style="margin: 0; box-shadow: none;" loading="lazy">'
+        return f'<div class="{cls} h-48 flex items-center justify-center text-sm" style="color: #78716c;">{esc(RESOURCE_TYPES[r["type"]])}</div>'
+
+    def res_links(r: dict) -> str:
+        return "".join(f'<a class="btn-sm" href="{qa(u)}" target="_blank" rel="noopener noreferrer">{esc(label)}</a> ' for label, u in r["links"])
+
+    def res_card(r: dict) -> str:
+        search = qa((r["title"] + " " + r["by"] + " " + RESOURCE_TYPES[r["type"]] + " " + " ".join(r["tags"]) + " " + r["body"][:400]).lower())
+        by = f'<p class="text-sm" style="color: #a8a29e;">{esc(r["by"])}</p>' if r["by"] else ""
+        return (f'<article class="card flex flex-col" data-rtype="{r["type"]}" data-search="{search}">'
+                f'<a href="{base}/resources/{r["slug"]}/">{res_image(r, "w-full h-48 object-contain rounded mb-3 bg-ink")}</a>'
+                f'<p class="text-xs uppercase tracking-wide" style="color: var(--color-gold);">{esc(RESOURCE_TYPES[r["type"]])}</p>'
+                f'<h3 class="font-display text-xl font-bold"><a class="hover:text-gold transition" href="{base}/resources/{r["slug"]}/">{esc(r["title"])}</a></h3>{by}'
+                f'<p class="text-sm mt-2 flex-1" style="color: #a8a29e;">{blurb_text(r["body"], 160)}</p>'
+                f'<div class="mt-3">{res_links(r)}</div></article>')
+
+    if resources:
+        used = [t for t in RESOURCE_TYPES if any(r["type"] == t for r in resources)]
+        buttons = '<button data-rfilter="all" class="tag">All</button>' + "".join(
+            f'<button data-rfilter="{t}" class="tag">{esc(RESOURCE_TYPES[t])} ({sum(r["type"] == t for r in resources)})</button>' for t in used)
+        res_body = ('<input id="res-filter" placeholder="Search resources…" class="input mb-4">'
+                    f'<div class="flex flex-wrap gap-2 mb-6">{buttons}</div>'
+                    '<div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">' + "".join(res_card(r) for r in resources) + '</div>'
+                    '<script>(function(){var q=document.getElementById("res-filter"),t="all";'
+                    'function a(){var s=q.value.toLowerCase();document.querySelectorAll("[data-rtype]").forEach(function(c){'
+                    'c.style.display=((t==="all"||c.dataset.rtype===t)&&c.dataset.search.indexOf(s)>-1)?"":"none"})}'
+                    'q.addEventListener("input",a);document.querySelectorAll("[data-rfilter]").forEach(function(b){'
+                    'b.addEventListener("click",function(){t=b.dataset.rfilter;a()})})})();</script>')
+    else:
+        res_body = '<p style="color: #a8a29e;">No recommendations yet. Add a markdown file to the Resources/ folder to get started.</p>'
+    # Scripture images: Resources/Scripture-Images/*.png|jpg, shown as a lightbox gallery
+    scripture_imgs = []
+    if SCRIPTURE_IMG_DIR.exists():
+        for img in sorted(p for p in SCRIPTURE_IMG_DIR.iterdir() if p.suffix.lower() in (".png", ".jpg", ".jpeg", ".webp")):
+            fname = slugify(img.stem) + img.suffix.lower()
+            si_out = out / "resources" / "scripture-images"
+            si_out.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(img, si_out / fname)
+            url = f"{base}/resources/scripture-images/{fname}?v={hashlib.md5(img.read_bytes()).hexdigest()[:8]}"
+            scripture_imgs.append((img.stem, url))
+    scripture_link = ""
+    if scripture_imgs:
+        grid = "".join(
+            f'<figure><a href="#" data-lightbox="{url}" class="card !p-0 overflow-hidden block"><img src="{url}" alt="{qa(title)}" class="w-full h-48 object-cover hover:opacity-90 transition" loading="lazy"></a>'
+            f'<figcaption class="text-sm mt-2" style="color: #a8a29e;">{esc(title)}</figcaption></figure>'
+            for title, url in scripture_imgs)
+        write("resources/scripture-images", "Scripture Images", "Scripture images to view and share.",
+              f'<p class="text-sm"><a class="text-gold hover:underline" href="{base}/resources/">Resources</a> / Scripture Images</p>'
+              f'<h1 class="font-display text-3xl font-black mt-1 mb-6">Scripture Images</h1>'
+              f'<div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">{grid}</div>')
+        scripture_link = (f'<p class="mb-6"><a class="btn-sm" href="{base}/resources/scripture-images/">'
+                          f'Scripture Images ({len(scripture_imgs)})</a></p>')
+    write("resources", "Resources", "Books, podcasts, YouTube channels and scripture images worth your time.",
+          '<h1 class="font-display text-3xl font-black mb-2">Resources</h1>'
+          '<p class="mb-6" style="color: #a8a29e;">Books, podcasts and YouTube channels worth your time. Links go to external sites.</p>'
+          + scripture_link + res_body)
+
+    for r in resources:
+        by = f'<p style="color: #a8a29e;">{esc(r["by"])}</p>' if r["by"] else ""
+        write(f"resources/{r['slug']}", r["title"], f"{r['title']} — {r['by']}" if r["by"] else r["title"],
+              f'<p class="text-sm"><a class="text-gold hover:underline" href="{base}/resources/">Resources</a> / {esc(RESOURCE_TYPES[r["type"]])}</p>'
+              f'<div class="grid gap-8 md:grid-cols-3 mt-3"><div>{res_image(r, "w-full rounded bg-panel")}</div>'
+              f'<div class="md:col-span-2"><h1 class="font-display text-3xl md:text-4xl font-black mb-1">{esc(r["title"])}</h1>{by}'
+              f'<div class="my-4">{res_links(r)}</div>'
+              f'<div class="prose-custom">{render_blocks(r["body"], linkmap, base, books)}</div>'
+              f'<div class="mt-4">{"".join(f"<span class=tag>#{esc(t)}</span>" for t in r["tags"])}</div></div></div>')
 
     # Copy exported logos to dist
     logo_dir = REPO / "logo"
