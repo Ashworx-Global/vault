@@ -118,7 +118,9 @@ BASE_TMPL = """<!DOCTYPE html>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>@@TITLE@@ | Man of God Daily Readings</title>
 <meta name="description" content="@@DESC@@">
-<link rel="icon" type="image/svg+xml" href="@@BASE@@/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="@@BASE@@/logos/favicon-32.png">
+<link rel="icon" type="image/png" sizes="64x64" href="@@BASE@@/logos/favicon-64.png">
+<link rel="apple-touch-icon" href="@@BASE@@/logos/icon-256.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -1067,9 +1069,6 @@ def main() -> int:
         '<div class="text-center py-16"><h1 class="font-display text-5xl font-black" style="color: var(--color-gold);">404</h1><p class="mt-2" style="color: #a8a29e;">That page is not in this vault.</p><p class="mt-6"><a class="text-gold font-semibold hover:underline" href="' + base + '/">← Home</a></p></div>'), encoding="utf-8")
     (out / ".nojekyll").write_text("", encoding="utf-8")
     (out / "robots.txt").write_text("User-agent: *\nAllow: /\n", encoding="utf-8")
-    fav = REPO / "public" / "favicon.svg"
-    if fav.exists():
-        shutil.copyfile(fav, out / "favicon.svg")
     urls = [f"{SITE_URL}{base}/"]
     for root, _, files in os.walk(out):
         for fn in files:
