@@ -851,6 +851,12 @@ def main() -> int:
     opts = "".join(f'<button data-book="{esc(slugify(b))}" class="tag">{esc(b)} ({len(by_book[b])})</button>' for b in books_sorted)
     write("bible", "Verse pages", "Every harvested verse page, grouped by book.",
           f'<h1 class="font-display text-3xl font-black mb-2">Verse pages</h1><p class="mb-4" style="color: #a8a29e;">{len(bible)} pages across {len(books_sorted)} books.</p>'
+          f'<div class="card mb-4" style="border-left: 4px solid var(--color-gold);"><h2 class="font-display text-xl font-bold mb-1">Read the whole Bible free with Logos</h2>'
+          f'<p class="text-sm mb-3" style="color: #a8a29e;">Logos Bible Software is free to sign up for. There are optional subscriptions if you want to go deeper, but you can read the whole Bible for free, anywhere, using the software or the online app.</p>'
+          f'<a class="btn" href="https://www.logos.com/free-edition" target="_blank" rel="noopener noreferrer">Sign up for free</a></div>'
+          f'<div class="card mb-6"><p class="text-sm mb-3" style="color: #a8a29e;">Prefer to read online? The ESV is free to read here:</p>'
+          f'<a class="btn-sm" href="https://www.esv.org/" target="_blank" rel="noopener noreferrer">ESV.org</a> '
+          f'<a class="btn-sm" href="https://www.biblegateway.com/versions/English-Standard-Version-ESV-Bible/" target="_blank" rel="noopener noreferrer">BibleGateway (ESV)</a></div>'
           f'<input id="filter" placeholder="Filter passages…" class="input mb-4">'
           f'<div class="flex flex-wrap gap-2 mb-6"><button data-book="all" class="tag">All</button>{opts}</div>'
           f'<div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">' + "".join(
