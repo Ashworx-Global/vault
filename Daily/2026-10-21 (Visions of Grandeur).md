@@ -9,7 +9,7 @@ tags:
 ---
 #### Daily Prayer
 
-Father God, help me to be patience with those around me, you have given me grace and your word tells me to be like you, I cannot do it without your love and help by the Holy Spirit, Father help me to forgive those who have done wrong, give the grace that you give me. I pray this in Jesus name.
+Father God, help me to be patient with those around me. You have given me grace, and your word tells me to be like you. I cannot do it without your love and the Holy Spirit's help, Father; help me forgive those who have done wrong, and give me the grace you give me. I pray this in Jesus' name.
 
 > [!bible]- [Ezekiel 41:1-42:20 - WEB-OFFLINE](https://www.biblegateway.com/passage/?search=Ezekiel+41:1-42:20&version=web-offline)
 > [[Ezekiel 41#^1|1]]. He brought me to the temple, and measured the posts, six cubits wide on the one side, and six cubits wide on the other side, which was the width of the tent.

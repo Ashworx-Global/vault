@@ -9,7 +9,7 @@ tags:
 ---
 #### Daily Prayer
 
-Father God, I come to you in Jesus name, give me the patience and understanding that you give me, you have given me grace and I think you. Help m today to be the light and salt to those around me. Your will be done on earth as it is in heaven in Jesus name, amen.
+Father God, I come to you in Jesus name, give me the patience and understanding that you give me, you have given me grace and I thank you. Help me today to be the light and salt to those around me. Your will be done on earth as it is in heaven in Jesus name, amen.
 
 
 > [!bible]- [Ezekiel 43:1-44:31 - WEB-OFFLINE](https://www.biblegateway.com/passage/?search=Ezekiel+43:1-44:31&version=web-offline)
