@@ -42,7 +42,7 @@ jobs:
       - name: Convert PSD files to PNG (art gallery exports)
         run: python3 scripts/art_processor.py
       - name: Build static site (stdlib only, no npm)
-        run: python3 scripts/build-site.py --base /vault --out site/dist
+        run: python3 scripts/build-site.py --base=/vault --out=site/dist
       - name: Rebuild under /vault/ so custom-domain URLs resolve
         # With a project site the repo name "/vault" is part of the URL, and
         # all baked links point there. A custom domain serves the same
@@ -50,7 +50,8 @@ jobs:
         # the artifact as a real subdirectory. Building a second copy there
         # makes both https://manofgod.online/vault/... and
         # https://ashworx-global.github.io/vault/... work unchanged.
-        run: python3 scripts/build-site.py --base /vault --out site/dist/vault
+        # NOTE: build-site.py only parses "--opt=value" (no space form).
+        run: python3 scripts/build-site.py --base=/vault --out=site/dist/vault
       - name: Publish to Patreon and Facebook
         if: success()
         env:
