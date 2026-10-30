@@ -44,7 +44,7 @@ param(
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
 
-$SITE = 'https://ashworx-global.github.io/vault'
+$SITE = 'https://manofgod.online/vault'
 $SKIP_FROM = '## Harvested verse pages'
 
 # ── helpers ──────────────────────────────────────────────────────────────────

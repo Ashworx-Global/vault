@@ -25,7 +25,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-SITE = "https://ashworx-global.github.io/vault"
+SITE = "https://manofgod.online/vault"
 SKIP_FROM = "## Harvested verse pages"
 
 
