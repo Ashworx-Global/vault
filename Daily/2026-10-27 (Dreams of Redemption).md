@@ -56,9 +56,9 @@ Father God, you are Lord of everything, the past, present and future. I pray for
      4:1       1 King Nebuchadnezzar to all peoples, nations, and languages, that well in all the earth: Peace be multiplied to you! 
            2       It has seemed good to me to show the signs and wonders that the Most High God has done for me. 
            3       How great are his signs, 
-      how mighty his pwonders! 
+      how mighty his wonders! 
       His kingdom is an everlasting kingdom, 
-      rand his dominion endures from generation to generation.(Da 4:1-3)
+      and his dominion endures from generation to generation.(Da 4:1-3)
 
 How God can work in peoples hearts, this is the same person that tried to have people killed for praising God instead of this statue which is a demonic spirit of self, and he turns 180 and praises God. 
 
@@ -79,9 +79,9 @@ What’s particularly interesting is that in recognition of the fact that Daniel
      While the words were still in the king’s mouth, there fell a voice from heaven, “O King Nebuchadnezzar, to you it is spoken: The kingdom has departed from you, 
            32       and you shall be driven from among men, and your dwelling shall be with the beasts of the field. And you shall be made to eat grass like an ox, and seven periods of time shall pass over you, muntil you know that the Most High rules the kingdom of men and gives it to whom he will.” (Da 4:31-32)
 
-The pride, here the king was fortunate to have Daniel tell him before-hand, and a voice tell him again. We are told in the bible not to have pride and to humble our selves, and the Holy Spirit counsels us, we should heed the warnings as ours is far greater than this a punishment, eternal separation from God is our fate, Holy Spirit soften my heart to the words of our Father.
+The pride, here the king was fortunate to have Daniel tell him beforehand, and a voice tell him again. We are told in the bible not to have pride and to humble ourselves, and the Holy Spirit counsels us, we should heed the warnings as ours is far greater than this a punishment, eternal separation from God is our fate, Holy Spirit soften my heart to the words of our Father.
 
-      Now I, Nebuchadnezzar, apraise and extol and honor the bKing of heaven, cfor all his works are right and his ways are just; and dthose who walk in pride he is able to humble. (Da 4:37)
+      Now I, Nebuchadnezzar, praise and extol and honor the King of heaven, for all his works are right and his ways are just; and those who walk in pride he is able to humble. (Da 4:37)
 
 Full circle, in the end every knee will bow and proclaim Jesus is King and God is Lord over all.
 
