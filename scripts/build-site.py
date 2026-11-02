@@ -6,6 +6,7 @@ Reads:
   Bible/*.md          harvested verse pages (one file per passage)
   Resources/*.md      recommended books / podcasts / YouTube channels (one file each,
                       files starting with _ are skipped; see Resources/_TEMPLATE.md)
+  Blog/*.md           articles for /blog/ (files starting with _ are skipped; see Blog/_TEMPLATE.md)
 
 Writes:
   site/dist/**        static HTML ready for GitHub Pages (Tailwind via CDN)
@@ -18,7 +19,8 @@ Linking parity with Obsidian:
     (kept as-is so the Logos app / ref.ly can open the user's own copy)
 
 Usage:
-  python3 scripts/build-site.py [--base /vault] [--out site/dist]
+  python3 scripts/build-site.py [--base=] [--out=site/dist]
+  (--base= is empty by default: the site lives at the domain root, e.g. https://manofgod.online/bible/)
 """
 
 from __future__ import annotations
@@ -41,12 +43,13 @@ ART_DIR = REPO / "Art"
 RESOURCE_DIR = REPO / "Resources"
 SCRIPTURE_IMG_DIR = RESOURCE_DIR / "Scripture-Images"
 PAGES_DIR = REPO / "Pages"
+BLOG_DIR = REPO / "Blog"
 
 # Resource `type:` values and the label shown on the filter buttons
 RESOURCE_TYPES = {"book": "Books", "podcast": "Podcasts", "youtube": "YouTube", "other": "Other"}
 
 SITE_NAME = "Man of God Daily Readings"
-SITE_URL = "https://ashworx-global.github.io/vault"
+SITE_URL = "https://manofgod.online"
 VERSE = "Not by might, nor by power, but by my Spirit, says the Lord of hosts. — Zechariah 4:6"
 # Scriptures shown prominently above the home page intro: (text, reference)
 HERO_VERSES = [
@@ -140,6 +143,7 @@ BASE_TMPL = """<!DOCTYPE html>
 <a href="@@BASE@@/" class="flex items-center shrink-0"><img src="@@BASE@@/logos/icon-256.png" alt="Man Of God" class="h-16 md:h-28 w-auto"></a>
 <div class="flex flex-wrap items-center justify-end gap-x-4 gap-y-2 text-sm md:gap-5">
 <a href="@@BASE@@/daily/" class="hover:text-gold transition">Daily</a>
+<a href="@@BASE@@/blog/" class="hover:text-gold transition">Blog</a>
 <a href="@@BASE@@/bible/" class="hover:text-gold transition">Bible</a>
 <a href="@@BASE@@/books/" class="hover:text-gold transition">Books</a>
 <a href="@@BASE@@/tags/" class="hover:text-gold transition">Topics</a>
@@ -157,7 +161,7 @@ BASE_TMPL = """<!DOCTYPE html>
 <footer>
 <div class="max-w-6xl mx-auto px-4 py-8 grid gap-6 md:grid-cols-3 text-sm" style="color: #a8a29e;">
 <div><h3 class="font-display text-gold mb-2">Man of God Daily Readings</h3><p>A GitHub Pages site rendered from an <a class="hover:text-gold" href="https://obsidian.md/" target="_blank" rel="noopener">Obsidian</a> vault of daily Bible notes. Verse links mirror the vault's wikilinks, and scripture text comes from the ESV via the <a class="hover:text-gold" href="https://api.esv.org/" target="_blank" rel="noopener">Crossway API</a>. Logos links open each passage in your own Logos library — <a class="hover:text-gold" href="https://www.logos.com/free-edition" target="_blank" rel="noopener">get Logos free</a>.</p></div>
-<div><h3 class="font-display text-gold mb-2">Browse</h3><p><a class="hover:text-gold" href="@@BASE@@/daily/">Daily notes</a> · <a class="hover:text-gold" href="@@BASE@@/bible/">Verse pages</a> · <a class="hover:text-gold" href="@@BASE@@/books/">Books</a> · <a class="hover:text-gold" href="@@BASE@@/tags/">Topics</a> · <a class="hover:text-gold" href="@@BASE@@/art/">Art</a> · <a class="hover:text-gold" href="@@BASE@@/resources/">Resources</a> · <a class="hover:text-gold" href="@@BASE@@/graph/">Graph</a></p></div>
+<div><h3 class="font-display text-gold mb-2">Browse</h3><p><a class="hover:text-gold" href="@@BASE@@/daily/">Daily notes</a> · <a class="hover:text-gold" href="@@BASE@@/blog/">Blog</a> · <a class="hover:text-gold" href="@@BASE@@/bible/">Verse pages</a> · <a class="hover:text-gold" href="@@BASE@@/books/">Books</a> · <a class="hover:text-gold" href="@@BASE@@/tags/">Topics</a> · <a class="hover:text-gold" href="@@BASE@@/art/">Art</a> · <a class="hover:text-gold" href="@@BASE@@/resources/">Resources</a> · <a class="hover:text-gold" href="@@BASE@@/graph/">Graph</a></p></div>
 <div><h3 class="font-display text-gold mb-2">Source</h3><p><a class="hover:text-gold" href="https://github.com/Ashworx-Global/vault" target="_blank" rel="noopener">Ashworx-Global/vault</a> · built from Obsidian markdown, stdlib only, no npm.</p></div>
 </div>
 </footer>
@@ -284,6 +288,43 @@ def parse_resource(path: Path) -> dict | None:
     return {"slug": slugify(path.stem), "title": fm.get("title") or path.stem,
             "type": rtype if rtype in RESOURCE_TYPES else "other", "by": fm.get("by", ""),
             "image": image, "links": links, "tags": fm["tags"], "body": parts[2].lstrip("\n")}
+
+
+def parse_post(path: Path) -> dict | None:
+    """Parse one Blog/*.md article.
+
+    Frontmatter: title, date (YYYY-MM-DD, required), description (optional, shown on cards),
+    tags (list or inline `[a, b]`). Returns None if the frontmatter is missing or the date is bad.
+    """
+    text = path.read_text(encoding="utf-8", errors="replace")
+    parts = text.split("---", 2)
+    if not text.startswith("---") or len(parts) < 3:
+        print(f"  ⚠ {path.name}: no frontmatter, skipped")
+        return None
+    fm: dict = {"tags": []}
+    cur = None
+    for line in parts[1].splitlines():
+        s = line.strip()
+        if not s or s.startswith("#"):
+            continue
+        if s.startswith("- ") and cur == "tags":
+            fm["tags"].append(s[2:].strip().strip('"').strip("'"))
+        elif ":" in s:
+            key, val = s.split(":", 1)
+            key, val = key.strip().lower(), val.strip().strip('"').strip("'")
+            cur = None
+            if key == "tags" and val.startswith("["):
+                fm["tags"] = [t.strip().strip('"').strip("'") for t in val.strip("[]").split(",") if t.strip()]
+            elif key == "tags":
+                cur = "tags"
+            else:
+                fm[key] = val
+    if not re.match(r"^\d{4}-\d{2}-\d{2}$", fm.get("date", "")):
+        print(f"  ⚠ {path.name}: date must be YYYY-MM-DD, skipped")
+        return None
+    return {"slug": slugify(path.stem), "title": fm.get("title") or path.stem, "date": fm["date"],
+            "desc": fm.get("description", ""), "tags": [t.lower() for t in fm["tags"]],
+            "body": parts[2].lstrip("\n")}
 
 
 # ---------------------------------------------------------------- slugs/urls
@@ -699,11 +740,11 @@ def render_graph_page(pages: list[dict], linkmap: dict, books: set[str], tag_ind
 
 
 def main() -> int:
-    base = "/vault"
+    base = ""
     out = REPO / "site" / "dist"
     for a in sys.argv[1:]:
         if a.startswith("--base="):
-            base = a.split("=", 1)[1].rstrip("/") or "/vault"
+            base = a.split("=", 1)[1].rstrip("/")
         elif a.startswith("--out="):
             p = a.split("=", 1)[1]
             out = Path(p) if os.path.isabs(p) else REPO / p
@@ -754,6 +795,19 @@ def main() -> int:
     for p in pages:  # aliases resolve too
         for a in p["fm"].get("aliases", []):
             linkmap.setdefault(a.strip().lower(), p["url"])
+
+    posts: list[dict] = []
+    if BLOG_DIR.exists():
+        for f in sorted(BLOG_DIR.glob("*.md")):
+            if f.name.startswith("_"):
+                continue
+            post = parse_post(f)
+            if post:
+                post["url"] = page_url("blog", post["slug"], base)
+                linkmap[f.stem.lower()] = post["url"]
+                linkmap[post["slug"]] = post["url"]
+                posts.append(post)
+    posts.sort(key=lambda p: p["date"], reverse=True)
 
     def render_page(title: str, desc: str, body_html: str) -> str:
         h = BASE_TMPL.replace("@@TITLE@@", esc(title)).replace("@@DESC@@", esc(desc[:160])).replace("@@BASE@@", base).replace("@@THEME_CSS@@", THEME_CSS).replace("@@BODY@@", body_html)
@@ -1044,7 +1098,7 @@ def main() -> int:
             si_out.mkdir(parents=True, exist_ok=True)
             shutil.copy2(img, si_out / fname)
             url = f"{base}/resources/scripture-images/{fname}?v={hashlib.md5(img.read_bytes()).hexdigest()[:8]}"
-            scripture_imgs.append((img.stem, url))
+            scripture_imgs.append((re.sub(r"[\uf000-\uf0ff]", ":", img.stem), url))
     scripture_link = ""
     if scripture_imgs:
         grid = "".join(
@@ -1071,6 +1125,31 @@ def main() -> int:
               f'<div class="my-4">{res_links(r)}</div>'
               f'<div class="prose-custom">{render_blocks(r["body"], linkmap, base, books)}</div>'
               f'<div class="mt-4">{"".join(f"<span class=tag>#{esc(t)}</span>" for t in r["tags"])}</div></div></div>')
+
+    # ---- blog: Blog/*.md -> /blog/ (newest first) and /blog/<slug>/
+    def card_post(p: dict) -> str:
+        search = esc((p["title"] + " " + p["date"] + " " + " ".join(p["tags"]) + " " + p["desc"]).lower())
+        blurb = esc(p["desc"]) if p["desc"] else blurb_text(p["body"], 180)
+        return (f'<article class="card" data-search="{search}"><p class="text-sm font-medium" style="color: var(--color-gold);">{esc(p["date"])}</p>'
+                f'<h3 class="font-display text-xl font-bold mt-1"><a class="hover:text-gold transition" href="{p["url"]}">{esc(p["title"])}</a></h3>'
+                f'<p class="text-sm mt-2" style="color: #a8a29e;">{blurb}</p><div class="mt-3">{tag_pills(p["tags"][:6])}</div></article>')
+
+    blog_cards = ("".join(card_post(p) for p in posts) if posts
+                  else '<p style="color: #a8a29e;">No articles yet. Add a markdown file to the Blog/ folder to get started.</p>')
+    write("blog", "Blog", "Articles and reflections on faith, strength and brotherhood.",
+          '<h1 class="font-display text-3xl font-black mb-2">Blog</h1><p class="mb-6" style="color: #a8a29e;">Articles and reflections, newest first.</p>'
+          f'<input id="filter" placeholder="Filter articles…" class="input mb-6">'
+          f'<div class="grid gap-4 md:grid-cols-2">{blog_cards}</div>'
+          '<script>(function(){var q=document.getElementById("filter");'
+          'q.addEventListener("input",function(){var s=q.value.toLowerCase();document.querySelectorAll("#main article[data-search]").forEach(function(c){'
+          'c.style.display=c.dataset.search.indexOf(s)>-1?"":"none"})})})();</script>')
+    for p in posts:
+        body_html = (f'<p class="text-sm"><a class="text-gold hover:underline" href="{base}/blog/">Blog</a> / {esc(p["date"])}</p>'
+                     f'<h1 class="font-display text-3xl md:text-4xl font-black mt-1 mb-3">{esc(p["title"])}</h1>'
+                     f'<div class="mb-6">{tag_pills(p["tags"])}</div>'
+                     f'<div class="prose-custom">{render_blocks(p["body"], linkmap, base, books)}</div>'
+                     f'<p class="mt-10 text-sm"><a class="text-gold hover:underline" href="{base}/blog/">← All articles</a></p>')
+        write(f"blog/{p['slug']}", p["title"], p["desc"] or p["title"], body_html)
 
     # ---- standalone pages: Pages/<slug>.md (frontmatter: title, description) -> /<slug>/
     if PAGES_DIR.exists():
@@ -1112,7 +1191,7 @@ def main() -> int:
                 urls.append(u)
     (out / "sitemap.xml").write_text('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
                                      + "".join(f"<url><loc>{esc(u)}</loc><lastmod>{date.today().isoformat()}</lastmod></url>" for u in sorted(set(urls))) + "</urlset>", encoding="utf-8")
-    print(f"built {len(pages)} pages ({len(daily)} daily, {len(bible)} verse) -> {out}")
+    print(f"built {len(pages)} pages ({len(daily)} daily, {len(bible)} verse, {len(posts)} articles) -> {out}")
     return 0
 
 

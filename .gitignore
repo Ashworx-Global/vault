@@ -33,6 +33,7 @@ node_modules/
 
 # OS
 .DS_Store
+._*
 Thumbs.db
 
 # Logs

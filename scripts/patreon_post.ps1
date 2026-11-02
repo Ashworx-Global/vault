@@ -44,7 +44,7 @@ param(
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
 
-$SITE = 'https://manofgod.online/vault'
+$SITE = 'https://manofgod.online'
 $SKIP_FROM = '## Harvested verse pages'
 
 # ── helpers ──────────────────────────────────────────────────────────────────

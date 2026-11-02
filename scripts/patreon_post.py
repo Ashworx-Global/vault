@@ -25,7 +25,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-SITE = "https://manofgod.online/vault"
+SITE = "https://manofgod.online"
 SKIP_FROM = "## Harvested verse pages"
 
 

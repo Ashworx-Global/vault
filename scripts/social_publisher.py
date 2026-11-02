@@ -243,7 +243,7 @@ def get_art_projects(art_dir: Path) -> list[tuple[str, str]]:
 
 
 def publish_daily_notes(daily_dir: Path, published_content: PublishedContent,
-                       base_url: str = "https://ashworx-global.github.io/vault"):
+                       base_url: str = "https://manofgod.online"):
     """Publish new or updated daily notes to Patreon and Facebook."""
     publish_patreon = os.getenv("PUBLISH_PATREON", "true").lower() in ["true", "1", "yes"]
     publish_facebook = os.getenv("PUBLISH_FACEBOOK", "true").lower() in ["true", "1", "yes"]
@@ -277,7 +277,7 @@ def publish_daily_notes(daily_dir: Path, published_content: PublishedContent,
 
 
 def publish_art_projects(art_dir: Path, published_content: PublishedContent,
-                        base_url: str = "https://ashworx-global.github.io/vault"):
+                        base_url: str = "https://manofgod.online"):
     """Publish new or updated art projects to Patreon and Facebook."""
     publish_patreon = os.getenv("PUBLISH_PATREON", "true").lower() in ["true", "1", "yes"]
     publish_facebook = os.getenv("PUBLISH_FACEBOOK", "true").lower() in ["true", "1", "yes"]

@@ -191,7 +191,7 @@ def process_all_art(art_dir: Path) -> list[ArtProject]:
     return projects
 
 
-def generate_gallery_index(projects: list[ArtProject], base_url: str = "/vault") -> str:
+def generate_gallery_index(projects: list[ArtProject], base_url: str = "") -> str:
     """Generate HTML index for all art projects."""
     if not projects:
         return '<p style="color: #a8a29e;">No art projects yet. Add folders to Art/ to get started.</p>'

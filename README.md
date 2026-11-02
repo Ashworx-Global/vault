@@ -4,7 +4,7 @@
 
 This site contains daily Bible reading notes with linked verse pages, harvested from daily reflections using the [`verse-pages`](https://github.com/lee-royashworth/opencode-skills/tree/main/verse-pages) skill.
 
-[🌐 View Live Site](https://ashworx-global.github.io/vault/)
+[🌐 View Live Site](https://manofgod.online/)
 
 > The site is built from this vault with `python3 scripts/build-site.py` (stdlib only, no npm) and deployed to GitHub Pages on every push to `main`. Wikilinks mirror Obsidian; `ref.ly` Logos links open in your own Logos copy.
 
