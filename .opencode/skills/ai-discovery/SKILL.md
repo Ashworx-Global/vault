@@ -76,13 +76,14 @@ Then remove `site/` (it is git-ignored and never pushed).
   ChatGPT-User is user-initiated and robots rules may not apply. The current robots.txt
   allows all of them. Whether to allow training (GPTBot, CCBot, Google-Extended) is the
   author's decision: flag it, do not change it silently.
-- **IndexNow** (supported by Bing) lets the site announce new and changed URLs. It needs a
-  key file at the domain root and a submission per deploy. Proposed, not built (see below).
+- **IndexNow** (supported by Bing) lets the site announce its URLs. Built: the key lives in
+  `indexnow-key.txt` (vault root), the build serves it at `/<key>.txt`, and
+  `scripts/submit_indexnow.py` sends the whole sitemap after each deploy (deploy.yml, with
+  `continue-on-error` so a failure never blocks the site). Keep the key file; do not rotate
+  it without updating the build.
 
 ## Ideas that are not built yet (ask before doing)
 
-- **IndexNow:** owner chooses a key, the build writes `<key>.txt` to the root, and the deploy
-  submits changed URLs. This sends data to search engines on each push, so get approval first.
 - **GPTBot / training opt-out:** decision for the author.
 - Per-page social preview images (currently every page uses the logo).
 - Product structured data once the shop opens.

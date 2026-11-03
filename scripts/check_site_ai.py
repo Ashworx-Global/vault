@@ -100,6 +100,12 @@ def main() -> int:
         if "/about/" not in guide:
             fail("llms.txt does not list the About page")
 
+    key_src = REPO / "indexnow-key.txt"
+    if key_src.exists():
+        key = key_src.read_text(encoding="utf-8").strip()
+        if not (dist / f"{key}.txt").exists():
+            fail("IndexNow key file is not served at the domain root")
+
     full = (dist / "llms-full.txt").read_text(encoding="utf-8")
     for pattern, label in [(r"\[\[", "wikilink"), (r"\[!bible\]", "callout header")]:
         if re.search(pattern, full):

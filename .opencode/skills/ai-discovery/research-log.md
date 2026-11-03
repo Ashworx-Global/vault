@@ -34,3 +34,6 @@ site-growth agent writes here after each research pass.
 - **IndexNow:** key file at domain root, URL submission per change, supported by Bing. Source:
   https://www.indexnow.org/documentation . **Not adopted yet:** needs owner approval (see SKILL.md).
 - **Health:** build 298 pages (37 daily, 261 verse); checker ok, 815 pages, 38 content URLs with markdown copies.
+- **IndexNow, adopted (owner approved 2026-11-03):** key file served at the root, full sitemap
+  submitted to api.indexnow.org after each deploy. Source: https://www.indexnow.org/documentation
+  Checker verifies the key file is served.

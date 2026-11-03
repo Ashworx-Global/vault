@@ -1282,6 +1282,11 @@ def main() -> int:
     for verify in ["BingSiteAuth.xml"]:
         if (REPO / verify).is_file():
             shutil.copy2(REPO / verify, out / verify)
+    # IndexNow key file: the key is the file name and its content, served at the domain root
+    key_file = REPO / "indexnow-key.txt"
+    if key_file.is_file():
+        indexnow_key = key_file.read_text(encoding="utf-8").strip()
+        (out / f"{indexnow_key}.txt").write_text(indexnow_key, encoding="utf-8")
     # ---- AI discovery: robots.txt welcomes AI assistants and search crawlers; llms.txt is the guide for them
     ai_bots = ["GPTBot", "OAI-SearchBot", "ChatGPT-User", "ClaudeBot", "Claude-SearchBot", "Claude-User", "anthropic-ai",
                "PerplexityBot", "Perplexity-User", "Google-Extended", "Applebot-Extended", "CCBot", "Bytespider",
