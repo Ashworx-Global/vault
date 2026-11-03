@@ -80,6 +80,19 @@ def main() -> int:
     if len(missing) > 10:
         fail(f"llms.txt is missing {len(missing)} content URLs in total")
 
+    about_src = REPO / "Pages" / "about.md"
+    if about_src.exists():
+        about_html = dist / "about" / "index.html"
+        if not about_html.exists():
+            fail("Pages/about.md exists but /about/ was not built")
+        else:
+            front = about_src.read_text(encoding="utf-8").split("---", 2)[1]
+            named = re.search(r"^name:[ \t]*\S", front, re.M) is not None
+            if named and '"@type": "Person"' not in about_html.read_text(encoding="utf-8"):
+                fail("About page has a name but no Person structured data")
+        if "/about/" not in guide:
+            fail("llms.txt does not list the About page")
+
     full = (dist / "llms-full.txt").read_text(encoding="utf-8")
     for pattern, label in [(r"\[\[", "wikilink"), (r"\[!bible\]", "callout header")]:
         if re.search(pattern, full):

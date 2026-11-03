@@ -150,6 +150,7 @@ BASE_TMPL = """<!DOCTYPE html>
 <div class="flex flex-wrap items-center justify-end gap-x-4 gap-y-2 text-sm md:gap-5">
 <a href="@@BASE@@/daily/" class="hover:text-gold transition">Daily</a>
 <a href="@@BASE@@/blog/" class="hover:text-gold transition">Blog</a>
+<a href="@@BASE@@/about/" class="hover:text-gold transition">About</a>
 <a href="@@BASE@@/bible/" class="hover:text-gold transition">Bible</a>
 <a href="@@BASE@@/books/" class="hover:text-gold transition">Books</a>
 <a href="@@BASE@@/tags/" class="hover:text-gold transition">Topics</a>
@@ -167,7 +168,7 @@ BASE_TMPL = """<!DOCTYPE html>
 <footer>
 <div class="max-w-6xl mx-auto px-4 py-8 grid gap-6 md:grid-cols-3 text-sm" style="color: #a8a29e;">
 <div><h3 class="font-display text-gold mb-2">Man of God Daily Readings</h3><p>A GitHub Pages site rendered from an <a class="hover:text-gold" href="https://obsidian.md/" target="_blank" rel="noopener">Obsidian</a> vault of daily Bible notes. Verse links mirror the vault's wikilinks, and scripture text comes from the ESV via the <a class="hover:text-gold" href="https://api.esv.org/" target="_blank" rel="noopener">Crossway API</a>. Logos links open each passage in your own Logos library — <a class="hover:text-gold" href="https://www.logos.com/free-edition" target="_blank" rel="noopener">get Logos free</a>.</p></div>
-<div><h3 class="font-display text-gold mb-2">Browse</h3><p><a class="hover:text-gold" href="@@BASE@@/daily/">Daily notes</a> · <a class="hover:text-gold" href="@@BASE@@/blog/">Blog</a> · <a class="hover:text-gold" href="@@BASE@@/bible/">Verse pages</a> · <a class="hover:text-gold" href="@@BASE@@/books/">Books</a> · <a class="hover:text-gold" href="@@BASE@@/tags/">Topics</a> · <a class="hover:text-gold" href="@@BASE@@/art/">Art</a> · <a class="hover:text-gold" href="@@BASE@@/resources/">Resources</a> · <a class="hover:text-gold" href="@@BASE@@/graph/">Graph</a></p></div>
+<div><h3 class="font-display text-gold mb-2">Browse</h3><p><a class="hover:text-gold" href="@@BASE@@/about/">About</a> · <a class="hover:text-gold" href="@@BASE@@/daily/">Daily notes</a> · <a class="hover:text-gold" href="@@BASE@@/blog/">Blog</a> · <a class="hover:text-gold" href="@@BASE@@/bible/">Verse pages</a> · <a class="hover:text-gold" href="@@BASE@@/books/">Books</a> · <a class="hover:text-gold" href="@@BASE@@/tags/">Topics</a> · <a class="hover:text-gold" href="@@BASE@@/art/">Art</a> · <a class="hover:text-gold" href="@@BASE@@/resources/">Resources</a> · <a class="hover:text-gold" href="@@BASE@@/graph/">Graph</a></p></div>
 <div><h3 class="font-display text-gold mb-2">Follow &amp; support</h3><p><a class="hover:text-gold" href="https://www.patreon.com/cw/ManOfGodSA" target="_blank" rel="noopener">Patreon</a> · <a class="hover:text-gold" href="https://www.facebook.com/profile.php?id=61596013522180" target="_blank" rel="noopener">Facebook</a></p><p class="mt-2"><a class="hover:text-gold" href="https://github.com/Ashworx-Global/vault" target="_blank" rel="noopener">Source on GitHub</a> · <a class="hover:text-gold" href="@@BASE@@/llms.txt">AI guide (llms.txt)</a></p></div>
 </div>
 </footer>
@@ -831,7 +832,8 @@ def main() -> int:
                 posts.append(post)
     posts.sort(key=lambda p: p["date"], reverse=True)
 
-    def render_page(title: str, desc: str, body_html: str, rel: str | None = None, article: dict | None = None) -> str:
+    def render_page(title: str, desc: str, body_html: str, rel: str | None = None, article: dict | None = None,
+                    extra: list[dict] | None = None) -> str:
         short = esc(desc[:160])
         head = [f'<meta property="og:site_name" content="{esc(SITE_NAME)}">',
                 f'<meta property="og:type" content="{"article" if article else "website"}">',
@@ -852,6 +854,7 @@ def main() -> int:
                       "description": SITE_DESC, "inLanguage": "en", "publisher": {"@id": f"{SITE_URL}/#organization"}},
                      {"@type": "Organization", "@id": f"{SITE_URL}/#organization", "name": SITE_NAME, "url": f"{SITE_URL}/",
                       "logo": f"{SITE_URL}{base}/logos/icon-256.png", "sameAs": SITE_SOCIAL}]
+            graph += extra or []
             if article:
                 graph.append({"@type": "Article", "headline": title, "description": desc[:160], "url": url,
                               "mainEntityOfPage": url, "inLanguage": "en", "keywords": article.get("tags", []),
@@ -865,10 +868,10 @@ def main() -> int:
     def tag_pills(tags: list[str]) -> str:
         return "".join(f'<a class="tag" href="{base}/tags/{quote(slugify(t))}/">#{esc(t)}</a>' for t in tags)
 
-    def write(rel: str, title: str, desc: str, body_html: str, article: dict | None = None) -> str:
+    def write(rel: str, title: str, desc: str, body_html: str, article: dict | None = None, extra: list[dict] | None = None) -> str:
         d = out / rel
         d.mkdir(parents=True, exist_ok=True)
-        (d / "index.html").write_text(render_page(title, desc, body_html, rel, article), encoding="utf-8")
+        (d / "index.html").write_text(render_page(title, desc, body_html, rel, article, extra), encoding="utf-8")
         return f"{base}/{rel}/".replace("//", "/")
 
     daily = sorted([p for p in pages if p["kind"] == "daily"], key=lambda p: p.get("date", ""), reverse=True)
@@ -1230,9 +1233,16 @@ def main() -> int:
             fm = {k.strip().lower(): v.strip().strip('"').strip("'")
                   for k, _, v in (ln.partition(":") for ln in parts[1].splitlines() if ":" in ln)}
             title = fm.get("title") or f.stem
+            extra = None
+            if slugify(f.stem) == "about" and fm.get("name"):
+                extra = [{"@type": "Person", "@id": f"{SITE_URL}/#person", "name": fm["name"],
+                          "description": fm.get("description", ""), "url": f"{SITE_URL}{base}/about/",
+                          "nationality": {"@type": "Country", "name": "South Africa"}, "sameAs": SITE_SOCIAL,
+                          "worksFor": {"@id": f"{SITE_URL}/#organization"}}]
             write(slugify(f.stem), title, fm.get("description", title),
                   f'<h1 class="font-display text-3xl md:text-4xl font-black mb-6">{esc(title)}</h1>'
-                  f'<div class="prose-custom">{render_blocks(parts[2].lstrip(chr(10)).replace("@@BASE@@", base), linkmap, base, books)}</div>')
+                  f'<div class="prose-custom">{render_blocks(parts[2].lstrip(chr(10)).replace("@@BASE@@", base), linkmap, base, books)}</div>',
+                  extra=extra)
 
     # Copy exported logos to dist
     logo_dir = REPO / "logo"
@@ -1270,6 +1280,7 @@ def main() -> int:
              f"- [Blog]({site}/blog/): articles",
              f"- [Resources]({site}/resources/): books, podcasts and channels worth reading",
              f"- [Scripture images]({site}/resources/scripture-images/): scripture graphics to view and share",
+             f"- [About]({site}/about/): who writes this site, and why",
              f"- [Accept Jesus]({site}/accept-jesus/): how to become a follower of Jesus",
              f"- [Full text]({site}/llms-full.txt): all daily notes, articles and resources as plain text", "",
              "## Blog"]
