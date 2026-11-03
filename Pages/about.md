@@ -1,7 +1,7 @@
 ---
 title: About
 description: Who writes Man of God, and why. A 46-year-old South African man who spent years following his own plans and found that God was at the helm the whole time.
-name:
+name: Lee-Roy Ashworth
 ---
 I am 46 years old. I grew up in South Africa, and I still live here. For most of my life I have been trying to make a living. I have tried many different things, and I have stumbled a lot along the way.
 
