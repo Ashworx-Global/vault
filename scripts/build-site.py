@@ -1257,6 +1257,10 @@ def main() -> int:
     (out / "404.html").write_text(render_page("Not found", "Page not found",
         '<div class="text-center py-16"><h1 class="font-display text-5xl font-black" style="color: var(--color-gold);">404</h1><p class="mt-2" style="color: #a8a29e;">That page is not in this vault.</p><p class="mt-6"><a class="text-gold font-semibold hover:underline" href="' + base + '/">← Home</a></p></div>'), encoding="utf-8")
     (out / ".nojekyll").write_text("", encoding="utf-8")
+    # Webmaster verification files live in the vault root and must sit at the domain root.
+    for verify in ["BingSiteAuth.xml"]:
+        if (REPO / verify).is_file():
+            shutil.copy2(REPO / verify, out / verify)
     # ---- AI discovery: robots.txt welcomes AI assistants and search crawlers; llms.txt is the guide for them
     ai_bots = ["GPTBot", "OAI-SearchBot", "ChatGPT-User", "ClaudeBot", "Claude-SearchBot", "Claude-User", "anthropic-ai",
                "PerplexityBot", "Perplexity-User", "Google-Extended", "Applebot-Extended", "CCBot", "Bytespider",
