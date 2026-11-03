@@ -149,12 +149,14 @@
     "contexts": "contexts",
     "projects": "projects",
     "attachments": "attachments",
+    "assignees": "assignees",
     "timeEstimate": "timeEstimate",
     "completedDate": "completedDate",
     "dateCreated": "dateCreated",
     "dateModified": "dateModified",
     "recurrence": "recurrence",
     "recurrenceAnchor": "recurrence_anchor",
+    "recurrenceOriginalDate": "recurrence_original_date",
     "recurrenceParent": "recurrence_parent",
     "occurrenceDate": "occurrence_date",
     "occurrenceMaterialization": "occurrence_materialization",
@@ -390,6 +392,16 @@
         "visibleInEdit": true,
         "order": 1,
         "enabled": true
+      },
+      {
+        "id": "attachments",
+        "fieldType": "organization",
+        "group": "organization",
+        "displayName": "Attachments",
+        "visibleInCreation": true,
+        "visibleInEdit": true,
+        "order": 2,
+        "enabled": true
       }
     ],
     "groups": [
@@ -483,11 +495,21 @@
     "eventColorId": null,
     "syncTrigger": "scheduled",
     "createAsAllDay": true,
+    "showAllDayAsFree": false,
     "defaultEventDuration": 60,
     "includeObsidianLink": true,
-    "defaultReminderMinutes": null
+    "defaultReminderMinutes": null,
+    "syncTimeblocks": false,
+    "timeblockTargetCalendarId": "",
+    "timeblockEventTitleTemplate": "{{title}}"
   },
   "enableDebugLogging": false,
-  "lastSeenVersion": "4.13.5",
-  "lastNotifiedReleaseVersion": "4.14.0"
+  "lastSeenVersion": "4.16.0",
+  "lastNotifiedReleaseVersion": "4.16.1",
+  "pomodoroState": {
+    "isRunning": false,
+    "timeRemaining": 1500
+  },
+  "lastPomodoroDate": "2026-11-02",
+  "nlpEnterToSubmit": false
 }
