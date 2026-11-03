@@ -25,6 +25,7 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
 AI_BOTS = ["GPTBot", "OAI-SearchBot", "ClaudeBot", "PerplexityBot", "Google-Extended", "CCBot"]
+SITE_URL_PREFIX = "https://manofgod.online/"
 OLD_BASE = re.compile(r'(href|src)="/vault/|github\.io/vault|manofgod\.online/vault')
 
 
@@ -73,7 +74,13 @@ def main() -> int:
     sitemap = (dist / "sitemap.xml").read_text(encoding="utf-8")
     urls = re.findall(r"<loc>([^<]+)</loc>", sitemap)
     guide = (dist / "llms.txt").read_text(encoding="utf-8")
-    listed = [u for u in urls if re.search(r"/(daily|blog|resources)/[^/]+/$", u)]
+    listed = [u for u in urls if re.search(r"/(daily|blog|resources)/[^/]+/$", u) and "/scripture-images/" not in u]
+    for u in listed:
+        rel = u.replace(SITE_URL_PREFIX, "")
+        if not (dist / rel / "index.md").exists():
+            fail(f"no markdown copy for {u}")
+        if f"{u}index.md" not in guide:
+            fail(f"llms.txt does not link the markdown copy of {u}")
     missing = [u for u in listed if u not in guide]
     for u in missing[:10]:
         fail(f"llms.txt does not list {u}")

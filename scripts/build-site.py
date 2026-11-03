@@ -862,6 +862,9 @@ def main() -> int:
                               **({"datePublished": article["date"], "dateModified": article["date"]} if article.get("date") else {})})
             ld = json.dumps({"@context": "https://schema.org", "@graph": graph}, ensure_ascii=False).replace("<", "\\u003c")
             head.append(f'<script type="application/ld+json">{ld}</script>')
+            head.append(f'<link rel="describedby" href="{SITE_URL}{base}/llms.txt">')
+            if rel and (out / rel / "index.md").exists():
+                head.append(f'<link rel="alternate" type="text/markdown" href="{url}index.md">')
         return (BASE_TMPL.replace("@@TITLE@@", esc(title)).replace("@@DESC@@", short).replace("@@HEAD@@", "\n".join(head))
                 .replace("@@BASE@@", base).replace("@@THEME_CSS@@", THEME_CSS).replace("@@BODY@@", body_html))
 
@@ -873,6 +876,20 @@ def main() -> int:
         d.mkdir(parents=True, exist_ok=True)
         (d / "index.html").write_text(render_page(title, desc, body_html, rel, article, extra), encoding="utf-8")
         return f"{base}/{rel}/".replace("//", "/")
+
+    def write_md(rel: str, title: str, desc: str, date_s: str, tags: list[str], body_md: str) -> None:
+        # Clean markdown copy at the same address + index.md (llms.txt v2 convention)
+        d = out / rel
+        d.mkdir(parents=True, exist_ok=True)
+        lines = [f"# {title}", "", f"URL: {SITE_URL}{base}/{rel}/"]
+        if date_s:
+            lines.append(f"Date: {date_s}")
+        if tags:
+            lines.append(f"Tags: {', '.join(tags)}")
+        if desc:
+            lines.append(f"Summary: {desc}")
+        lines += ["", to_plain(body_md)]
+        (d / "index.md").write_text("\n".join(lines).rstrip() + "\n", encoding="utf-8")
 
     daily = sorted([p for p in pages if p["kind"] == "daily"], key=lambda p: p.get("date", ""), reverse=True)
     bible = sorted([p for p in pages if p["kind"] == "bible"],
@@ -951,6 +968,7 @@ def main() -> int:
                      + f'<p class="mt-10 text-sm"><a class="text-gold hover:underline" href="{base}/daily/">← All daily notes</a></p>')
         tags = p["fm"].get("tags", [])
         desc = f"{p['title']}: a daily Bible reading with reflections on {', '.join(tags[:4])}." if tags else f"{p['title']}: a daily Bible reading with reflections."
+        write_md(f"daily/{p['slug']}", p["title"], desc, p.get("date", ""), tags, p["body"])
         write(f"daily/{p['slug']}", p["title"], desc, body_html, article={"date": p.get("date", ""), "tags": tags})
 
     # ---- bible index + pages
@@ -1173,6 +1191,7 @@ def main() -> int:
 
     for r in resources:
         by = f'<p style="color: #a8a29e;">{esc(r["by"])}</p>' if r["by"] else ""
+        write_md(f"resources/{r['slug']}", r["title"], f"{r['title']} — {r['by']}" if r["by"] else r["title"], "", r["tags"], r["body"])
         write(f"resources/{r['slug']}", r["title"], f"{r['title']} — {r['by']}" if r["by"] else r["title"],
               f'<p class="text-sm"><a class="text-gold hover:underline" href="{base}/resources/">Resources</a> / {esc(RESOURCE_TYPES[r["type"]])}</p>'
               f'<div class="grid gap-8 md:grid-cols-3 mt-3"><div>{res_image(r, "w-full rounded bg-panel")}</div>'
@@ -1205,6 +1224,7 @@ def main() -> int:
                      f'<div class="mb-6">{tag_pills(p["tags"])}</div>'
                      f'<div class="prose-custom">{render_blocks(p["body"], linkmap, base, books)}</div>'
                      f'<p class="mt-10 text-sm"><a class="text-gold hover:underline" href="{base}/blog/">← All articles</a></p>')
+        write_md(f"blog/{p['slug']}", p["title"], p["desc"], p["date"], p["tags"], p["body"])
         write(f"blog/{p['slug']}", p["title"], p["desc"] or p["title"], body_html, article={"date": p["date"], "tags": p["tags"]})
 
     # ---- landing page sections that need blog posts and ranked resources
@@ -1239,6 +1259,7 @@ def main() -> int:
                           "description": fm.get("description", ""), "url": f"{SITE_URL}{base}/about/",
                           "nationality": {"@type": "Country", "name": "South Africa"}, "sameAs": SITE_SOCIAL,
                           "worksFor": {"@id": f"{SITE_URL}/#organization"}}]
+            write_md(slugify(f.stem), title, fm.get("description", title), "", [], parts[2].lstrip(chr(10)))
             write(slugify(f.stem), title, fm.get("description", title),
                   f'<h1 class="font-display text-3xl md:text-4xl font-black mb-6">{esc(title)}</h1>'
                   f'<div class="prose-custom">{render_blocks(parts[2].lstrip(chr(10)).replace("@@BASE@@", base), linkmap, base, books)}</div>',
@@ -1286,13 +1307,14 @@ def main() -> int:
              f"- [Scripture images]({site}/resources/scripture-images/): scripture graphics to view and share",
              f"- [About]({site}/about/): who writes this site, and why",
              f"- [Accept Jesus]({site}/accept-jesus/): how to become a follower of Jesus",
-             f"- [Full text]({site}/llms-full.txt): all daily notes, articles and resources as plain text", "",
+             f"- [Full text]({site}/llms-full.txt): all daily notes, articles and resources as plain text",
+             "", "Every daily note, article, resource and standalone page also has a plain-text markdown copy at its own address with index.md added (for example /daily/<slug>/index.md).", "",
              "## Blog"]
-    guide += [f"- [{p['title']}]({SITE_URL}{p['url']}) ({p['date']})" + (f": {p['desc']}" if p["desc"] else "") for p in posts]
+    guide += [f"- [{p['title']}]({SITE_URL}{p['url']}index.md) ({p['date']})" + (f": {p['desc']}" if p["desc"] else "") for p in posts]
     guide += ["", "## Daily notes"]
-    guide += [f"- [{p['title']}]({SITE_URL}{p['url']}) ({p['date']})" for p in daily]
+    guide += [f"- [{p['title']}]({SITE_URL}{p['url']}index.md) ({p['date']})" for p in daily]
     guide += ["", "## Resources"]
-    guide += [f"- [{r['title']}]({SITE_URL}/resources/{r['slug']}/): {RESOURCE_TYPES[r['type']]}" + (f" by {r['by']}" if r["by"] else "")
+    guide += [f"- [{r['title']}]({SITE_URL}/resources/{r['slug']}/index.md): {RESOURCE_TYPES[r['type']]}" + (f" by {r['by']}" if r["by"] else "")
               for r in resources]
     guide += ["", "## Verse pages by book"]
     guide += [f"- [{b}]({site}/books/{slugify(b)}/)" for b in books_sorted]

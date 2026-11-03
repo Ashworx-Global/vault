@@ -18,3 +18,19 @@ site-growth agent writes here after each research pass.
   action). Bing Webmaster Tools also offers IndexNow for pushing URL changes.
 - **Pending:** per-page social preview images.
 - **Pending:** Product structured data when the shop opens.
+
+## 2026-11-03 — first run of the ai-discovery review
+
+- **Google AI features:** no extra requirements; normal SEO applies; structured data must match
+  visible text. Source: https://developers.google.com/search/docs/appearance/ai-features
+  Adopted: nothing new needed (the existing SEO and structured data already follow it).
+- **llms.txt v2:** clean markdown copy at page address + `index.md`; `rel="alternate"
+  type="text/markdown"` and `rel="describedby"` links; links in llms.txt point at the markdown.
+  Source: https://llmstxt.org . **Adopted:** `index.md` copies for daily, blog, resource and
+  standalone pages; alternate and describedby links; llms.txt links the copies; checker verifies.
+- **OpenAI crawlers:** OAI-SearchBot (search), GPTBot (training), ChatGPT-User (user-initiated,
+  robots may not apply). Source: https://developers.openai.com/api/docs/bots . **Adopted:** nothing
+  changed. Open question for the author: allow or block GPTBot training.
+- **IndexNow:** key file at domain root, URL submission per change, supported by Bing. Source:
+  https://www.indexnow.org/documentation . **Not adopted yet:** needs owner approval (see SKILL.md).
+- **Health:** build 298 pages (37 daily, 261 verse); checker ok, 815 pages, 38 content URLs with markdown copies.

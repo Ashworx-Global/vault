@@ -24,6 +24,8 @@ so new content is discoverable as soon as it is built and deployed. Never hand-e
 | `llms.txt` | the guide: start pages plus every content URL with a one-line description | end of `main()` |
 | `llms-full.txt` | all daily notes, articles and resources as plain text | `to_plain()` + end of `main()` |
 | `noindex` on 404 | keeps error pages out of search | `render_page(rel=None)` |
+| `index.md` clean markdown copy beside each daily, blog, resource and standalone page | text an AI tool can read without HTML noise (llms.txt v2 convention) | `write_md(...)` |
+| `<link rel="alternate" type="text/markdown">` and `<link rel="describedby" href="/llms.txt">` | lets tools find the markdown copy and the guide from the HTML page | `render_page()` |
 
 ## Rules when you change content or the build
 
@@ -62,8 +64,26 @@ sitemap; every page has a canonical and parseable JSON-LD; every daily, blog and
 URL is in `llms.txt`; `llms-full.txt` has no wikilink or callout syntax; no `/vault` paths.
 Then remove `site/` (it is git-ignored and never pushed).
 
+## What the research has established (see research-log.md for sources)
+
+- **Google** says AI Overviews and AI Mode need no special files or schema. Normal SEO
+  (crawlable links, real text, valid structured data that matches the visible page) is what
+  counts. Do not tell the author that llms.txt gets them into Google's AI features.
+- **llms.txt** is an informal proposal used by tools and coding agents, not by Google. It
+  stays because it is cheap, accurate and asked for by agent tools. Keep the links in it
+  pointing at the markdown copies.
+- **OpenAI**: OAI-SearchBot controls search appearance; GPTBot controls training;
+  ChatGPT-User is user-initiated and robots rules may not apply. The current robots.txt
+  allows all of them. Whether to allow training (GPTBot, CCBot, Google-Extended) is the
+  author's decision: flag it, do not change it silently.
+- **IndexNow** (supported by Bing) lets the site announce new and changed URLs. It needs a
+  key file at the domain root and a submission per deploy. Proposed, not built (see below).
+
 ## Ideas that are not built yet (ask before doing)
 
+- **IndexNow:** owner chooses a key, the build writes `<key>.txt` to the root, and the deploy
+  submits changed URLs. This sends data to search engines on each push, so get approval first.
+- **GPTBot / training opt-out:** decision for the author.
 - Per-page social preview images (currently every page uses the logo).
 - Product structured data once the shop opens.
 - Submitting the sitemap to Google Search Console and Bing Webmaster Tools (a manual step
