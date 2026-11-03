@@ -74,8 +74,9 @@ Then remove `site/` (it is git-ignored and never pushed).
   pointing at the markdown copies.
 - **OpenAI**: OAI-SearchBot controls search appearance; GPTBot controls training;
   ChatGPT-User is user-initiated and robots rules may not apply. The current robots.txt
-  allows all of them. Whether to allow training (GPTBot, CCBot, Google-Extended) is the
-  author's decision: flag it, do not change it silently.
+  allows all of them. Decision (author, 2026-11-03): keep training crawlers allowed, so the
+  teaching can reach people through chatbots. Applies to GPTBot, CCBot and Google-Extended.
+  Do not block any of them without asking the author.
 - **IndexNow** (supported by Bing) lets the site announce its URLs. Built: the key lives in
   `indexnow-key.txt` (vault root), the build serves it at `/<key>.txt`, and
   `scripts/submit_indexnow.py` sends the whole sitemap after each deploy (deploy.yml, with
@@ -84,7 +85,6 @@ Then remove `site/` (it is git-ignored and never pushed).
 
 ## Ideas that are not built yet (ask before doing)
 
-- **GPTBot / training opt-out:** decision for the author.
 - Per-page social preview images (currently every page uses the logo).
 - Product structured data once the shop opens.
 - Submitting the sitemap to Google Search Console and Bing Webmaster Tools (a manual step
