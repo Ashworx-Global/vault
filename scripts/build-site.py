@@ -50,6 +50,11 @@ RESOURCE_TYPES = {"book": "Books", "podcast": "Podcasts", "youtube": "YouTube", 
 
 SITE_NAME = "Man of God Daily Readings"
 SITE_URL = "https://manofgod.online"
+SITE_DESC = ("Free daily Bible reading notes, verse pages, articles and recommended resources for men who want to "
+             "grow closer to God through His Word. Reflections are personal thoughts; Scripture is the authority.")
+SITE_SOCIAL = ["https://www.patreon.com/cw/ManOfGodSA",
+               "https://www.facebook.com/profile.php?id=61596013522180",
+               "https://github.com/Ashworx-Global/vault"]
 VERSE = "Not by might, nor by power, but by my Spirit, says the Lord of hosts. — Zechariah 4:6"
 # Scriptures shown prominently above the home page intro: (text, reference)
 HERO_VERSES = [
@@ -127,6 +132,7 @@ BASE_TMPL = """<!DOCTYPE html>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>@@TITLE@@ | Man of God Daily Readings</title>
 <meta name="description" content="@@DESC@@">
+@@HEAD@@
 <link rel="icon" type="image/png" sizes="32x32" href="@@BASE@@/logos/favicon-32.png">
 <link rel="icon" type="image/png" sizes="64x64" href="@@BASE@@/logos/favicon-64.png">
 <link rel="apple-touch-icon" href="@@BASE@@/logos/icon-256.png">
@@ -162,7 +168,7 @@ BASE_TMPL = """<!DOCTYPE html>
 <div class="max-w-6xl mx-auto px-4 py-8 grid gap-6 md:grid-cols-3 text-sm" style="color: #a8a29e;">
 <div><h3 class="font-display text-gold mb-2">Man of God Daily Readings</h3><p>A GitHub Pages site rendered from an <a class="hover:text-gold" href="https://obsidian.md/" target="_blank" rel="noopener">Obsidian</a> vault of daily Bible notes. Verse links mirror the vault's wikilinks, and scripture text comes from the ESV via the <a class="hover:text-gold" href="https://api.esv.org/" target="_blank" rel="noopener">Crossway API</a>. Logos links open each passage in your own Logos library — <a class="hover:text-gold" href="https://www.logos.com/free-edition" target="_blank" rel="noopener">get Logos free</a>.</p></div>
 <div><h3 class="font-display text-gold mb-2">Browse</h3><p><a class="hover:text-gold" href="@@BASE@@/daily/">Daily notes</a> · <a class="hover:text-gold" href="@@BASE@@/blog/">Blog</a> · <a class="hover:text-gold" href="@@BASE@@/bible/">Verse pages</a> · <a class="hover:text-gold" href="@@BASE@@/books/">Books</a> · <a class="hover:text-gold" href="@@BASE@@/tags/">Topics</a> · <a class="hover:text-gold" href="@@BASE@@/art/">Art</a> · <a class="hover:text-gold" href="@@BASE@@/resources/">Resources</a> · <a class="hover:text-gold" href="@@BASE@@/graph/">Graph</a></p></div>
-<div><h3 class="font-display text-gold mb-2">Source</h3><p><a class="hover:text-gold" href="https://github.com/Ashworx-Global/vault" target="_blank" rel="noopener">Ashworx-Global/vault</a> · built from Obsidian markdown, stdlib only, no npm.</p></div>
+<div><h3 class="font-display text-gold mb-2">Follow &amp; support</h3><p><a class="hover:text-gold" href="https://www.patreon.com/cw/ManOfGodSA" target="_blank" rel="noopener">Patreon</a> · <a class="hover:text-gold" href="https://www.facebook.com/profile.php?id=61596013522180" target="_blank" rel="noopener">Facebook</a></p><p class="mt-2"><a class="hover:text-gold" href="https://github.com/Ashworx-Global/vault" target="_blank" rel="noopener">Source on GitHub</a> · <a class="hover:text-gold" href="@@BASE@@/llms.txt">AI guide (llms.txt)</a></p></div>
 </div>
 </footer>
 <div id="lightbox">
@@ -285,9 +291,11 @@ def parse_resource(path: Path) -> dict | None:
         else:
             print(f"  ⚠ {path.name}: image '{fm['image']}' not found in Resources/, skipped")
     rtype = fm.get("type", "other").lower()
+    rank = str(fm.get("rank", "")).strip()
     return {"slug": slugify(path.stem), "title": fm.get("title") or path.stem,
             "type": rtype if rtype in RESOURCE_TYPES else "other", "by": fm.get("by", ""),
-            "image": image, "links": links, "tags": fm["tags"], "body": parts[2].lstrip("\n")}
+            "image": image, "links": links, "tags": fm["tags"], "body": parts[2].lstrip("\n"),
+            "rank": int(rank) if rank.isdigit() else None}
 
 
 def parse_post(path: Path) -> dict | None:
@@ -325,6 +333,20 @@ def parse_post(path: Path) -> dict | None:
     return {"slug": slugify(path.stem), "title": fm.get("title") or path.stem, "date": fm["date"],
             "desc": fm.get("description", ""), "tags": [t.lower() for t in fm["tags"]],
             "body": parts[2].lstrip("\n")}
+
+
+def to_plain(md: str) -> str:
+    """Obsidian markdown -> plain text for llms-full.txt: drops comments, callout headers, wikilink
+    syntax and link URLs, keeps the words."""
+    t = re.sub(r"%%.*?%%", "", md, flags=re.S)
+    t = re.sub(r"^\s*>\s*\[!\w+\].*$", "", t, flags=re.M)
+    t = re.sub(r"\[\[[^\]|]*\|([^\]]*)\]\]", r"\1", t)
+    t = re.sub(r"\[\[([^\]|#]*)[^\]]*\]\]", r"\1", t)
+    t = re.sub(r"\[([^\]]*)\]\([^)]*\)", r"\1", t)
+    t = re.sub(r"^\s*>\s?", "", t, flags=re.M)
+    t = re.sub(r"^#+\s*", "", t, flags=re.M)
+    t = re.sub(r"[*`]", "", t)
+    return re.sub(r"\n{3,}", "\n\n", t).strip()
 
 
 # ---------------------------------------------------------------- slugs/urls
@@ -809,17 +831,44 @@ def main() -> int:
                 posts.append(post)
     posts.sort(key=lambda p: p["date"], reverse=True)
 
-    def render_page(title: str, desc: str, body_html: str) -> str:
-        h = BASE_TMPL.replace("@@TITLE@@", esc(title)).replace("@@DESC@@", esc(desc[:160])).replace("@@BASE@@", base).replace("@@THEME_CSS@@", THEME_CSS).replace("@@BODY@@", body_html)
-        return h
+    def render_page(title: str, desc: str, body_html: str, rel: str | None = None, article: dict | None = None) -> str:
+        short = esc(desc[:160])
+        head = [f'<meta property="og:site_name" content="{esc(SITE_NAME)}">',
+                f'<meta property="og:type" content="{"article" if article else "website"}">',
+                f'<meta property="og:title" content="{esc(title)}">',
+                f'<meta property="og:description" content="{short}">',
+                f'<meta property="og:image" content="{SITE_URL}{base}/logos/icon-256.png">',
+                '<meta name="twitter:card" content="summary">',
+                f'<meta name="twitter:title" content="{esc(title)}">',
+                f'<meta name="twitter:description" content="{short}">']
+        if rel is None:
+            head.append('<meta name="robots" content="noindex">')
+        else:
+            url = f"{SITE_URL}{base}/{rel}/" if rel else f"{SITE_URL}{base}/"
+            head += [f'<link rel="canonical" href="{url}">',
+                     f'<meta property="og:url" content="{url}">',
+                     '<meta name="robots" content="index, follow, max-image-preview:large">']
+            graph = [{"@type": "WebSite", "@id": f"{SITE_URL}/#website", "url": f"{SITE_URL}/", "name": SITE_NAME,
+                      "description": SITE_DESC, "inLanguage": "en", "publisher": {"@id": f"{SITE_URL}/#organization"}},
+                     {"@type": "Organization", "@id": f"{SITE_URL}/#organization", "name": SITE_NAME, "url": f"{SITE_URL}/",
+                      "logo": f"{SITE_URL}{base}/logos/icon-256.png", "sameAs": SITE_SOCIAL}]
+            if article:
+                graph.append({"@type": "Article", "headline": title, "description": desc[:160], "url": url,
+                              "mainEntityOfPage": url, "inLanguage": "en", "keywords": article.get("tags", []),
+                              "author": {"@id": f"{SITE_URL}/#organization"}, "publisher": {"@id": f"{SITE_URL}/#organization"},
+                              **({"datePublished": article["date"], "dateModified": article["date"]} if article.get("date") else {})})
+            ld = json.dumps({"@context": "https://schema.org", "@graph": graph}, ensure_ascii=False).replace("<", "\\u003c")
+            head.append(f'<script type="application/ld+json">{ld}</script>')
+        return (BASE_TMPL.replace("@@TITLE@@", esc(title)).replace("@@DESC@@", short).replace("@@HEAD@@", "\n".join(head))
+                .replace("@@BASE@@", base).replace("@@THEME_CSS@@", THEME_CSS).replace("@@BODY@@", body_html))
 
     def tag_pills(tags: list[str]) -> str:
         return "".join(f'<a class="tag" href="{base}/tags/{quote(slugify(t))}/">#{esc(t)}</a>' for t in tags)
 
-    def write(rel: str, title: str, desc: str, body_html: str) -> str:
+    def write(rel: str, title: str, desc: str, body_html: str, article: dict | None = None) -> str:
         d = out / rel
         d.mkdir(parents=True, exist_ok=True)
-        (d / "index.html").write_text(render_page(title, desc, body_html), encoding="utf-8")
+        (d / "index.html").write_text(render_page(title, desc, body_html, rel, article), encoding="utf-8")
         return f"{base}/{rel}/".replace("//", "/")
 
     daily = sorted([p for p in pages if p["kind"] == "daily"], key=lambda p: p.get("date", ""), reverse=True)
@@ -877,7 +926,6 @@ def main() -> int:
             f'<div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">{"".join(card_daily(p) for p in daily[:6])}</div>'
             f'<div class="flex items-center justify-between mt-10 mb-4"><h2 class="font-display text-2xl font-bold">Recent verse pages</h2><a class="text-gold font-medium hover:underline" href="{base}/bible/">View all →</a></div>'
             f'<div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">{"".join(card_verse(p) for p in bible[-8:][::-1])}</div>')
-    write("", SITE_NAME, VERSE, hero)
 
     # ---- daily index + pages
     write("daily", "Daily notes", "Chronological daily Bible reading notes.",
@@ -898,7 +946,9 @@ def main() -> int:
                      f'<div class="prose-custom">{html_body}</div>'
                      + (f'<h2 class="font-display text-2xl font-bold mt-10 mb-3">Harvested verse pages</h2><div>{"".join(links)}</div>' if links else "")
                      + f'<p class="mt-10 text-sm"><a class="text-gold hover:underline" href="{base}/daily/">← All daily notes</a></p>')
-        write(f"daily/{p['slug']}", p["title"], p["title"], body_html)
+        tags = p["fm"].get("tags", [])
+        desc = f"{p['title']}: a daily Bible reading with reflections on {', '.join(tags[:4])}." if tags else f"{p['title']}: a daily Bible reading with reflections."
+        write(f"daily/{p['slug']}", p["title"], desc, body_html, article={"date": p.get("date", ""), "tags": tags})
 
     # ---- bible index + pages
     books_sorted = sorted(by_book)
@@ -927,7 +977,9 @@ def main() -> int:
                      f'<div class="prose-custom">{html_body}</div>'
                      + (f'<div class="mt-6 p-4 card" style="border-left: 4px solid var(--color-gold);"><h3 class="font-semibold text-gold">Also known as</h3><ul class="list-disc ml-5" style="color: #a8a29e;">{aliases}</ul></div>' if aliases else "")
                      + ("".join(f'<h2 class="font-display text-2xl font-bold mt-10 mb-3">More in {esc(p["book"])} {esc(p["chapter"])}</h2><div class="grid gap-3 md:grid-cols-2 lg:grid-cols-3">' + "".join(card_verse(q) for q in related) + "</div>" if related else "")))
-        write(f"bible/{p['slug']}", p["title"], p["title"], body_html)
+        tags = p["fm"].get("tags", [])
+        desc = f"{p['title']}: a Bible verse page with reflections on {', '.join(tags[:4])}." if tags else f"{p['title']}: a Bible verse page with reflections."
+        write(f"bible/{p['slug']}", p["title"], desc, body_html, article={"tags": tags})
 
     # ---- books
     write("books", "Books", "Verse pages grouped by Bible book.",
@@ -1124,7 +1176,8 @@ def main() -> int:
               f'<div class="md:col-span-2"><h1 class="font-display text-3xl md:text-4xl font-black mb-1">{esc(r["title"])}</h1>{by}'
               f'<div class="my-4">{res_links(r)}</div>'
               f'<div class="prose-custom">{render_blocks(r["body"], linkmap, base, books)}</div>'
-              f'<div class="mt-4">{"".join(f"<span class=tag>#{esc(t)}</span>" for t in r["tags"])}</div></div></div>')
+              f'<div class="mt-4">{"".join(f"<span class=tag>#{esc(t)}</span>" for t in r["tags"])}</div></div></div>',
+              article={"tags": r["tags"]})
 
     # ---- blog: Blog/*.md -> /blog/ (newest first) and /blog/<slug>/
     def card_post(p: dict) -> str:
@@ -1149,7 +1202,20 @@ def main() -> int:
                      f'<div class="mb-6">{tag_pills(p["tags"])}</div>'
                      f'<div class="prose-custom">{render_blocks(p["body"], linkmap, base, books)}</div>'
                      f'<p class="mt-10 text-sm"><a class="text-gold hover:underline" href="{base}/blog/">← All articles</a></p>')
-        write(f"blog/{p['slug']}", p["title"], p["desc"] or p["title"], body_html)
+        write(f"blog/{p['slug']}", p["title"], p["desc"] or p["title"], body_html, article={"date": p["date"], "tags": p["tags"]})
+
+    # ---- landing page sections that need blog posts and ranked resources
+    recent_posts = posts[:4]
+    blog_home = ('<div class="flex items-center justify-between mt-10 mb-4"><h2 class="font-display text-2xl font-bold">Recent blog posts</h2>'
+                 f'<a class="text-gold font-medium hover:underline" href="{base}/blog/">View all →</a></div>'
+                 + (f'<div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">{"".join(card_post(p) for p in recent_posts)}</div>' if posts
+                    else '<p style="color: #a8a29e;">No articles yet. New posts will appear here.</p>'))
+    top_resources = sorted((r for r in resources if r["rank"] is not None), key=lambda r: (r["rank"], r["title"].lower()))[:5]
+    top_html = ('<div class="flex items-center justify-between mt-10 mb-4"><h2 class="font-display text-2xl font-bold">Top resources</h2>'
+                f'<a class="text-gold font-medium hover:underline" href="{base}/resources/">View all →</a></div>'
+                + (f'<div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">{"".join(res_card(r) for r in top_resources)}</div>' if top_resources
+                   else '<p style="color: #a8a29e;">No ranked resources yet. Add a rank to a Resources file to feature it here.</p>'))
+    write("", SITE_NAME, SITE_DESC, hero + blog_home + top_html)
 
     # ---- standalone pages: Pages/<slug>.md (frontmatter: title, description) -> /<slug>/
     if PAGES_DIR.exists():
@@ -1181,7 +1247,52 @@ def main() -> int:
     (out / "404.html").write_text(render_page("Not found", "Page not found",
         '<div class="text-center py-16"><h1 class="font-display text-5xl font-black" style="color: var(--color-gold);">404</h1><p class="mt-2" style="color: #a8a29e;">That page is not in this vault.</p><p class="mt-6"><a class="text-gold font-semibold hover:underline" href="' + base + '/">← Home</a></p></div>'), encoding="utf-8")
     (out / ".nojekyll").write_text("", encoding="utf-8")
-    (out / "robots.txt").write_text("User-agent: *\nAllow: /\n", encoding="utf-8")
+    # ---- AI discovery: robots.txt welcomes AI assistants and search crawlers; llms.txt is the guide for them
+    ai_bots = ["GPTBot", "OAI-SearchBot", "ChatGPT-User", "ClaudeBot", "Claude-SearchBot", "Claude-User", "anthropic-ai",
+               "PerplexityBot", "Perplexity-User", "Google-Extended", "Applebot-Extended", "CCBot", "Bytespider",
+               "Amazonbot", "meta-externalagent", "cohere-ai", "DuckAssistBot"]
+    (out / "robots.txt").write_text(
+        "User-agent: *\nAllow: /\n\n"
+        "# AI assistants and answer engines are welcome. Content is free to read; quote it with a link back.\n"
+        "# Plain-text guide for AI tools: /llms.txt (all content as text: /llms-full.txt)\n"
+        + "".join(f"User-agent: {b}\n" for b in ai_bots) + "Allow: /\n\n"
+        + f"Sitemap: {SITE_URL}/sitemap.xml\n", encoding="utf-8")
+
+    site = f"{SITE_URL}{base}"
+    guide = [f"# {SITE_NAME}", "", f"> {SITE_DESC}", "",
+             "Man of God publishes free daily Bible reading notes with reflections, a verse page for each harvested passage, "
+             "articles, and recommended books, podcasts and channels for men. Scripture text is public domain (WEB) or linked "
+             "to the ESV. Reflections are the author's personal thoughts, not doctrine; the Bible is the authority.", "",
+             "## Start here",
+             f"- [Home]({site}/): overview and the newest notes",
+             f"- [Daily notes]({site}/daily/): chronological daily Bible reading with reflections",
+             f"- [Verse pages]({site}/bible/): one page per harvested passage, grouped by book",
+             f"- [Blog]({site}/blog/): articles",
+             f"- [Resources]({site}/resources/): books, podcasts and channels worth reading",
+             f"- [Accept Jesus]({site}/accept-jesus/): how to become a follower of Jesus",
+             f"- [Full text]({site}/llms-full.txt): all daily notes, articles and resources as plain text", "",
+             "## Blog"]
+    guide += [f"- [{p['title']}]({SITE_URL}{p['url']}) ({p['date']})" + (f": {p['desc']}" if p["desc"] else "") for p in posts]
+    guide += ["", "## Daily notes"]
+    guide += [f"- [{p['title']}]({SITE_URL}{p['url']}) ({p['date']})" for p in daily]
+    guide += ["", "## Resources"]
+    guide += [f"- [{r['title']}]({SITE_URL}/resources/{r['slug']}/): {RESOURCE_TYPES[r['type']]}" + (f" by {r['by']}" if r["by"] else "")
+              for r in resources]
+    guide += ["", "## Verse pages by book"]
+    guide += [f"- [{b}]({site}/books/{slugify(b)}/)" for b in books_sorted]
+    guide += ["", "## Follow and support",
+              "- [Patreon](https://www.patreon.com/cw/ManOfGodSA): posts from the daily readings",
+              "- [Facebook](https://www.facebook.com/profile.php?id=61596013522180): sharing the daily readings",
+              "- [Source on GitHub](https://github.com/Ashworx-Global/vault): the vault and the build that makes this site"]
+    (out / "llms.txt").write_text("\n".join(guide) + "\n", encoding="utf-8")
+
+    full = [f"# {SITE_NAME} - full text", "", f"> {SITE_DESC}", f"Source: {site}/", ""]
+    for kind, items in (("Article", posts), ("Daily note", daily)):
+        for p in items:
+            full += [f"## {kind}: {p['title']}", f"URL: {SITE_URL}{p['url']}", f"Date: {p['date']}", "", to_plain(p["body"]), ""]
+    for r in resources:
+        full += [f"## Resource: {r['title']}", f"URL: {SITE_URL}/resources/{r['slug']}/", "", to_plain(r["body"]), ""]
+    (out / "llms-full.txt").write_text("\n".join(full), encoding="utf-8")
     urls = [f"{SITE_URL}{base}/"]
     for root, _, files in os.walk(out):
         for fn in files:
