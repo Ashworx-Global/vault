@@ -45,5 +45,9 @@ Steps:
 5. **Publish, then verify.** Click Publish, then confirm the post appears on
    the creator page and report the post URL. Never retry Publish blindly:
    check the creator page first so a post is not duplicated.
+5a. **Check the site link.** The post's `site_url` (`https://manofgod.online/...`)
+   is the link AI tools and search engines follow back to the teaching. Once the
+   Pages deploy has finished, confirm it loads and has its canonical link and
+   Article structured data (see the `ai-discovery` skill). Report any mismatch.
 6. **Skip this step** and say so if the user passed `--no-patreon` in
    `$ARGUMENTS`.

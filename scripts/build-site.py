@@ -1269,6 +1269,7 @@ def main() -> int:
              f"- [Verse pages]({site}/bible/): one page per harvested passage, grouped by book",
              f"- [Blog]({site}/blog/): articles",
              f"- [Resources]({site}/resources/): books, podcasts and channels worth reading",
+             f"- [Scripture images]({site}/resources/scripture-images/): scripture graphics to view and share",
              f"- [Accept Jesus]({site}/accept-jesus/): how to become a follower of Jesus",
              f"- [Full text]({site}/llms-full.txt): all daily notes, articles and resources as plain text", "",
              "## Blog"]
@@ -1297,7 +1298,7 @@ def main() -> int:
     for root, _, files in os.walk(out):
         for fn in files:
             if fn == "index.html":
-                rel = os.path.relpath(os.path.join(root, fn), out)
+                rel = Path(os.path.relpath(os.path.join(root, fn), out)).as_posix()
                 u = f"{SITE_URL}{base}/" + ("" if rel == "index.html" else rel[: -len("/index.html")] + "/")
                 urls.append(u)
     (out / "sitemap.xml").write_text('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'

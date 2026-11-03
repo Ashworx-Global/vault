@@ -56,3 +56,8 @@ For each created page, read it and upgrade like the hand-made verse pages:
   an explicit key, else the `> **ESV** — _paste from Logos:_` placeholder.
 - Page names use `v` and en dash: `Luke 3 v 27`, `Isaiah 40 v 29–31`.
 - Tags lowercase; thematic alias Title Case; `cssclasses: verse` always.
+- AI-ready (see the `ai-discovery` skill): the page's tags become its meta
+  description, JSON-LD `keywords` and topic pages, so make them specific
+  (`four-beasts`, `son-of-man`), not generic. Every new verse page is listed in
+  the sitemap and reachable through its book page; after harvesting, run the site
+  build and `python3 scripts/check_site_ai.py`.
