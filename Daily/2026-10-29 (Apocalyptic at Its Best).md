@@ -70,7 +70,7 @@ tags:
  %% #Daniel #Daniel7 #Daniel8 %%>
   [[Daniel]] [[Daniel 7]]
 
-Daniel was a man of God, known for being able to interpret dreams as we have read, and the closing statement that he makes is that he did not understand the dream and, it appalled him gives me a sense of relief in not understanding everything that I read in the bible. I can see the similarities of these visions with Revelation, and knowing that they are predictions of the near time, so these things happened in timeline of Daniel but also looking at a later time, the end of time. My role is not know and figure it out, it’s to believe in God and His sovereignty, He did give this beautiful thing called the mind, and we are to ponder on these things, but He is higher than our pondering and should not lose focus on Him.
+Daniel was a man of God, known for being able to interpret dreams as we have read, and the closing statement that he makes is that he did not understand the dream and, it appalled him gives me a sense of relief in not understanding everything that I read in the bible. I can see the similarities of these visions with Revelation, and knowing that they are predictions of the near time, so these things happened in the timeline of Daniel but also looking at a later time, the end of time. My role is not to know and figure it out; it’s to believe in God and His sovereignty. He did give this beautiful thing called the mind, and we are to ponder on these things, but He is higher than our pondering, and we should not lose focus on Him.
 
 > [!bible]- [2 Thessalonians 1:1-12 - WEB-OFFLINE](https://www.biblegateway.com/passage/?search=2%20Thessalonians+1:1-12&version=web-offline)
 > [[2 Thessalonians 1#^1|1]]. Paul, Silvanus, and Timothy, to the assembly of the Thessalonians in God our Father, and the Lord Jesus Christ:
@@ -108,7 +108,7 @@ Keeping it real, we will suffer for Him, and we do not do it to earn points with
  %% #Job #Job41 %%>
   [[Job]] [[Job 41]]
 
-Using Logos study assistant, it mentions that people have thought that the Leviathan is a way to show the vastness of the ability of God’s power in contrast to man’s ability. What if this description and conversation highlights that as a Leviathan in the sea which is shown to be chaos and the power of chaos in our lives, we should keep our eyes on God like Peter with the waves, and there are moments when we can draw on the strength that God provides and overcome the chaos of life, there are other moments when we need to rest in God's hands and draw even closer to Him.
+Using Logos study assistant, it mentions that people have thought that the Leviathan is a way to show the vastness of the ability of God’s power in contrast to man’s ability. What if this description and conversation highlights that, as a Leviathan in the sea, which is shown to be chaos and the power of chaos in our lives, we should keep our eyes on God like Peter with the waves, and there are moments when we can draw on the strength that God provides and overcome the chaos of life; there are other moments when we need to rest in God's hands and draw even closer to Him.
 
 #### Daily Question
 
