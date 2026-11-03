@@ -7,7 +7,7 @@ I am 46 years old. I grew up in South Africa, and I still live here. For most of
 
 Through all of it, God has been at the helm of my life, whether I knew it or not. For a long time, though, I was following my own ideas. I was always stressed and always chasing the next big thing, and every time I got there I still felt empty.
 
-I am learning to stop running my own plan and to trust the One who has been steering all along. This site is part of that. It is where I share what I am reading in the Bible each day.
+Growing up in a Christian household, God was never a foreign idea. However, from living rather close to God, then slowly drifting away from a close relationship with God as life puts pressure to build a career and get things done, I found myself in desperate need for the love and care that He brings. Rededicating my life to Him, I have slowly drawn closer to Him by reading His word, going to church and consuming podcasts and other material has helped my journey towards the Lord. I am by no means a perfect person, nor do I claim to be, but His love and hand have been on my life so many times that it is staggering.
 
 ## What you will find here
 
@@ -15,6 +15,7 @@ I am learning to stop running my own plan and to trust the One who has been stee
 - **Verse pages:** one page for each passage I read, so you can read it, look up the words, and come back to it later.
 - **Articles:** longer pieces on what I am learning as a man trying to live for God.
 - **Resources:** books, podcasts and channels that have helped me, and that I think are worth your time.
+- **Blog:** Normal events that can be interesting and potencially helpful from a human perspective and things that happen in my life.
 
 ## Why this site
 
