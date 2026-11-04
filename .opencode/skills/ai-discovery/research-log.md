@@ -37,3 +37,51 @@ site-growth agent writes here after each research pass.
 - **IndexNow, adopted (owner approved 2026-11-03):** key file served at the root, full sitemap
   submitted to api.indexnow.org after each deploy. Source: https://www.indexnow.org/documentation
   Checker verifies the key file is served.
+
+## 2026-11-03 — SEO agent run (SEO)
+
+- **SEO: title links.** Descriptive, concise, distinct `<title>` per page; avoid boilerplate and
+  vague titles like "Home" or "Profile"; the title link is truncated by device width, so there is
+  no hard length limit. Source: https://developers.google.com/search/docs/appearance/title-link
+  **Adopted:** tag pages now titled "Bible readings on {topic}" (was "#topic"); book pages titled
+  "Bible verses in {book}" (was the bare book name); verse pages titled "{ref} Bible Study" (was
+  the bare reference). Titles stay within about 60 characters for most pages; a few long tag
+  names and long verse references run to about 65 characters, which Google truncates.
+- **SEO: meta descriptions.** Unique per page, descriptive, not a keyword list, no quality claims
+  the site cannot back up; no length limit but truncated to fit the device. Source:
+  https://developers.google.com/search/docs/appearance/snippet . **Adopted:** tag, book, verse and
+  daily pages now have specific descriptions that say what the page holds (for daily notes, the
+  date and the verse pages cited). No duplicate descriptions across the 815 pages.
+- **SEO: image alt and landing pages.** Every `<img>` needs descriptive alt text; avoid generic
+  logo images in og:image and avoid keyword stuffing in alt. Source:
+  https://developers.google.com/search/docs/appearance/google-images . **Checked:** every image has
+  a non-empty alt. **Not adopted:** og:image is the site logo on every page (Google advises a
+  representative image per page). This needs per-page artwork, so it is a decision for the author
+  (see report).
+- **SEO/speed: above-fold images.** Use the default eager loading for images visible on first
+  view, and `loading="lazy"` only for images below the fold; give images width and height.
+  Source: https://web.dev/articles/browser-level-image-lazy-loading . **Adopted:** header logo now
+  has `loading="eager"`. **Pending:** width and height on images (not yet adopted, a template change
+  for a later run).
+- **SEO: Bing Webmaster Guidelines.** Source: https://www.bing.com/webmasters/help/webmaster-guidelines-30fba23a .
+  **Not retrieved:** the page returned no content in this run; retry next run.
+- **SEO: sitemap and robots (checked, no change needed).** 815 sitemap URLs match the 815 indexable
+  pages; no noindex in the sitemap; all URLs https://manofgod.online; robots.txt allows crawlers and
+  names the sitemap.
+- **SEO: descriptions cut mid-word (fixed).** Meta descriptions were cut at 160 characters without
+  regard to words, so verse-page snippets ended "…and other" or "…the daily notes ". Source:
+  https://developers.google.com/search/docs/appearance/snippet . **Adopted:** build clips at a word
+  boundary (`clip_desc`) and verse-page descriptions were shortened so they fit without clipping.
+  Checked on daniel-9-v-1-27, daniel-10-v-1-21, 2-thessalonians-2-v-1-17, job-42-v-1-9.
+- **SEO: daily note titles (adopted).** Daily `<title>` was only the note title, e.g. "An Obstructed
+  View | Man of God Daily Readings". Google's title guidance asks for specific titles. **Adopted:**
+  the build adds the note's first topic tag when it fits (e.g. "An Obstructed View: Daniel | Man of
+  God Daily Readings"). H1, the note file and its name are unchanged. Source:
+  https://developers.google.com/search/docs/appearance/title-link
+- **SEO: duplicate "Harvested verse pages" heading (fixed).** A daily note that already had this
+  heading also got the build's own h2 with the same text. **Adopted:** the build skips its heading
+  when the note already has one. Source: not fetched this run; retry the Search Central heading
+  guidance next run.
+- **Pending (report only):** about 50 scripture images in `resources/scripture-images/` are over
+  500 KB (largest about 12.5 MB, Philippians 4:13); the Play CDN Tailwind script and Google Fonts load
+  from third-party hosts; 47 `logos4-command:` links in daily notes do not resolve on the web.

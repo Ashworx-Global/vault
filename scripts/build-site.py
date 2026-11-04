@@ -146,7 +146,7 @@ BASE_TMPL = """<!DOCTYPE html>
 <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 z-50 px-4 py-2 bg-gold text-ink rounded-lg">Skip to content</a>
 <header>
 <nav class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-x-4 gap-y-2 px-4 py-2 md:py-0">
-<a href="@@BASE@@/" class="flex items-center shrink-0"><img src="@@BASE@@/logos/icon-256.png" alt="Man Of God" class="h-16 md:h-28 w-auto"></a>
+<a href="@@BASE@@/" class="flex items-center shrink-0"><img src="@@BASE@@/logos/icon-256.png" alt="Man Of God" loading="eager" class="h-16 md:h-28 w-auto"></a>
 <div class="flex flex-wrap items-center justify-end gap-x-4 gap-y-2 text-sm md:gap-5">
 <a href="@@BASE@@/daily/" class="hover:text-gold transition">Daily</a>
 <a href="@@BASE@@/blog/" class="hover:text-gold transition">Blog</a>
@@ -372,6 +372,14 @@ IMAGE_RE = re.compile(r"!\[([^\]]*)\]\(([^)]+)\)")
 LINK_RE = re.compile(r"\[([^\]]+)\]\(([^)]+)\)")
 BOLD_RE = re.compile(r"\*\*(.+?)\*\*")
 ITALIC_RE = re.compile(r"(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)|_(.+?)_")
+
+
+def clip_desc(text: str, limit: int = 160) -> str:
+    """Trim a meta description to `limit` characters at a word boundary (never mid-word)."""
+    text = " ".join(text.split())
+    if len(text) <= limit:
+        return text
+    return text[:limit].rsplit(" ", 1)[0].rstrip(" ,;:-–—")
 
 
 def esc(t: str) -> str:
@@ -834,7 +842,8 @@ def main() -> int:
 
     def render_page(title: str, desc: str, body_html: str, rel: str | None = None, article: dict | None = None,
                     extra: list[dict] | None = None) -> str:
-        short = esc(desc[:160])
+        desc = clip_desc(desc)
+        short = esc(desc)
         head = [f'<meta property="og:site_name" content="{esc(SITE_NAME)}">',
                 f'<meta property="og:type" content="{"article" if article else "website"}">',
                 f'<meta property="og:title" content="{esc(title)}">',
@@ -964,12 +973,20 @@ def main() -> int:
                      f'<h1 class="font-display text-3xl md:text-4xl font-black mb-3">{esc(p["title"])}</h1>'
                      f'<div class="mb-6">{tag_pills(p["fm"].get("tags", []))}</div>'
                      f'<div class="prose-custom">{html_body}</div>'
-                     + (f'<h2 class="font-display text-2xl font-bold mt-10 mb-3">Harvested verse pages</h2><div>{"".join(links)}</div>' if links else "")
+                     + (f'<h2 class="font-display text-2xl font-bold mt-10 mb-3">Harvested verse pages</h2><div>{"".join(links)}</div>' if links and "Harvested verse pages" not in html_body else "")
                      + f'<p class="mt-10 text-sm"><a class="text-gold hover:underline" href="{base}/daily/">← All daily notes</a></p>')
         tags = p["fm"].get("tags", [])
-        desc = f"{p['title']}: a daily Bible reading with reflections on {', '.join(tags[:4])}." if tags else f"{p['title']}: a daily Bible reading with reflections."
+        topics = [t.replace("-", " ") for t in tags[:4]]
+        topics = [t[:1].upper() + t[1:] for t in topics]
+        # Title: the note's own title plus its first topic when it fits the ~60 character search-result limit.
+        # The H1 and the source file are unchanged; the site suffix " | Man of God Daily Readings" is added by the template.
+        title_tag = p["title"]
+        if topics and len(p["title"]) + len(topics[0]) + 2 <= 33:
+            title_tag = f"{p['title']}: {topics[0]}"
+        desc = (f"Daily Bible reading for {p.get('date', '')}: {p['title']}, with reflections on {', '.join(topics)} and links to the verse pages it cites." if topics
+                else f"Daily Bible reading for {p.get('date', '')}: {p['title']}, with reflections and links to the verse pages it cites.")
         write_md(f"daily/{p['slug']}", p["title"], desc, p.get("date", ""), tags, p["body"])
-        write(f"daily/{p['slug']}", p["title"], desc, body_html, article={"date": p.get("date", ""), "tags": tags})
+        write(f"daily/{p['slug']}", title_tag, desc, body_html, article={"date": p.get("date", ""), "tags": tags})
 
     # ---- bible index + pages
     books_sorted = sorted(by_book)
@@ -999,8 +1016,8 @@ def main() -> int:
                      + (f'<div class="mt-6 p-4 card" style="border-left: 4px solid var(--color-gold);"><h3 class="font-semibold text-gold">Also known as</h3><ul class="list-disc ml-5" style="color: #a8a29e;">{aliases}</ul></div>' if aliases else "")
                      + ("".join(f'<h2 class="font-display text-2xl font-bold mt-10 mb-3">More in {esc(p["book"])} {esc(p["chapter"])}</h2><div class="grid gap-3 md:grid-cols-2 lg:grid-cols-3">' + "".join(card_verse(q) for q in related) + "</div>" if related else "")))
         tags = p["fm"].get("tags", [])
-        desc = f"{p['title']}: a Bible verse page with reflections on {', '.join(tags[:4])}." if tags else f"{p['title']}: a Bible verse page with reflections."
-        write(f"bible/{p['slug']}", p["title"], desc, body_html, article={"tags": tags})
+        desc = f"{p['title']}: a Bible verse page with reflections on {', '.join(tags[:3])}. Read the passage and the daily notes that cite it." if tags else f"{p['title']}: a Bible verse page with reflections. Read the passage and the daily notes that cite it."
+        write(f"bible/{p['slug']}", f"{p['title']} Bible Study", desc, body_html, article={"tags": tags})
 
     # ---- books
     write("books", "Books", "Verse pages grouped by Bible book.",
@@ -1014,7 +1031,8 @@ def main() -> int:
         for ch in sorted(groups, key=lambda c: int(c) if c.isdigit() else 999):
             items = "".join(f'<a class="card block" href="{q["url"]}"><strong>{esc(q["title"])}</strong><br><span class="text-sm" style="color: #a8a29e;">{" ".join(q["fm"].get("tags", [])[:4])}</span></a>' for q in groups[ch])
             secs += f'<section class="card mb-6"><h2 class="font-bold text-lg mb-3">{esc(b)} {esc(ch)}</h2><div class="grid gap-3 md:grid-cols-2">{items}</div></section>'
-        write(f"books/{slugify(b)}", b, f"Verse pages in {b}", f'<p class="text-sm"><a class="text-gold hover:underline" href="{base}/books/">Books</a> / {esc(b)}</p><h1 class="font-display text-3xl font-black mt-1 mb-4">{esc(b)}</h1>{secs}')
+        write(f"books/{slugify(b)}", f"Bible verses in {b.title() if b.islower() else b}",
+              f"Verse pages in {b} from Man of God's daily Bible reading notes, grouped by chapter, each with reflections and topic tags.", f'<p class="text-sm"><a class="text-gold hover:underline" href="{base}/books/">Books</a> / {esc(b)}</p><h1 class="font-display text-3xl font-black mt-1 mb-4">{esc(b)}</h1>{secs}')
 
     # ---- tags
     write("tags", "Topics", "Browse by theme.",
@@ -1022,7 +1040,8 @@ def main() -> int:
           + "".join(f'<a class="tag" href="{base}/tags/{slugify(t)}/">#{esc(t)} ({len(tag_index[t])})</a>' for t in sorted(tag_index)) + "</div>")
     for t, plist in tag_index.items():
         cards = "".join(card_daily(p) if p["kind"] == "daily" else card_verse(p) for p in plist)
-        write(f"tags/{slugify(t)}", f"#{t}", f"Pages tagged {t}",
+        write(f"tags/{slugify(t)}", f"Bible readings on {t}",
+              f"Daily Bible notes and verse pages tagged {t} on Man of God. Browse the reflections and passages on this theme, with links to each one.",
               f'<p class="text-sm"><a class="text-gold hover:underline" href="{base}/tags/">Topics</a> / #{esc(t)}</p><h1 class="font-display text-3xl font-black mt-1 mb-4">#{esc(t)}</h1><div class="grid gap-4 md:grid-cols-2">{cards}</div>')
 
     # ---- shop (placeholder until the store opens)
