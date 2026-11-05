@@ -983,8 +983,8 @@ def main() -> int:
         title_tag = p["title"]
         if topics and len(p["title"]) + len(topics[0]) + 2 <= 33:
             title_tag = f"{p['title']}: {topics[0]}"
-        desc = (f"Daily Bible reading for {p.get('date', '')}: {p['title']}, with reflections on {', '.join(topics)} and links to the verse pages it cites." if topics
-                else f"Daily Bible reading for {p.get('date', '')}: {p['title']}, with reflections and links to the verse pages it cites.")
+        desc = (f"Daily Bible reading for {p.get('date', '')}: {p['title']}. Reflections on {', '.join(topics[:3])} and links to cited verse pages." if topics
+                else f"Daily Bible reading for {p.get('date', '')}: {p['title']}. Reflections and links to cited verse pages.")
         write_md(f"daily/{p['slug']}", p["title"], desc, p.get("date", ""), tags, p["body"])
         write(f"daily/{p['slug']}", title_tag, desc, body_html, article={"date": p.get("date", ""), "tags": tags})
 
@@ -1017,7 +1017,12 @@ def main() -> int:
                      + ("".join(f'<h2 class="font-display text-2xl font-bold mt-10 mb-3">More in {esc(p["book"])} {esc(p["chapter"])}</h2><div class="grid gap-3 md:grid-cols-2 lg:grid-cols-3">' + "".join(card_verse(q) for q in related) + "</div>" if related else "")))
         tags = p["fm"].get("tags", [])
         desc = f"{p['title']}: a Bible verse page with reflections on {', '.join(tags[:3])}. Read the passage and the daily notes that cite it." if tags else f"{p['title']}: a Bible verse page with reflections. Read the passage and the daily notes that cite it."
-        write(f"bible/{p['slug']}", f"{p['title']} Bible Study", desc, body_html, article={"tags": tags})
+        # Keep <title> (page title + " | Man of God Daily Readings") near the ~60 character search-result limit:
+        # drop the " Bible Study" suffix for long passage names.
+        bible_title = f"{p['title']} Bible Study"
+        if len(bible_title) + len(" | Man of God Daily Readings") > 60:
+            bible_title = p['title']
+        write(f"bible/{p['slug']}", bible_title, desc, body_html, article={"tags": tags})
 
     # ---- books
     write("books", "Books", "Verse pages grouped by Bible book.",
