@@ -450,7 +450,7 @@ def render_inline(text: str, linkmap: dict, base: str, books: set[str]) -> str:
 
 # ---------------------------------------------------------------- blocks
 
-def render_blocks(body: str, linkmap: dict, base: str, books: set[str]) -> str:
+def render_blocks(body: str, linkmap: dict, base: str, books: set[str], heading_offset: int = 0) -> str:
     lines = body.splitlines()
     out: list[str] = []
     i = 0
@@ -493,7 +493,7 @@ def render_blocks(body: str, linkmap: dict, base: str, books: set[str]) -> str:
             i += 1
             continue
         if re.match(r"^#{1,6}\s", s):
-            level = len(s) - len(s.lstrip("#"))
+            level = min(6, len(s) - len(s.lstrip("#")) + heading_offset)
             out.append(f"<h{level}>{render_inline(s[level:].strip(), linkmap, base, books)}</h{level}>")
             i += 1
             continue
@@ -536,7 +536,7 @@ def render_blocks(body: str, linkmap: dict, base: str, books: set[str]) -> str:
             if m:
                 title, url = m.group(1), m.group(2)
                 inner = "\n".join(buf[1:])
-                inner_html = render_blocks(inner, linkmap, base, books)
+                inner_html = render_blocks(inner, linkmap, base, books, heading_offset)
                 out.append(
                     "<details class=\"bible\">"
                     f"<summary><span>{esc(title)}</span>"
@@ -547,7 +547,7 @@ def render_blocks(body: str, linkmap: dict, base: str, books: set[str]) -> str:
                 )
             else:
                 inner = "\n".join(buf)
-                out.append(f"<blockquote>{render_blocks(inner, linkmap, base, books)}</blockquote>")
+                out.append(f"<blockquote>{render_blocks(inner, linkmap, base, books, heading_offset)}</blockquote>")
             continue
         # plain paragraph (collect wrapped lines)
         buf = [line]
@@ -962,7 +962,7 @@ def main() -> int:
           f'<input id="filter" placeholder="Filter notes…" class="input mb-6">'
           f'<div class="grid gap-4 md:grid-cols-2">{"".join(card_daily(p) for p in daily)}</div>')
     for p in daily:
-        html_body = render_blocks(p["body"], linkmap, base, {b for b in books})
+        html_body = render_blocks(p["body"], linkmap, base, {b for b in books}, heading_offset=1)
         harvested = sorted({m.group(1).strip() for m in WIKILINK_RE.finditer(p["body"]) if " v " in m.group(1)})
         links = []
         for ref in harvested:
@@ -985,6 +985,8 @@ def main() -> int:
             title_tag = f"{p['title']}: {topics[0]}"
         desc = (f"Daily Bible reading for {p.get('date', '')}: {p['title']}. Reflections on {', '.join(topics[:3])} and links to cited verse pages." if topics
                 else f"Daily Bible reading for {p.get('date', '')}: {p['title']}. Reflections and links to cited verse pages.")
+        if len(desc) > 160 and desc.endswith(" and links to cited verse pages."):
+            desc = desc.removesuffix(" and links to cited verse pages.") + "."
         write_md(f"daily/{p['slug']}", p["title"], desc, p.get("date", ""), tags, p["body"])
         write(f"daily/{p['slug']}", title_tag, desc, body_html, article={"date": p.get("date", ""), "tags": tags})
 
