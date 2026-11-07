@@ -101,6 +101,7 @@ p code { background: #1c1917; color: var(--color-gold); padding: .1rem .35rem; b
 .prose-custom { line-height: 1.75; }
 .prose-custom p { margin-bottom: 1rem; color: #d6d3d1; }
 .prose-custom h1, .prose-custom h2, .prose-custom h3 { font-family: var(--font-display); color: #fafafa; }
+.daily-note h2 { font-size: 1.5rem; font-weight: 700; line-height: 1.3; margin: 2rem 0 1rem; }
 .prose-custom blockquote { border-left: 4px solid var(--color-gold); background: rgba(200,162,74,.1); padding: .75rem 1.25rem; border-radius: 0 .75rem .75rem 0; margin: 1.25rem 0; font-style: italic; color: #d6d3d1; }
 details.bible { border: 1px solid #292524; background: var(--color-panel); border-radius: .5rem; margin: 1rem 0; overflow: hidden; }
 details.bible summary { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: .8rem 1.1rem; font-weight: 600; color: var(--color-gold); cursor: pointer; list-style: none; }
@@ -450,7 +451,7 @@ def render_inline(text: str, linkmap: dict, base: str, books: set[str]) -> str:
 
 # ---------------------------------------------------------------- blocks
 
-def render_blocks(body: str, linkmap: dict, base: str, books: set[str], heading_offset: int = 0) -> str:
+def render_blocks(body: str, linkmap: dict, base: str, books: set[str], daily_headings: bool = False) -> str:
     lines = body.splitlines()
     out: list[str] = []
     i = 0
@@ -493,8 +494,10 @@ def render_blocks(body: str, linkmap: dict, base: str, books: set[str], heading_
             i += 1
             continue
         if re.match(r"^#{1,6}\s", s):
-            level = min(6, len(s) - len(s.lstrip("#")) + heading_offset)
-            out.append(f"<h{level}>{render_inline(s[level:].strip(), linkmap, base, books)}</h{level}>")
+            source_level = len(s) - len(s.lstrip("#"))
+            # Daily pages have a separate title H1; make their section headings prominent.
+            level = (2 if source_level in (1, 2, 4) else source_level) if daily_headings else source_level
+            out.append(f"<h{level}>{render_inline(s[source_level:].strip(), linkmap, base, books)}</h{level}>")
             i += 1
             continue
         if re.match(r"^(\*\*\*|---|___)\s*$", s):
@@ -536,7 +539,7 @@ def render_blocks(body: str, linkmap: dict, base: str, books: set[str], heading_
             if m:
                 title, url = m.group(1), m.group(2)
                 inner = "\n".join(buf[1:])
-                inner_html = render_blocks(inner, linkmap, base, books, heading_offset)
+                inner_html = render_blocks(inner, linkmap, base, books, daily_headings)
                 out.append(
                     "<details class=\"bible\">"
                     f"<summary><span>{esc(title)}</span>"
@@ -547,7 +550,7 @@ def render_blocks(body: str, linkmap: dict, base: str, books: set[str], heading_
                 )
             else:
                 inner = "\n".join(buf)
-                out.append(f"<blockquote>{render_blocks(inner, linkmap, base, books, heading_offset)}</blockquote>")
+                out.append(f"<blockquote>{render_blocks(inner, linkmap, base, books, daily_headings)}</blockquote>")
             continue
         # plain paragraph (collect wrapped lines)
         buf = [line]
@@ -962,7 +965,7 @@ def main() -> int:
           f'<input id="filter" placeholder="Filter notes…" class="input mb-6">'
           f'<div class="grid gap-4 md:grid-cols-2">{"".join(card_daily(p) for p in daily)}</div>')
     for p in daily:
-        html_body = render_blocks(p["body"], linkmap, base, {b for b in books}, heading_offset=1)
+        html_body = render_blocks(p["body"], linkmap, base, {b for b in books}, daily_headings=True)
         harvested = sorted({m.group(1).strip() for m in WIKILINK_RE.finditer(p["body"]) if " v " in m.group(1)})
         links = []
         for ref in harvested:
@@ -972,7 +975,7 @@ def main() -> int:
         body_html = (f'<p class="text-sm font-medium" style="color: var(--color-gold);">{esc(p.get("date",""))}</p>'
                      f'<h1 class="font-display text-3xl md:text-4xl font-black mb-3">{esc(p["title"])}</h1>'
                      f'<div class="mb-6">{tag_pills(p["fm"].get("tags", []))}</div>'
-                     f'<div class="prose-custom">{html_body}</div>'
+                     f'<div class="prose-custom daily-note">{html_body}</div>'
                      + (f'<h2 class="font-display text-2xl font-bold mt-10 mb-3">Harvested verse pages</h2><div>{"".join(links)}</div>' if links and "Harvested verse pages" not in html_body else "")
                      + f'<p class="mt-10 text-sm"><a class="text-gold hover:underline" href="{base}/daily/">← All daily notes</a></p>')
         tags = p["fm"].get("tags", [])
