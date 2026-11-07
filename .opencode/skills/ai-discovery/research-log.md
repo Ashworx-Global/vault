@@ -50,6 +50,12 @@ site-growth agent writes here after each research pass.
 - **New note:** daily page has an `index.md` copy and alternate link; its llms.txt entry points to that copy. All four new verse URLs have canonical links and JSON-LD.
 - **Current AI tools still match the build:** robots.txt allows AI crawlers and names the sitemap; llms.txt, llms-full.txt and markdown copies are generated and checked; the IndexNow key is served at the domain root and `.github/workflows/deploy.yml` submits with `scripts/submit_indexnow.py` after deploy. No build or checker changes needed.
 
+## 2026-11-07 — review for 2026-11-02 (Will We Follow)
+
+- **Health:** build 318 pages (41 daily, 277 verse, 0 articles); checker ok, 881 pages checked, 42 content URLs in llms.txt.
+- **New note:** daily page has an `index.md` copy and alternate markdown link; llms.txt points to that copy. All four new verse URLs have canonical links and JSON-LD.
+- **Current AI tools still match the build:** robots.txt allows named AI crawlers; llms.txt, llms-full.txt and markdown copies are built and checked; the IndexNow key is served at the root and `.github/workflows/deploy.yml` invokes `scripts/submit_indexnow.py`. No build or checker changes needed.
+
 ## 2026-11-03 — SEO agent run (SEO)
 
 - **SEO: title links.** Descriptive, concise, distinct `<title>` per page; avoid boilerplate and
