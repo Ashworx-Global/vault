@@ -130,7 +130,7 @@ Jesus gets to the heart of the problem: the outside the was crippled, the inside
      But that you may know that the Son of Man has authority on earth to forgive sins”—he said to the paralytic— 
            11       “I say to you, rise, pick up your bed, and go home.” (Mk 2:10-11)
 
-This is the altimate flex here, Jesus is the creator of everything, and the creation is pointing a fingure at the creator, and He simply proves the point of who is in charge.
+This is the ultimate flex here, Jesus is the creator of everything, and the creation is pointing a figure at the creator, and He simply proves the point of who is in charge.
 
      And he said to them, “The Sabbath was made for man, not man for the Sabbath. 
            28       So the Son of Man is lord even of the Sabbath.” (Mk 2:27-28)
