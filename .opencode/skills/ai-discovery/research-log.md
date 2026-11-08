@@ -56,6 +56,12 @@ site-growth agent writes here after each research pass.
 - **New note:** daily page has an `index.md` copy and alternate markdown link; llms.txt points to that copy. All four new verse URLs have canonical links and JSON-LD.
 - **Current AI tools still match the build:** robots.txt allows named AI crawlers; llms.txt, llms-full.txt and markdown copies are built and checked; the IndexNow key is served at the root and `.github/workflows/deploy.yml` invokes `scripts/submit_indexnow.py`. No build or checker changes needed.
 
+## 2026-11-08 — review for 2026-11-03 (Love and Commitment, Not Always Synonymous)
+
+- **Health:** build 325 pages (42 daily, 283 verse, 0 articles); checker ok, 901 pages checked, 43 content URLs in llms.txt.
+- **New note:** daily page has an `index.md` copy and alternate markdown link; llms.txt points to the copy. All six new verse URLs have canonical links and JSON-LD.
+- **Current AI tools still match the build:** robots.txt allows named AI crawlers; llms.txt, llms-full.txt and markdown copies are generated and checked; the IndexNow key is served at the root and `.github/workflows/deploy.yml` invokes `scripts/submit_indexnow.py`. No AI-specific build or checker change needed; the SEO review shortened long title suffixes in the build.
+
 ## 2026-11-03 — SEO agent run (SEO)
 
 - **SEO: title links.** Descriptive, concise, distinct `<title>` per page; avoid boilerplate and

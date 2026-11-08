@@ -131,7 +131,7 @@ BASE_TMPL = """<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>@@TITLE@@ | Man of God Daily Readings</title>
+<title>@@TITLE@@ | @@TITLE_BRAND@@</title>
 <meta name="description" content="@@DESC@@">
 @@HEAD@@
 <link rel="icon" type="image/png" sizes="32x32" href="@@BASE@@/logos/favicon-32.png">
@@ -877,7 +877,9 @@ def main() -> int:
             head.append(f'<link rel="describedby" href="{SITE_URL}{base}/llms.txt">')
             if rel and (out / rel / "index.md").exists():
                 head.append(f'<link rel="alternate" type="text/markdown" href="{url}index.md">')
-        return (BASE_TMPL.replace("@@TITLE@@", esc(title)).replace("@@DESC@@", short).replace("@@HEAD@@", "\n".join(head))
+        title_brand = SITE_NAME if len(f"{title} | {SITE_NAME}") <= 60 else "Man of God"
+        return (BASE_TMPL.replace("@@TITLE@@", esc(title)).replace("@@TITLE_BRAND@@", title_brand)
+                .replace("@@DESC@@", short).replace("@@HEAD@@", "\n".join(head))
                 .replace("@@BASE@@", base).replace("@@THEME_CSS@@", THEME_CSS).replace("@@BODY@@", body_html))
 
     def tag_pills(tags: list[str]) -> str:
@@ -982,7 +984,7 @@ def main() -> int:
         topics = [t.replace("-", " ") for t in tags[:4]]
         topics = [t[:1].upper() + t[1:] for t in topics]
         # Title: the note's own title plus its first topic when it fits the ~60 character search-result limit.
-        # The H1 and the source file are unchanged; the site suffix " | Man of God Daily Readings" is added by the template.
+        # The H1 and the source file are unchanged; the template uses a shorter site suffix for long titles.
         title_tag = p["title"]
         if topics and len(p["title"]) + len(topics[0]) + 2 <= 33:
             title_tag = f"{p['title']}: {topics[0]}"
