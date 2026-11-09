@@ -989,7 +989,7 @@ def main() -> int:
         if topics and len(p["title"]) + len(topics[0]) + 2 <= 33:
             title_tag = f"{p['title']}: {topics[0]}"
         desc = (f"Daily Bible reading for {p.get('date', '')}: {p['title']}. Reflections on {', '.join(topics[:3])} and links to cited verse pages." if topics
-                else f"Daily Bible reading for {p.get('date', '')}: {p['title']}. Reflections and links to cited verse pages.")
+                else f"Daily Bible reading for {p.get('date', '')}: {p['title']}. Scripture reflections, encouragement, and links to cited verse pages.")
         if len(desc) > 160 and desc.endswith(" and links to cited verse pages."):
             desc = desc.removesuffix(" and links to cited verse pages.") + "."
         write_md(f"daily/{p['slug']}", p["title"], desc, p.get("date", ""), tags, p["body"])

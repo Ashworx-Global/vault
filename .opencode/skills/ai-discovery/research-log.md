@@ -60,7 +60,7 @@ site-growth agent writes here after each research pass.
 
 - **Health:** build 325 pages (42 daily, 283 verse, 0 articles); checker ok, 901 pages checked, 43 content URLs in llms.txt.
 - **New note:** daily page has an `index.md` copy and alternate markdown link; llms.txt points to the copy. All six new verse URLs have canonical links and JSON-LD.
-- **Current AI tools still match the build:** robots.txt allows named AI crawlers; llms.txt, llms-full.txt and markdown copies are generated and checked; the IndexNow key is served at the root and `.github/workflows/deploy.yml` invokes `scripts/submit_indexnow.py`. No AI-specific build or checker change needed; the SEO review shortened long title suffixes in the build.
+- **Current AI tools still match the build:** robots.txt allows named AI crawlers; llms.txt, llms-full.txt and markdown copies are generated and checked; the IndexNow key is served at the root and `.github/workflows/deploy.yml` invokes `scripts/submit_indexnow.py`. No AI-specific build or checker change needed. The SEO review added a build rule to keep generated titles within the search-result length.
 
 ## 2026-11-03 — SEO agent run (SEO)
 
@@ -109,3 +109,9 @@ site-growth agent writes here after each research pass.
 - **Pending (report only):** about 50 scripture images in `resources/scripture-images/` are over
   500 KB (largest about 12.5 MB, Philippians 4:13); the Play CDN Tailwind script and Google Fonts load
   from third-party hosts; 47 `logos4-command:` links in daily notes do not resolve on the web.
+
+## 2026-11-09 — review for 2026-11-04 (Cutting a Deal with God)
+
+- **Health:** build 331 pages (43 daily, 288 verse, 0 articles); checker ok, 916 pages checked, 44 content URLs in llms.txt.
+- **New note:** daily page has an `index.md` copy and alternate markdown link; llms.txt points to the copy. All five new verse URLs have canonical links and JSON-LD.
+- **Current AI tools still match the build:** robots.txt allows named AI crawlers; llms.txt, llms-full.txt and markdown copies are generated and checked; the IndexNow key is served at the root and `.github/workflows/deploy.yml` invokes `scripts/submit_indexnow.py`. No AI-specific build or checker change needed. The SEO review added a build rule to keep generated titles within the search-result length.
