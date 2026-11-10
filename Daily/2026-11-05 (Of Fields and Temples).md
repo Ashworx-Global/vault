@@ -1,4 +1,3 @@
-
 ---
 tags:
   - building-gods-house
