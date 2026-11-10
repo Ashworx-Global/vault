@@ -115,3 +115,9 @@ site-growth agent writes here after each research pass.
 - **Health:** build 331 pages (43 daily, 288 verse, 0 articles); checker ok, 916 pages checked, 44 content URLs in llms.txt.
 - **New note:** daily page has an `index.md` copy and alternate markdown link; llms.txt points to the copy. All five new verse URLs have canonical links and JSON-LD.
 - **Current AI tools still match the build:** robots.txt allows named AI crawlers; llms.txt, llms-full.txt and markdown copies are generated and checked; the IndexNow key is served at the root and `.github/workflows/deploy.yml` invokes `scripts/submit_indexnow.py`. No AI-specific build or checker change needed. The SEO review added a build rule to keep generated titles within the search-result length.
+
+## 2026-11-10 — review for 2026-11-05 (Of Fields and Temples)
+
+- **Health:** build 336 pages (44 daily, 292 verse, 0 articles); checker ok, 929 pages checked, 45 content URLs in llms.txt.
+- **New note:** daily page has an `index.md` copy and alternate markdown link; llms.txt points to the copy. All four new verse URLs have canonical links and JSON-LD.
+- **Current AI tools still match the build:** robots.txt allows named AI crawlers; llms.txt, llms-full.txt and markdown copies are generated and checked; the IndexNow key is served at the root and `.github/workflows/deploy.yml` invokes `scripts/submit_indexnow.py`. No AI-specific build or checker change needed.
