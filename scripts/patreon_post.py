@@ -15,12 +15,15 @@ Usage:
   patreon_post.py "Daily/2026-10-19 (Big Picture Hope).md" --out DIR [--copy]
 
 Writes DIR/post.json and DIR/post.html. With --copy the HTML is also placed on
-the macOS clipboard as rich text, ready to paste into the Patreon editor.
+the macOS or Linux clipboard as rich text, ready to paste into the Patreon
+editor. Linux requires wl-copy (Wayland) or xclip (X11) in a desktop session.
 """
 import argparse
 import html
 import json
+import os
 import re
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -118,9 +121,29 @@ def build_body(body: str) -> str:
 
 
 def copy_html(doc: str):
-    """Put HTML on the macOS clipboard as rich text."""
-    script = f'set the clipboard to «data HTML{doc.encode().hex()}»'
-    subprocess.run(["osascript", "-e", script], check=True)
+    """Put HTML on the desktop clipboard without reducing it to plain text."""
+    if sys.platform == "darwin":
+        script = f'set the clipboard to «data HTML{doc.encode().hex()}»'
+        subprocess.run(["osascript", "-e", script], check=True)
+        return
+    if sys.platform.startswith("linux"):
+        if os.environ.get("WAYLAND_DISPLAY") and shutil.which("wl-copy"):
+            command = ["wl-copy", "--type", "text/html"]
+        elif os.environ.get("DISPLAY") and shutil.which("xclip"):
+            command = ["xclip", "-selection", "clipboard", "-t", "text/html", "-i"]
+        else:
+            raise RuntimeError(
+                "Linux HTML clipboard unavailable: use wl-copy (wl-clipboard) "
+                "on Wayland or xclip on X11 in a desktop session. "
+                "Post files were saved; open post.html and copy the rendered "
+                "body only, excluding its title and tags."
+            )
+        # Clipboard owners may stay alive after their launcher exits. Do not
+        # leave them holding a captured stdout/stderr pipe open.
+        subprocess.run(command, input=doc.encode("utf-8"), check=True,
+                       stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        return
+    raise RuntimeError("HTML clipboard unsupported here; use patreon_post.ps1 on Windows.")
 
 
 def main():
@@ -153,7 +176,10 @@ def main():
         {"title": title, "date": date, "tags": tags, "site_url": site_url}, indent=2),
         encoding="utf-8")
     if args.copy:
-        copy_html(post_html)
+        try:
+            copy_html(post_html)
+        except (RuntimeError, OSError, subprocess.CalledProcessError) as exc:
+            ap.exit(1, f"Clipboard copy failed: {exc}\n")
     print(json.dumps({"title": title, "date": date, "tags": tags, "site_url": site_url}))
 
 

@@ -27,6 +27,33 @@ Steps:
 7. **Verify the site build.** Run `python3 scripts/build-site.py --base= --out=site/dist` (note: `--out` and `--base` need the `=` form; the empty `--base=` is correct because the site is at the domain root) and confirm the page count grew; spot-check the new `bible/...` and `daily/...` URLs exist. Confirm the Resources page count (`Scripture Images (N)`) equals the number of image files in `Resources/Scripture-Images/`. Then run `python3 scripts/check_site_ai.py` (run it after the build finishes, never in parallel with it) and fix any failure before committing: it checks robots, canonical and JSON-LD on every page, that `llms.txt` lists the new daily note, and that `llms-full.txt` has no leftover wikilink syntax. Then load the `ai-discovery` skill and run its review for this new note: confirm the note has an `index.md` markdown copy and an alternate link, that its `llms.txt` entry points at the copy, and that its verse pages have canonical links and JSON-LD. Check the skill's list of current AI tools (llms.txt, robots, markdown copies, IndexNow) still matches the build, and fix any gap in `scripts/build-site.py` or `scripts/check_site_ai.py` before committing. If the skill's research log needs a dated note, add it. Then run the `seo` agent (a subagent) on the same build, after the ai-discovery review has finished, to check the new note for traditional search: a unique title and description, one `<h1>`, a canonical link, alt text on images, and working internal links. It may fix titles and descriptions in `scripts/build-site.py` only; it never edits the note and never commits. Fold its fixes into the same `scripts/` commit described below. Then remove `site/` (build output is git-ignored and never pushed).
 8. **Commit and push.** Stage ONLY the changed `Bible/` and `Daily/` files and the `Resources/Scripture-Images/` changes from step 6 (never `.obsidian/` editor noise). Confirm `git config --local --get user.signingkey` returns a key and `git config --local --get commit.gpgsign` returns `true`. Commits MUST be GPG-signed with message `vault: harvest verse pages for <YYYY-MM-DD>`. Set `GPG_TTY`, commit explicitly with `-S`, verify with `git log -1 --show-signature`, then `git push origin main` (push auto-triggers the Pages deploy). Do not source a shell profile or modify global Git/GPG configuration: this repository's local `gpg.program` wrapper and signing key are authoritative. If step 7 changed any file under `scripts/` or `.opencode/`, commit those in a separate signed commit (message `site: ai-discovery and SEO update for <YYYY-MM-DD>`) and stage only those files.
 9. **Post to Patreon (browser).** The Patreon API is read-only, so this is done in the user's default browser, which is already signed in. Do this only after step 8's push succeeded. Branch on the platform:
+   - **All platforms:** `--no-patreon` in `$ARGUMENTS` skips this step. Remove that flag before resolving the note in step 1. Never publish until title, formatted body, tags, free audience and the note's publish date have each been re-read and confirmed. After Publish, confirm the post on the creator page and report its URL; never retry Publish blindly.
+   - **Linux:** skip the Windows and AppleScript flows. Build with
+     `python3 scripts/patreon_post.py "<note path>" --out "/tmp/opencode/patreon-<YYYY-MM-DD>" --copy`.
+     It writes `post.json` and `post.html`, prints JSON (`title`, `date`,
+     `tags`, `site_url`), and copies only the formatted body as `text/html`.
+     Clipboard support requires `wl-copy` (package `wl-clipboard`) in a
+     Wayland desktop session or `xclip` in an X11 session. Do not install
+     packages or change the desktop environment without permission. If the
+     clipboard is unavailable, the files are still saved: open `post.html`
+     with `xdg-open` and copy just the rendered body, excluding its title and
+     tags. Do not paste raw HTML or the full verse dumps from the callouts.
+     Load the `browser` skill before using browser tools. Use an available
+     browser connection to the user's signed-in browser; `xdg-open` alone
+     does not give browser tools control of that session. If no controllable
+     signed-in session is available, stop and report the prepared files for
+     manual posting; do not use AppleScript, guess coordinates, or claim
+     the post was published.
+     Open `https://www.patreon.com/c/ManOfGodSA` (with browser tools, or
+     `xdg-open` for manual posting), inspect the actual page controls, and
+     click "Create" / "Make a post" / "Make your first post" as shown.
+     Fill title from `title`, paste the rich-text body with Ctrl+V, add the
+     `tags`, leave the default free audience, and set publish date to `date`.
+     Confirm the body retained its linked reading headings, quoted
+     reflections and site link, without including the review title or tags.
+     If any field, rich-text paste, or requested date cannot be confirmed,
+     stop before publishing and report it. Otherwise publish once, confirm
+     the resulting post on the creator page, and report its URL.
    - **Windows:** skip the AppleScript flow below, but keep the Patreon intent
      gate (`--no-patreon` in `$ARGUMENTS` skips this step). Run the Patreon
      build exactly as the `patreon-post` command does:
