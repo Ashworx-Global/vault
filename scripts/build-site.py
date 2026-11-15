@@ -966,7 +966,9 @@ def main() -> int:
           f'<h1 class="font-display text-3xl font-black mb-2">Daily notes</h1><p class="mb-6" style="color: #a8a29e;">Newest first. Open any note to read reflections, verse inserts, and harvested verse pages.</p>'
           f'<input id="filter" placeholder="Filter notes…" class="input mb-6">'
           f'<div class="grid gap-4 md:grid-cols-2">{"".join(card_daily(p) for p in daily)}</div>')
-    for p in daily:
+    for i, p in enumerate(daily):
+        prev_url = f"{base}/daily/{daily[i-1]['slug']}/" if i > 0 else f"{base}/daily/"
+        next_url = f"{base}/daily/{daily[i+1]['slug']}/" if i + 1 < len(daily) else f"{base}/daily/"
         html_body = render_blocks(p["body"], linkmap, base, {b for b in books}, daily_headings=True)
         harvested = sorted({m.group(1).strip() for m in WIKILINK_RE.finditer(p["body"]) if " v " in m.group(1)})
         links = []
@@ -979,7 +981,9 @@ def main() -> int:
                      f'<div class="mb-6">{tag_pills(p["fm"].get("tags", []))}</div>'
                      f'<div class="prose-custom daily-note">{html_body}</div>'
                      + (f'<h2 class="font-display text-2xl font-bold mt-10 mb-3">Harvested verse pages</h2><div>{"".join(links)}</div>' if links and "Harvested verse pages" not in html_body else "")
-                     + f'<p class="mt-10 text-sm"><a class="text-gold hover:underline" href="{base}/daily/">← All daily notes</a></p>')
+                     + f'<p class="mt-10 text-sm"><a class="text-gold hover:underline" href="{base}/daily/">← All daily notes</a></p>'
+                      + f'<div class="mt-10 flex flex-wrap items-center justify-between gap-3"><a class="text-gold hover:underline" href="{prev_url}">← Previous note</a><a class="text-gold hover:underline" href="{next_url}">Next note →</a></div>'
+                      + '<div class="mt-6 p-4 rounded border border-gold/30"><p class="font-display text-gold mb-1">Enjoying these notes?</p><p class="text-sm" style="color:#a8a29e;">Support the work on <a class="text-gold hover:underline" href="https://www.patreon.com/manofgod" target="_blank" rel="noopener">Patreon</a> or <a class="text-gold hover:underline" href="https://manofgod.online/blog/">read the blog</a>.</p></div>')
         tags = p["fm"].get("tags", [])
         topics = [t.replace("-", " ") for t in tags[:4]]
         topics = [t[:1].upper() + t[1:] for t in topics]
