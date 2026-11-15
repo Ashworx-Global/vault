@@ -259,10 +259,11 @@ def main():
         # The creator UI opens a menu from this stable data attribute. The
         # Post item is rendered only after opening that menu.
         create = first_visible(driver, [
-            (By.CSS_SELECTOR, "button[data-tag='create-content-button'][aria-label='Create post']"),
             (By.CSS_SELECTOR, "button[data-tag='create-content-button']"),
-            (By.XPATH, "//button[contains(@aria-label, 'Create') or contains(normalize-space(), '+')]"),
-            (By.XPATH, "//*[self::button or self::a][contains(normalize-space(), 'Create post')]"),
+            (By.XPATH, "//*[contains(normalize-space(), 'Create on Patreon')]"),
+            (By.XPATH, "//*[@data-tag='IconPlus']/ancestor::button[1]"),
+            (By.XPATH, "//*[@data-tag='IconPlus']/ancestor::*[self::button or self::a][1]"),
+            (By.XPATH, "//*[self::button or self::a][contains(@aria-label, 'Create')]"),
         ])
         driver.execute_script("arguments[0].click();", create)
         failed_control = "Post menu item"
