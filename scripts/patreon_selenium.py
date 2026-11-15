@@ -261,6 +261,8 @@ def main():
         create = first_visible(driver, [
             (By.CSS_SELECTOR, "button[data-tag='create-content-button'][aria-label='Create post']"),
             (By.CSS_SELECTOR, "button[data-tag='create-content-button']"),
+            (By.XPATH, "//button[contains(@aria-label, 'Create') or contains(normalize-space(), '+')]"),
+            (By.XPATH, "//*[self::button or self::a][contains(normalize-space(), 'Create post')]"),
         ])
         driver.execute_script("arguments[0].click();", create)
         failed_control = "Post menu item"
