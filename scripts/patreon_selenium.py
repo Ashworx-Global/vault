@@ -205,7 +205,11 @@ def main():
         if ff_bin:
             options.binary_location = ff_bin
         try:
-            driver = webdriver.Firefox(options=options)
+            from selenium.webdriver.firefox.service import Service as FirefoxService
+            import shutil
+            gd = shutil.which("geckodriver")
+            service = FirefoxService(executable_path=gd) if gd else None
+            driver = webdriver.Firefox(options=options, service=service)
         except Exception as error:
             sys.exit(f"Could not launch Firefox: {error}")
 
