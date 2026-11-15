@@ -69,8 +69,7 @@ def inline(line: str) -> str:
 def paragraphs(lines):
     """Group consecutive non-blank lines into <p> blocks (line breaks kept).
 
-    A markdown heading line (``#### Daily Prayer``) ends the current block and
-    becomes its own <h4>, so it never shows up as literal ``####`` text.
+    Markdown section headings become H1s for the Patreon post.
     """
     blocks, cur = [], []
     for ln in lines + [""]:
@@ -79,7 +78,7 @@ def paragraphs(lines):
             if cur:
                 blocks.append("<p>" + "<br>".join(inline(c) for c in cur) + "</p>")
                 cur = []
-            blocks.append(f"<h4>{inline(heading.group(1))}</h4>")
+            blocks.append(f"<h1>{inline(heading.group(1))}</h1>")
         elif ln.strip():
             cur.append(ln.strip())
         elif cur:
@@ -97,7 +96,21 @@ def build_body(body: str) -> str:
     for ln in body.splitlines():
         m = re.match(r">\s*\[!bible\][+-]?\s*\[([^\]]+)\]\(([^)\s]+)\)", ln)
         if m:
-            headings.append(m.groups())
+            title, url = m.groups()
+            # The note often repeats the reading just before its callout.
+            # Keep that label (including its Unicode range dash), but emit
+            # only one linked heading rather than two adjacent headings.
+            previous = parts[-1]
+            last = len(previous) - 1
+            while last >= 0 and not previous[last].strip():
+                last -= 1
+            if last >= 0:
+                heading = re.fullmatch(r"#{1,6}\s+(.+)", previous[last].strip())
+                reference = re.match(r"(?:[1-3]\s+)?[A-Za-z ]+\s+\d+:\d+", title)
+                if heading and reference and heading.group(1).startswith(reference.group()):
+                    title = heading.group(1)
+                    del previous[last:]
+            headings.append((title, url))
             parts.append([])
             in_callout = True
             continue
@@ -114,10 +127,23 @@ def build_body(body: str) -> str:
     out = paragraphs(parts[0])
     for head, lines in zip(headings[1:], parts[1:]):
         title, url = head
-        label = re.sub(r"\s*-\s*[\w-]+$", "", title)         # drop " - WEB-OFFLINE"
-        out.append(f'<h3><a href="{html.escape(url)}">{html.escape(label)}</a></h3>')
+        label = re.sub(r"\s+-\s+[\w-]+$", "", title)         # drop " - WEB-OFFLINE"
+        out.append(f'<h1><a href="{html.escape(url)}">{html.escape(label)}</a></h1>')
         out.extend(paragraphs(lines))
     return "\n".join(out)
+
+
+def render_preview(title: str, post_html: str, tags: list[str]) -> str:
+    """Declare UTF-8 so local-file previews preserve dashes and apostrophes."""
+    content = f"<h1>{html.escape(title)}</h1>\n{post_html}"
+    if tags:
+        content += f"\n<p><strong>Tags:</strong> {html.escape(', '.join(tags))}</p>"
+    return (
+        '<!doctype html>\n<html lang="en">\n<head>\n'
+        '<meta charset="utf-8">\n'
+        f'<title>{html.escape(title)}</title>\n'
+        '</head>\n<body>\n' + content + '\n</body>\n</html>\n'
+    )
 
 
 def copy_html(doc: str):
@@ -168,9 +194,7 @@ def main():
 
     out = Path(args.out)
     out.mkdir(parents=True, exist_ok=True)
-    preview_html = f"<h1>{html.escape(title)}</h1>\n{post_html}"
-    if tags:
-        preview_html += f"\n<p><strong>Tags:</strong> {html.escape(', '.join(tags))}</p>"
+    preview_html = render_preview(title, post_html, tags)
     (out / "post.html").write_text(preview_html, encoding="utf-8")
     (out / "post.json").write_text(json.dumps(
         {"title": title, "date": date, "tags": tags, "site_url": site_url}, indent=2),

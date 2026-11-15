@@ -1,10 +1,57 @@
-"""Desktop clipboard routing; no real clipboard or browser is touched."""
+"""Patreon formatting and desktop clipboard routing; no real clipboard touched."""
 import os
 import subprocess
 import unittest
 from unittest.mock import patch
 
 import patreon_post
+
+
+class FormattingTests(unittest.TestCase):
+    def test_unicode_preview_declares_utf8(self):
+        preview = patreon_post.render_preview(
+            "What’s Inside", "<h1>Mark 7:14–8:10</h1>", ["heart"])
+        self.assertIn('<meta charset="utf-8">', preview)
+        self.assertIn("What’s Inside", preview)
+        self.assertIn("Mark 7:14–8:10", preview)
+        self.assertIn("<!doctype html>", preview)
+
+    def test_sections_are_h1_and_reading_is_linked_once(self):
+        body = """## Daily prayer
+Please guide us.
+
+## Mark 7:14–8:10
+> [!bible]- [Mark 7:14-8:10 - WEB-OFFLINE](https://example.com/reading)
+> [[Mark 7#^14|14]]. Verse dump.
+ %% #Mark %%>
+ [[Mark]] [[Mark 7]]
+
+Our reflection.
+## Daily question
+What is happening “in” you?
+"""
+        result = patreon_post.build_body(body)
+        self.assertIn("<h1>Daily prayer</h1>", result)
+        self.assertIn("<h1>Daily question</h1>", result)
+        self.assertIn('<h1><a href="https://example.com/reading">Mark 7:14–8:10</a></h1>', result)
+        self.assertEqual(result.count("Mark 7:14"), 1)
+        self.assertNotIn("Verse dump", result)
+        self.assertNotIn("<h3>", result)
+        self.assertNotIn("<h4>", result)
+        self.assertIn("Our reflection.", result)
+
+    def test_callout_without_preceding_heading_is_h1(self):
+        result = patreon_post.build_body(
+            "> [!bible]- [Mark 8:1-10 - WEB-OFFLINE](https://example.com/reading)\n"
+            " %% #Mark %%>\nReflection.")
+        self.assertIn('<h1><a href="https://example.com/reading">Mark 8:1-10</a></h1>', result)
+
+    def test_source_heading_keeps_ascii_verse_range(self):
+        result = patreon_post.build_body(
+            "## Mark 8:1-10\n"
+            "> [!bible]- [Mark 8:1-10 - WEB-OFFLINE](https://example.com/reading)\n"
+            " %% #Mark %%>")
+        self.assertIn('>Mark 8:1-10</a></h1>', result)
 
 
 class ClipboardTests(unittest.TestCase):
