@@ -21,10 +21,14 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import subprocess
 import sys
 import time
 from pathlib import Path
+
+PATREON_USER = os.environ.get("PATREON_USER", "")
+PATREON_PASS = os.environ.get("PATREON_PASS", "")
 
 try:
     from selenium import webdriver
@@ -147,22 +151,31 @@ def set_publish_date(driver, date):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
-    parser.add_argument("note", type=Path)
+    parser.add_argument("note", type=Path, nargs="?")
     parser.add_argument("--publish", action="store_true", help="publish after every field has been verified")
+    parser.add_argument("--test-login", action="store_true", help="validate Patreon credentials from env and test login without posting")
     args = parser.parse_args()
 
     if selenium_import_error:
         sys.exit("Selenium is required. Install it with: python3 -m pip install --user selenium")
 
-    repo = Path(__file__).resolve().parent.parent
-    output = Path("/tmp") / f"patreon-{args.note.stem[:10]}"
-    subprocess.run(
-        [sys.executable, "scripts/patreon_post.py", str(args.note), "--out", str(output)],
-        cwd=repo,
-        check=True,
-    )
-    metadata = json.loads((output / "post.json").read_text(encoding="utf-8"))
-    body = (output / "post.html").read_text(encoding="utf-8")
+    if args.test_login:
+        if not PATREON_USER or not PATREON_PASS:
+            sys.exit("Set PATREON_USER and PATREON_PASS environment variables first.")
+        print("PATREON_USER and PATREON_PASS are set (values not shown).")
+
+    if not args.test_login:
+        if args.note is None:
+            sys.exit("A note path is required unless --test-login is used.")
+        repo = Path(__file__).resolve().parent.parent
+        output = Path("/tmp") / f"patreon-{args.note.stem[:10]}"
+        subprocess.run(
+            [sys.executable, "scripts/patreon_post.py", str(args.note), "--out", str(output)],
+            cwd=repo,
+            check=True,
+        )
+        metadata = json.loads((output / "post.json").read_text(encoding="utf-8"))
+        body = (output / "post.html").read_text(encoding="utf-8")
 
     if not Path(EDGE_BINARY).is_file():
         sys.exit(f"Microsoft Edge is not installed at {EDGE_BINARY}")
@@ -179,6 +192,27 @@ def main():
         driver = webdriver.Edge(options=options)
     except Exception as error:
         sys.exit(f"Could not launch Edge with its Patreon profile. Details: {error}")
+
+    driver.get("https://www.patreon.com/login")
+    print(f"Opened Patreon login: {driver.title} ({driver.current_url})")
+    if args.test_login:
+        # If already authenticated, Patreon redirects away from /login.
+        if "login" in driver.current_url.lower():
+            try:
+                email = driver.find_element(By.CSS_SELECTOR, "input[type='email'], input[name='email']")
+                email.clear(); email.send_keys(PATREON_USER)
+                pw = driver.find_element(By.CSS_SELECTOR, "input[type='password'], input[name='password']")
+                pw.clear(); pw.send_keys(PATREON_PASS)
+                pw.send_keys(Keys.ENTER)
+                time.sleep(5)
+            except Exception as e:
+                print(f"Could not fill login form: {e}")
+        if "login" in driver.current_url.lower():
+            print("LOGIN FAILED: still on login page.")
+        else:
+            print("LOGIN OK: authenticated (redirected away from login).")
+        driver.quit()
+        sys.exit(0)
 
     driver.get(CREATOR_URL)
     print(f"Opened Patreon: {driver.title} ({driver.current_url})")
