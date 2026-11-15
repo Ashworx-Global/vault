@@ -1253,12 +1253,16 @@ def main() -> int:
           '<script>(function(){var q=document.getElementById("filter");'
           'q.addEventListener("input",function(){var s=q.value.toLowerCase();document.querySelectorAll("#main article[data-search]").forEach(function(c){'
           'c.style.display=c.dataset.search.indexOf(s)>-1?"":"none"})})})();</script>')
-    for p in posts:
+    for i, p in enumerate(posts):
+        prev_url = f"{base}/blog/{posts[i-1]['slug']}/" if i > 0 else f"{base}/blog/"
+        next_url = f"{base}/blog/{posts[i+1]['slug']}/" if i + 1 < len(posts) else f"{base}/blog/"
         body_html = (f'<p class="text-sm"><a class="text-gold hover:underline" href="{base}/blog/">Blog</a> / {esc(p["date"])}</p>'
                      f'<h1 class="font-display text-3xl md:text-4xl font-black mt-1 mb-3">{esc(p["title"])}</h1>'
                      f'<div class="mb-6">{tag_pills(p["tags"])}</div>'
                      f'<div class="prose-custom">{render_blocks(p["body"], linkmap, base, books)}</div>'
-                     f'<p class="mt-10 text-sm"><a class="text-gold hover:underline" href="{base}/blog/">← All articles</a></p>')
+                     f'<p class="mt-10 text-sm"><a class="text-gold hover:underline" href="{base}/blog/">← All articles</a></p>'
+                      + f'<div class="mt-10 flex flex-wrap items-center justify-between gap-3"><a class="text-gold hover:underline" href="{prev_url}">← Previous post</a><a class="text-gold hover:underline" href="{next_url}">Next post →</a></div>'
+                      + '<div class="mt-6 p-4 rounded border border-gold/30"><p class="font-display text-gold mb-1">Enjoying this?</p><p class="text-sm" style="color:#a8a29e;">Support the work on <a class="text-gold hover:underline" href="https://www.patreon.com/manofgod" target="_blank" rel="noopener">Patreon</a>.</p></div>')
         write_md(f"blog/{p['slug']}", p["title"], p["desc"], p["date"], p["tags"], p["body"])
         write(f"blog/{p['slug']}", p["title"], p["desc"] or p["title"], body_html, article={"date": p["date"], "tags": p["tags"]})
 
