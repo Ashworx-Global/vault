@@ -219,12 +219,26 @@ def main():
         # If already authenticated, Patreon redirects away from /login.
         if "login" in driver.current_url.lower():
             try:
-                email = driver.find_element(By.CSS_SELECTOR, "input[type='email'], input[name='email']")
+                # Step 1: email
+                email = WebDriverWait(driver, 20).until(
+                    conditions.visibility_of_element_located((By.CSS_SELECTOR, "input[type='email'], input[name='email'], input[name='username']"))
+                )
+                driver.execute_script("arguments[0].scrollIntoView({block:'center'});", email)
                 email.clear(); email.send_keys(PATREON_USER)
-                pw = driver.find_element(By.CSS_SELECTOR, "input[type='password'], input[name='password']")
+                # submit email step
+                try:
+                    email.send_keys(Keys.ENTER)
+                except Exception:
+                    pass
+                time.sleep(3)
+                # Step 2: password (may be same page or next)
+                pw = WebDriverWait(driver, 20).until(
+                    conditions.visibility_of_element_located((By.CSS_SELECTOR, "input[type='password'], input[name='password'], input[name='current-password']"))
+                )
+                driver.execute_script("arguments[0].scrollIntoView({block:'center'});", pw)
                 pw.clear(); pw.send_keys(PATREON_PASS)
                 pw.send_keys(Keys.ENTER)
-                time.sleep(5)
+                time.sleep(6)
             except Exception as e:
                 print(f"Could not fill login form: {e}")
         if "login" in driver.current_url.lower():
