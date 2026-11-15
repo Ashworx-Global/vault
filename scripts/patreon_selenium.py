@@ -154,6 +154,7 @@ def main():
     parser.add_argument("note", type=Path, nargs="?")
     parser.add_argument("--publish", action="store_true", help="publish after every field has been verified")
     parser.add_argument("--test-login", action="store_true", help="validate Patreon credentials from env and test login without posting")
+    parser.add_argument("--browser", choices=["edge", "firefox"], default="edge", help="browser to use (default: edge)")
     args = parser.parse_args()
 
     if selenium_import_error:
@@ -177,21 +178,36 @@ def main():
         metadata = json.loads((output / "post.json").read_text(encoding="utf-8"))
         body = (output / "post.html").read_text(encoding="utf-8")
 
-    if not Path(EDGE_BINARY).is_file():
-        sys.exit(f"Microsoft Edge is not installed at {EDGE_BINARY}")
-
-    PROFILE_DIR.mkdir(parents=True, exist_ok=True)
-    options = webdriver.EdgeOptions()
-    options.binary_location = EDGE_BINARY
-    # Chromium blocks DevTools access to its default profile. A separate,
-    # persistent profile keeps the Patreon sign-in without weakening Edge.
-    options.add_argument(f"--user-data-dir={PROFILE_DIR}")
-    options.add_argument("--no-first-run")
-    options.add_argument("--no-default-browser-check")
-    try:
-        driver = webdriver.Edge(options=options)
-    except Exception as error:
-        sys.exit(f"Could not launch Edge with its Patreon profile. Details: {error}")
+    if args.browser == "edge":
+        if not Path(EDGE_BINARY).is_file():
+            sys.exit(f"Microsoft Edge is not installed at {EDGE_BINARY}")
+        PROFILE_DIR.mkdir(parents=True, exist_ok=True)
+        options = webdriver.EdgeOptions()
+        options.binary_location = EDGE_BINARY
+        options.add_argument(f"--user-data-dir={PROFILE_DIR}")
+        options.add_argument("--no-first-run")
+        options.add_argument("--no-default-browser-check")
+        try:
+            driver = webdriver.Edge(options=options)
+        except Exception as error:
+            sys.exit(f"Could not launch Edge: {error}")
+    else:
+        try:
+            from selenium.webdriver.firefox.options import Options as FirefoxOptions
+            from selenium.webdriver.firefox.service import Service as FirefoxService
+        except Exception as error:
+            sys.exit(f"Firefox support unavailable: {error}")
+        ff_profile = Path.home() / ".mozilla" / "firefox" / "PatreonSelenium"
+        ff_profile.mkdir(parents=True, exist_ok=True)
+        options = FirefoxOptions()
+        # Let Selenium find firefox on PATH; override only if FIREFOX_BINARY env set.
+        ff_bin = os.environ.get("FIREFOX_BINARY")
+        if ff_bin:
+            options.binary_location = ff_bin
+        try:
+            driver = webdriver.Firefox(options=options)
+        except Exception as error:
+            sys.exit(f"Could not launch Firefox: {error}")
 
     driver.get("https://www.patreon.com/login")
     print(f"Opened Patreon login: {driver.title} ({driver.current_url})")
