@@ -9,6 +9,8 @@ tags: [health, data-ownership, open-source, garmin, sleep]
 
 I've started building a health app, and it's intentionally simple in its first couple of rounds. The point isn't to ship a finished product — it's to understand the moving parts and learn how to craft this kind of application.
 
+![HealthMonitor in action](health_monitor_2026-11-15_10-09-31.png)
+
 The project lives on GitHub: [Ashworx-Global/HealthMonitor](https://github.com/Ashworx-Global/HealthMonitor).
 
 ## The idea
