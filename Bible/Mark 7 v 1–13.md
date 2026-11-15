@@ -12,7 +12,7 @@ cssclasses:
   - verse
 ---
 
-[[2027-11-08 (Traditions and a Priority Problem)]] · [[Mark 6 v 45–56]] · [[1 Kings 11 v 1–8]] · [[Proverbs 3 v 1–5]]
+[[2026-11-08 (Traditions and a Priority Problem)]] · [[Mark 6 v 45–56]] · [[1 Kings 11 v 1–8]] · [[Proverbs 3 v 1–5]]
 
 **1** Then the Pharisees and some of the scribes gathered together to him, having come from Jerusalem.
 **2** Now when they saw some of his disciples eating bread with defiled, that is unwashed, hands, they found fault.

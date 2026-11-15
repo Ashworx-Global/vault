@@ -12,7 +12,7 @@ cssclasses:
   - verse
 ---
 
-[[2027-11-08 (Traditions and a Priority Problem)]] · [[Proverbs 2 v 16–22]] · [[Mark 6 v 45–56]] · [[1 Kings 11 v 1–8]]
+[[2026-11-08 (Traditions and a Priority Problem)]] · [[Proverbs 2 v 16–22]] · [[Mark 6 v 45–56]] · [[1 Kings 11 v 1–8]]
 
 **1** My son, don’t forget my teaching; but let your heart keep my commandments:
 **2** for they will add to you length of days, years of life, and peace.

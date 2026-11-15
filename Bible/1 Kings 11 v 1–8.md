@@ -12,7 +12,7 @@ cssclasses:
   - verse
 ---
 
-[[2027-11-08 (Traditions and a Priority Problem)]] · [[1 Kings 10 v 1–29]] · [[Proverbs 3 v 1–5]] · [[Mark 7 v 1–13]]
+[[2026-11-08 (Traditions and a Priority Problem)]] · [[1 Kings 10 v 1–29]] · [[Proverbs 3 v 1–5]] · [[Mark 7 v 1–13]]
 
 **1** Now king Solomon loved many foreign women, together with the daughter of Pharaoh, women of the Moabites, Ammonites, Edomites, Sidonians, and Hittites;
 **2** of the nations concerning which Yahweh said to the children of Israel, “You shall not go among them, neither shall they come among you; for surely they will turn away your heart after their gods.” Solomon joined to these in love.
