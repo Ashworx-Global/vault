@@ -238,7 +238,11 @@ def main():
                 driver.execute_script("arguments[0].scrollIntoView({block:'center'});", pw)
                 pw.clear(); pw.send_keys(PATREON_PASS)
                 pw.send_keys(Keys.ENTER)
-                time.sleep(6)
+                # Wait for authentication to complete before navigating away.
+                for _ in range(30):
+                    time.sleep(1)
+                    if "login" not in driver.current_url.lower():
+                        break
             except Exception as e:
                 print(f"Could not fill login form: {e}")
         if "login" in driver.current_url.lower():
