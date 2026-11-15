@@ -138,3 +138,15 @@ site-growth agent writes here after each research pass.
 - **SEO research — Google sitemap/Search Console:** https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap — submit through Search Console to monitor access and processing; source located in official search results. No submission performed; owner action.
 - **SEO research — Bing:** https://www.bing.com/webmasters/help/webmaster-guidelines-30fba23a — fetched, but response exposed only the documentation shell. No new recommendation adopted or inferred.
 - **SEO research — web.dev speed:** https://web.dev/articles/browser-level-image-lazy-loading — lazy-load offscreen images, not initial-viewport/LCP images; explicit eager loading is valid. Adopted as review criteria; no code change. Empty-src lightbox placeholders are not scripture-image loading failures.
+
+## 2026-11-15 — review for 2026-11-09 (Fear Not What’s Outside but Inside)
+
+- **Health:** 356 content pages (48 daily, 308 verse), up from 350; checker passed for 985 pages and 49 content URLs. Resources count matches all 61 image files.
+- **New note:** daily HTML has an alternate markdown link and an `index.md` copy; llms.txt links the copy. All five new verse pages have self-canonical links and Article JSON-LD, with resolving related-page links.
+- **Implementation review:** llms.txt, llms-full.txt, robots, markdown copies and IndexNow still match the skill. Named search and training crawlers remain allowed; the key is served at the domain root and deployment submits the sitemap. No build/checker change or new external AI research was needed. The author's November 8 date correction was included in the reviewed build.
+
+### SEO — scoped traditional search review, 2026-11-15
+
+- **SEO health:** `python` is unavailable; rebuilt with `python3`, then ran the checker sequentially: 356 content pages built; 985 HTML pages checked, 49 content URLs, all passed.
+- **SEO page checks:** November 9 daily and all five new verse pages have titles and descriptions unique across 985 indexable pages, exactly one topic-matching h1, correct HTTPS self-canonical, nonempty image alt text, eager logo loading and resolving internal page links. Verse titles are 53–57 characters; daily title is 47; descriptions are 130–145. No template fix required.
+- **SEO research:** Google recommends concise, descriptive unique titles and a clear main heading, with no fixed title character limit. Source: https://developers.google.com/search/docs/appearance/title-link . **Adopted:** review criteria only; retained the clear 47-character daily title rather than padding it. No build or author-content edits.
