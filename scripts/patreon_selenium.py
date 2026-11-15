@@ -267,7 +267,7 @@ def main():
         ])
         driver.execute_script("arguments[0].click();", create)
         failed_control = "Post menu item"
-        click_visible(driver, (By.XPATH, "//*[normalize-space()='Post']"))
+        click_visible(driver, (By.XPATH, "//*[@role='menuitem' and normalize-space()='Post'] | //*[@data-tag='IconPost']/ancestor::*[self::button or @role='menuitem'][1] | //*[@data-tag='IconPost']/ancestor::button[1]"))
     except RuntimeError:
         screenshot = Path("/tmp/patreon-selenium-state.png")
         driver.save_screenshot(str(screenshot))
