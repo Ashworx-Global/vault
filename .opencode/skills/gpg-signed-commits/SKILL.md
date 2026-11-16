@@ -12,10 +12,12 @@ fallback. Never create an unsigned commit.
 ## Preconditions
 
 1. Load the passphrase variable if missing (do NOT print its value).
-   NOTE: it must be single-quoted in shell profile so `$` is literal:
-   `export GPG='...'` not `export GPG="..."`.
+   It is stored in the private file `~/.gpg-passphrase` (mode 600), which the
+   wrapper reads automatically. To set or change it interactively, run
+   `set-gpg-passphrase.sh` from this folder — it prompts without echoing.
+   `~/.profile` exports `$GPG` from that file on login shells:
    ```sh
-   [ -n "${GPG:-}" ] || source ~/.zshrc
+   [ -n "${GPG:-}" ] || . ~/.profile
    ```
    If still empty, do NOT abort — the wrapper falls back to gpg-agent.
 2. Set TTY for pinentry fallback:
@@ -30,13 +32,13 @@ WRAPPER="$PWD/.opencode/skills/gpg-signed-commits/gpg-with-passphrase.sh"
 chmod +x "$WRAPPER"
 
 # Global defaults so every project signs by default
-git config --global user.signingkey 8CDCD577355815C7
+git config --global user.signingkey ED19DB6634F43050
 git config --global commit.gpgsign true
 git config --global gpg.format openpgp
 git config --global gpg.program "$WRAPPER"
 
 # Per-repo enforcement (run inside project)
-git config user.signingkey 8CDCD577355815C7
+git config user.signingkey ED19DB6634F43050
 git config commit.gpgsign true
 git config gpg.format openpgp
 git config gpg.program "$WRAPPER"

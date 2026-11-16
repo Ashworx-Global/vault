@@ -7,6 +7,13 @@
 # Used as: git config gpg.program /path/to/gpg-with-passphrase.sh
 set -eu
 
+# Load the passphrase from a private file when it is not already in the
+# environment (unattended runs do not source a shell profile).
+if [ -z "${GPG:-}" ] && [ -r "$HOME/.gpg-passphrase" ]; then
+  GPG="$(cat "$HOME/.gpg-passphrase")"
+  export GPG
+fi
+
 # Extract signing key: last arg (git calls: gpg --status-fd=2 -bsau KEY)
 KEY=""
 for a in "$@"; do KEY="$a"; done
