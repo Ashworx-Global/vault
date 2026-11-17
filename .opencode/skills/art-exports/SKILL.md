@@ -14,7 +14,7 @@ copies plain images across, then watermarks each result into `Art/<project>/expo
 1. List what's there: `ls Art/*/source/`. Tell Lee which projects have sources and
    which have none (those are skipped, not errors).
 2. Check prerequisites first, they fail quietly:
-   - `which magick` (ImageMagick). Missing means every PSD fails.
+   - `which convert` (ImageMagick 6). This is the command `art_processor.py` calls. On ImageMagick 7 it is `magick`; check with `which magick || which convert`. Missing means every PSD fails.
    - `python3 -c "import PIL"`. Missing means the watermark step is **silently
      skipped** and exports go out unmarked. If it's missing, stop and tell Lee
      (`pip install Pillow` from PyPI; company dependency rules apply) rather
