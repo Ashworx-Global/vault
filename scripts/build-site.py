@@ -443,7 +443,13 @@ def render_inline(text: str, linkmap: dict, base: str, books: set[str]) -> str:
         inner = m.group(1) if m.group(1) is not None else m.group(2)
         return f"<em>{inner}</em>"
 
-    text = ITALIC_RE.sub(_it, text)
+    # Apply italics only outside HTML tags so underscores in attributes such as
+    # image file names (e.g. health_monitor_...png) are not turned into <em>.
+    _parts = re.split(r"(<[^>]+>)", text)
+    text = "".join(
+        part if (part.startswith("<") and part.endswith(">")) else ITALIC_RE.sub(_it, part)
+        for part in _parts
+    )
     for i, c in enumerate(codes):
         text = text.replace(f"\ue000{i}\ue001", c)
     return text
@@ -986,6 +992,8 @@ def main() -> int:
                       + '<div class="mt-6 p-4 rounded border border-gold/30"><p class="font-display text-gold mb-1">Enjoying these notes?</p><p class="text-sm" style="color:#a8a29e;">Support the work on <a class="text-gold hover:underline" href="https://www.patreon.com/manofgod" target="_blank" rel="noopener">Patreon</a> or <a class="text-gold hover:underline" href="https://manofgod.online/blog/">read the blog</a>.</p></div>')
         tags = p["fm"].get("tags", [])
         topics = [t.replace("-", " ") for t in tags[:4]]
+        # Don't repeat the note's own title as a topic (e.g. "Exclusivity: Exclusivity").
+        topics = [t for t in topics if t.lower() != p["title"].lower()]
         topics = [t[:1].upper() + t[1:] for t in topics]
         # Title: the note's own title plus its first topic when it fits the ~60 character search-result limit.
         # The H1 and the source file are unchanged; the template uses a shorter site suffix for long titles.

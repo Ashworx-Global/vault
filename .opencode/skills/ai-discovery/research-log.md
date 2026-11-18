@@ -157,6 +157,12 @@ site-growth agent writes here after each research pass.
 - **New note:** daily HTML has an `index.md` markdown copy, an alternate markdown link and a `describedby` link; llms.txt points at the copy. `llms-full.txt` contains the note text with no leftover wikilink syntax. All five new verse pages have self-canonical links and Article JSON-LD.
 - **Implementation review:** llms.txt, llms-full.txt, robots, markdown copies and IndexNow still match the skill. Named search and training crawlers remain allowed; the key is served at the domain root and deployment submits the sitemap. No build/checker change or new external research was needed.
 
+## 2026-11-18 — ai-discovery review for 2026-11-12 (Exclusivity)
+
+- **Health:** built 376 content pages (51 daily, 325 verse, 1 articles), up from 369; checker passed for 1033 pages and 53 content URLs. Resources count matches all 67 scripture image files.
+- **New note:** daily HTML has an `index.md` markdown copy, an alternate markdown link and a `describedby` link; llms.txt points at the copy. `llms-full.txt` contains the note text with no leftover wikilink syntax. All six new verse pages have self-canonical links and Article JSON-LD.
+- **Implementation review:** llms.txt, llms-full.txt, robots, markdown copies and IndexNow still match the skill. Named search and training crawlers remain allowed; the key is served at the domain root and deployment submits the sitemap. No build/checker change or new external research was needed.
+
 ### SEO — traditional search review, 2026-11-17 (review of 2026-11-11 note)
 
 - **Scope:** review-only on the build already produced by `python3 scripts/build-site.py --base= --out=site/dist` (369 content pages; 1015 HTML pages checked). Did not rebuild or remove `site/`; parent workflow owns it. `python3 scripts/check_site_ai.py` passed unchanged (1015 pages, 52 content URLs, AI crawlers allowed).
@@ -169,3 +175,23 @@ site-growth agent writes here after each research pass.
 - **SEO research — Bing:** https://www.bing.com/webmasters/help/webmaster-guidelines-30fba23a — official page fetched via search result; consolidate duplicate URLs, consistent canonicalization, standard `<a href>` links with relevant anchor text/alt attributes, logical accessible structure, sitemap submission. **Adopted:** canonical and alt-text checks; no code change.
 - **SEO research — web.dev speed:** https://web.dev/articles/browser-level-image-lazy-loading — eager-load first-viewport/LCP images (explicit `eager` is valid), lazy-load offscreen images, add width/height to limit CLS. **Adopted:** review criteria; logo `loading="eager"` is correct, empty-src lightbox placeholder is not a loading failure. 65 scripture PNGs exceed 500 KB (largest ~12.5 MB, `philippians-413-widescreen.png`) — reported; image files not changed.
 - **SEO outcome:** no change to `scripts/build-site.py` or `scripts/check_site_ai.py` this run — the six reviewed new pages are already clean, and fixes for the reported defects need author/owner decisions. Files changed this run: this research log only (SEO section appended under a new heading).
+
+## 2026-11-18 — SEO review (seo agent)
+
+- **Title links best practices:** every page needs a distinct, descriptive `<title>`; avoid
+  repeated/boilerplate text and keyword stuffing; brand concisely at end; main title clear in
+  first `<h1>`. Source: https://developers.google.com/search/docs/appearance/title-link .
+  Adopted (build): fixed daily-note title template that stuttered the note title as its own topic
+  ("Exclusivity: Exclusivity"); now dedupes the topic against the title and adds the next topic.
+- **Snippets / meta descriptions:** create unique descriptions per page; programmatic generation
+  is fine when human-readable and diverse; quality descriptions improve click-through.
+  Source: https://developers.google.com/search/docs/appearance/snippet . Adopted: nothing new this
+  run (existing templates already generate unique per-page descriptions; no duplicates found).
+- **Image rendering bug (build):** italics processing mangled underscores in image `src`
+  attributes (e.g. `health_monitor_...png` -> `health<em>monitor</em>...`). Source: observed in
+  built HTML. Adopted: apply italic markup only outside HTML tags in `render_inline`.
+- **Not adopted / reported:** daily note "Exclusivity" H1 is fine; blog post
+  `health-monitor-own-your-data` has a second `<h1>` from its body and a relative image that is
+  not copied to dist (broken image) — author/content decision, reported under "Needs the author".
+- **Large images:** many scripture-image PNGs in site/dist are over 500 KB (up to ~12.8 MB);
+  reported, image files not changed (author/asset pipeline decision).
