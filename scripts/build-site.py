@@ -844,6 +844,7 @@ def main() -> int:
             post = parse_post(f)
             if post:
                 post["url"] = page_url("blog", post["slug"], base)
+                post["kind"] = "blog"
                 linkmap[f.stem.lower()] = post["url"]
                 linkmap[post["slug"]] = post["url"]
                 posts.append(post)
@@ -922,6 +923,9 @@ def main() -> int:
     for p in pages:
         for t in p["fm"].get("tags", []):
             tag_index.setdefault(t, []).append(p)
+    for p in posts:
+        for t in p.get("tags", []):
+            tag_index.setdefault(t, []).append(p)
 
     def blurb_text(body: str, n: int) -> str:
         t = re.sub(r"\[([^\]]*)\]\([^)]*\)", r"\1", body)  # [text](url) -> text
@@ -942,6 +946,13 @@ def main() -> int:
         blurb = blurb_text(p["body"], 140)
         return (f'<article class="card" data-search="{search}"><h3 class="font-semibold"><a class="hover:text-gold transition" href="{p["url"]}">{esc(p["title"])}</a></h3>'
                 f'<p class="text-sm mt-2" style="color: #a8a29e;">{blurb}</p><div class="mt-3">{pills}</div></article>')
+
+    def card_post(p: dict) -> str:
+        search = esc((p["title"] + " " + p["date"] + " " + " ".join(p["tags"]) + " " + p["desc"]).lower())
+        blurb = esc(p["desc"]) if p["desc"] else blurb_text(p["body"], 180)
+        return (f'<article class="card" data-search="{search}"><p class="text-sm font-medium" style="color: var(--color-gold);">{esc(p["date"])}</p>'
+                f'<h3 class="font-display text-xl font-bold mt-1"><a class="hover:text-gold transition" href="{p["url"]}">{esc(p["title"])}</a></h3>'
+                f'<p class="text-sm mt-2" style="color: #a8a29e;">{blurb}</p><div class="mt-3">{tag_pills(p["tags"][:6])}</div></article>')
 
     # ---- home
     stats = (f'<div class="grid grid-cols-2 md:grid-cols-4 gap-4">'
@@ -1063,7 +1074,7 @@ def main() -> int:
           '<h1 class="font-display text-3xl font-black mb-2">Topics</h1><p class="mb-6" style="color: #a8a29e;">Themes from passages and reflections.</p><div class="flex flex-wrap gap-2">'
           + "".join(f'<a class="tag" href="{base}/tags/{slugify(t)}/">#{esc(t)} ({len(tag_index[t])})</a>' for t in sorted(tag_index)) + "</div>")
     for t, plist in tag_index.items():
-        cards = "".join(card_daily(p) if p["kind"] == "daily" else card_verse(p) for p in plist)
+        cards = "".join(card_daily(p) if p.get("kind") == "daily" else card_post(p) if p.get("kind") == "blog" else card_verse(p) for p in plist)
         write(f"tags/{slugify(t)}", f"Bible readings on {t}",
               f"Daily Bible notes and verse pages tagged {t} on Man of God. Browse the reflections and passages on this theme, with links to each one.",
               f'<p class="text-sm"><a class="text-gold hover:underline" href="{base}/tags/">Topics</a> / #{esc(t)}</p><h1 class="font-display text-3xl font-black mt-1 mb-4">#{esc(t)}</h1><div class="grid gap-4 md:grid-cols-2">{cards}</div>')
