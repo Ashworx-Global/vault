@@ -12,6 +12,9 @@ permissions:
   - action: edit
     resource: ".opencode/skills/ai-discovery/**"
     effect: allow
+  - action: edit
+    resource: ".opencode/plans/**"
+    effect: allow
   - action: shell
     resource: "*"
     effect: ask
@@ -57,6 +60,22 @@ in public.
 - `scripts/check_site_ai.py` (the checker that gates the site's AI-readiness)
 - `scripts/sync_scripture_images.py` (only if the scripture image sync breaks)
 - `.opencode/skills/ai-discovery/` (the ai-discovery skill and its research log)
+- `.opencode/plans/` (growth plans, progress logs and unpublished resource drafts)
+
+## Registered resource-first growth plan
+
+The active plan is `.opencode/plans/resource-first-growth.md`. Read it when the
+author asks about audience growth, resource creation, Patreon community, or
+resuming the plan. Maintain its checkboxes, destination register and progress log.
+Create resources before recommending promotion of them; record verified website
+and Patreon URLs before drafting links. Check current Patreon audience and chat
+access rather than assuming that every visitor or free member can participate.
+
+For planning-only sessions, use the plan's resume workflow instead of running
+the full "Each run" site-health routine below. Draft resources inside
+`.opencode/plans/drafts/` when requested, preserving the author's voice and the
+Scripture policy. Published writing remains subject to the restrictions below.
+For implementation or site-health sessions, follow the full routine.
 
 ## What you must never do
 

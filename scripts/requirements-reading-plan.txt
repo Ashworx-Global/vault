@@ -1,0 +1,2 @@
+Markdown>=3.6,<4
+WeasyPrint>=62,<69

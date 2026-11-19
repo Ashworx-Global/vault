@@ -124,6 +124,20 @@ footer { border-top: 1px solid #292524; background: var(--color-panel); }
 header img { margin: 0; box-shadow: none; }
 @media (max-width: 640px) { header { position: static; } main { overflow-wrap: anywhere; } details.bible summary { flex-wrap: wrap; } p.verse { padding: .5rem .7rem; } h1 { overflow-wrap: anywhere; } }
 header { background: rgba(18,24,33,.95); backdrop-filter: blur(8px); border-bottom: 1px solid #292524; position: sticky; top: 0; z-index: 40; }
+.site-nav { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: .5rem 1rem; max-width: 72rem; margin: auto; padding: .5rem 1rem; }
+.site-nav img { width: 56px; height: 56px; }
+.nav-links { display: flex; align-items: center; flex-wrap: wrap; gap: .25rem .75rem; font-size: .9rem; }
+.nav-links > a, .nav-more summary { display: inline-flex; align-items: center; min-height: 44px; padding: .4rem .25rem; }
+.nav-more { position: relative; }
+.nav-more summary { cursor: pointer; color: var(--color-gold); }
+.nav-more summary::after { content: " ▾"; margin-left: .4rem; }
+.nav-more div { position: absolute; right: 0; width: 180px; padding: .5rem; border: 1px solid #44403c; border-radius: .5rem; background: var(--color-panel); box-shadow: 0 8px 24px #0008; }
+.nav-more a { display: block; padding: .7rem; }
+a:focus-visible, summary:focus-visible, button:focus-visible { outline: 2px solid var(--color-gold); outline-offset: 4px; }
+.daily-note { max-width: 72ch; font-size: 1.05rem; }
+.home-hero { padding: clamp(1.5rem, 5vw, 3rem); border: 1px solid #292524; border-radius: 1rem; background: var(--color-panel); }
+.home-hero h1 { max-width: 18ch; font-size: clamp(2.25rem, 5vw, 3.8rem); line-height: 1.1; }
+@media (max-width: 640px) { header { position: static; } .nav-links { gap: .25rem .5rem; } }
 """
 
 BASE_TMPL = """<!DOCTYPE html>
@@ -146,29 +160,28 @@ BASE_TMPL = """<!DOCTYPE html>
 <body class="min-h-screen flex flex-col antialiased">
 <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 z-50 px-4 py-2 bg-gold text-ink rounded-lg">Skip to content</a>
 <header>
-<nav class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-x-4 gap-y-2 px-4 py-2 md:py-0">
-<a href="@@BASE@@/" class="flex items-center shrink-0"><img src="@@BASE@@/logos/icon-256.png" alt="Man Of God" loading="eager" class="h-16 md:h-28 w-auto"></a>
-<div class="flex flex-wrap items-center justify-end gap-x-4 gap-y-2 text-sm md:gap-5">
-<a href="@@BASE@@/daily/" class="hover:text-gold transition">Daily</a>
-<a href="@@BASE@@/blog/" class="hover:text-gold transition">Blog</a>
-<a href="@@BASE@@/about/" class="hover:text-gold transition">About</a>
-<a href="@@BASE@@/bible/" class="hover:text-gold transition">Bible</a>
-<a href="@@BASE@@/books/" class="hover:text-gold transition">Books</a>
-<a href="@@BASE@@/tags/" class="hover:text-gold transition">Topics</a>
-<a href="@@BASE@@/art/" class="hover:text-gold transition">Art</a>
-<a href="@@BASE@@/resources/" class="hover:text-gold transition">Resources</a>
-<a href="@@BASE@@/graph/" class="hover:text-gold transition">Graph</a>
-<a href="@@BASE@@/shop/" class="btn-sm">Shop</a>
-<a href="https://github.com/Ashworx-Global/vault" target="_blank" rel="noopener" class="btn-sm">GitHub</a>
-<a href="https://www.patreon.com/cw/ManOfGodSA" target="_blank" rel="noopener" class="btn-sm">Patreon</a>
-<a href="https://www.facebook.com/profile.php?id=61596013522180" target="_blank" rel="noopener" class="btn-sm">Facebook</a>
+<nav class="site-nav" aria-label="Main navigation">
+<a href="@@BASE@@/" aria-label="Man of God home"><img src="@@BASE@@/logos/icon-256.png" alt="Man of God" loading="eager" width="56" height="56"></a>
+<div class="nav-links">
+<a href="@@BASE@@/daily/">Readings</a>
+<a href="@@BASE@@/resources/">Resources</a>
+<a href="@@BASE@@/about/">About</a>
+<details class="nav-more"><summary>Explore</summary><div>
+<a href="@@BASE@@/bible/">Bible passages</a>
+<a href="@@BASE@@/books/">Books of the Bible</a>
+<a href="@@BASE@@/tags/">Topics</a>
+<a href="@@BASE@@/blog/">Blog</a>
+<a href="@@BASE@@/art/">Art</a>
+<a href="@@BASE@@/graph/">Connection graph</a>
+<a href="@@BASE@@/shop/">Shop</a>
+</div></details>
 </div>
 </nav>
 </header>
 <main id="main" class="flex-1 w-full max-w-6xl mx-auto px-4 py-8">@@BODY@@</main>
 <footer>
 <div class="max-w-6xl mx-auto px-4 py-8 grid gap-6 md:grid-cols-3 text-sm" style="color: #a8a29e;">
-<div><h3 class="font-display text-gold mb-2">Man of God Daily Readings</h3><p>A GitHub Pages site rendered from an <a class="hover:text-gold" href="https://obsidian.md/" target="_blank" rel="noopener">Obsidian</a> vault of daily Bible notes. Verse links mirror the vault's wikilinks, and scripture text comes from the ESV via the <a class="hover:text-gold" href="https://api.esv.org/" target="_blank" rel="noopener">Crossway API</a>. Logos links open each passage in your own Logos library — <a class="hover:text-gold" href="https://www.logos.com/free-edition" target="_blank" rel="noopener">get Logos free</a>.</p></div>
+<div><h3 class="font-display text-gold mb-2">Man of God Daily Readings</h3><p>Bible readings and personal reflections to help men grow closer to God. Read the passages for yourself: Scripture is the authority, and these reflections are personal thoughts.</p><p class="mt-3"><a href="@@BASE@@/accept-jesus/">Explore faith in Jesus →</a></p></div>
 <div><h3 class="font-display text-gold mb-2">Browse</h3><p><a class="hover:text-gold" href="@@BASE@@/about/">About</a> · <a class="hover:text-gold" href="@@BASE@@/daily/">Daily notes</a> · <a class="hover:text-gold" href="@@BASE@@/blog/">Blog</a> · <a class="hover:text-gold" href="@@BASE@@/bible/">Verse pages</a> · <a class="hover:text-gold" href="@@BASE@@/books/">Books</a> · <a class="hover:text-gold" href="@@BASE@@/tags/">Topics</a> · <a class="hover:text-gold" href="@@BASE@@/art/">Art</a> · <a class="hover:text-gold" href="@@BASE@@/resources/">Resources</a> · <a class="hover:text-gold" href="@@BASE@@/graph/">Graph</a></p></div>
 <div><h3 class="font-display text-gold mb-2">Follow &amp; support</h3><p><a class="hover:text-gold" href="https://www.patreon.com/cw/ManOfGodSA" target="_blank" rel="noopener">Patreon</a> · <a class="hover:text-gold" href="https://www.facebook.com/profile.php?id=61596013522180" target="_blank" rel="noopener">Facebook</a></p><p class="mt-2"><a class="hover:text-gold" href="https://github.com/Ashworx-Global/vault" target="_blank" rel="noopener">Source on GitHub</a> · <a class="hover:text-gold" href="@@BASE@@/llms.txt">AI guide (llms.txt)</a></p></div>
 </div>
@@ -181,7 +194,10 @@ BASE_TMPL = """<!DOCTYPE html>
 </div>
 <script>
 const q=document.getElementById('filter');
-if(q){q.addEventListener('input',()=>{const s=q.value.toLowerCase();document.querySelectorAll('[data-search]').forEach(el=>{el.style.display=el.dataset.search.includes(s)?'':'none';});});}
+if(q){q.addEventListener('input',()=>{const s=q.value.toLowerCase().trim();let visible=0;document.querySelectorAll('[data-search]').forEach(el=>{const match=el.dataset.search.includes(s);el.style.display=match?'':'none';if(match)visible++;});const empty=document.getElementById('filter-empty');if(empty)empty.hidden=visible>0;});}
+const more=document.querySelector('.nav-more');
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&more?.open){more.open=false;more.querySelector('summary').focus();}});
+document.addEventListener('click',e=>{if(more?.open&&!more.contains(e.target))more.open=false;});
 // Lightbox for art gallery
 document.addEventListener('DOMContentLoaded',()=>{
   const lightbox=document.getElementById('lightbox');
@@ -349,6 +365,28 @@ def to_plain(md: str) -> str:
     t = re.sub(r"^#+\s*", "", t, flags=re.M)
     t = re.sub(r"[*`]", "", t)
     return re.sub(r"\n{3,}", "\n\n", t).strip()
+
+
+def preview_text(body: str, limit: int = 180) -> str:
+    """Readable card excerpt, excluding imported Bible callouts and vault metadata."""
+    body = OBSIDIAN_COMMENT_RE.sub("", body)
+    lines = []
+    in_bible = False
+    for line in body.splitlines():
+        if re.match(r"^\s*>\s*\[!bible\]", line, re.I):
+            in_bible = True
+            continue
+        if in_bible and line.lstrip().startswith(">"):
+            continue
+        if line.strip():
+            in_bible = False
+        if re.match(r"^\s*#|\s*!\[", line) or re.fullmatch(r"\s*(?:\[\[.*?\]\]\s*)+", line):
+            continue
+        lines.append(line)
+    paragraphs = [p.strip() for p in to_plain("\n".join(lines)).split("\n\n") if p.strip()]
+    text = " ".join((paragraphs[0] if paragraphs else "").split())
+    clipped = clip_desc(text, limit)
+    return clipped + ("…" if len(text) > limit else "")
 
 
 # ---------------------------------------------------------------- slugs/urls
@@ -928,13 +966,11 @@ def main() -> int:
             tag_index.setdefault(t, []).append(p)
 
     def blurb_text(body: str, n: int) -> str:
-        t = re.sub(r"\[([^\]]*)\]\([^)]*\)", r"\1", body)  # [text](url) -> text
-        t = re.sub(r"[#>*`\[\]]", "", t)
-        return esc(re.sub(r"\s+", " ", t)[:n] + "…")
+        return esc(preview_text(body, n))
 
     def card_daily(p: dict) -> str:
         search = esc((p["title"] + " " + p.get("date", "") + " " + " ".join(p["fm"].get("tags", []))).lower())
-        pills = tag_pills(p["fm"].get("tags", [])[:6])
+        pills = tag_pills(p["fm"].get("tags", [])[:3])
         blurb = blurb_text(p["body"], 180)
         return (f'<article class="card" data-search="{search}"><p class="text-sm font-medium" style="color: var(--color-gold);">{esc(p.get("date",""))}</p>'
                 f'<h3 class="font-display text-xl font-bold mt-1"><a class="hover:text-gold transition" href="{p["url"]}">{esc(p["title"])}</a></h3>'
@@ -955,33 +991,29 @@ def main() -> int:
                 f'<p class="text-sm mt-2" style="color: #a8a29e;">{blurb}</p><div class="mt-3">{tag_pills(p["tags"][:6])}</div></article>')
 
     # ---- home
-    stats = (f'<div class="grid grid-cols-2 md:grid-cols-4 gap-4">'
-             f'<div class="card text-center"><p class="text-3xl font-bold" style="color: var(--color-gold);">{len(daily)}</p><p class="text-sm" style="color: #a8a29e;">Daily notes</p></div>'
-             f'<div class="card text-center"><p class="text-3xl font-bold" style="color: var(--color-gold);">{len(bible)}</p><p class="text-sm" style="color: #a8a29e;">Verse pages</p></div>'
-             f'<div class="card text-center"><p class="text-3xl font-bold" style="color: var(--color-gold);">{len(by_book)}</p><p class="text-sm" style="color: #a8a29e;">Books</p></div>'
-             f'<div class="card text-center"><p class="text-3xl font-bold" style="color: var(--color-gold);">{len(tag_index)}</p><p class="text-sm" style="color: #a8a29e;">Topics</p></div></div>')
-    hero = (f'<section class="rounded-2xl p-8 md:p-12 text-white mb-8" style="background:linear-gradient(135deg,var(--color-ink),var(--color-panel))">'
-            f'<p class="mb-4 text-sm uppercase tracking-[0.3em]" style="color: var(--color-gold);">Faith · Strength · Brotherhood</p>'
-            f'<h1 class="font-display text-5xl md:text-7xl">Man of God</h1>'
-            f'<div class="mx-auto mt-8 grid max-w-3xl gap-4 md:grid-cols-2 text-left">' + "".join(
-                f'<blockquote class="rounded-lg p-5" style="border-left: 4px solid var(--color-gold); background: rgba(0,0,0,.25);">'
-                f'<p class="font-display text-lg md:text-xl" style="color: var(--color-gold);">“{esc(t)}”</p>'
-                f'<footer class="mt-2 text-sm" style="color: #a8a29e;">— {esc(ref)}</footer></blockquote>' for t, ref in HERO_VERSES) + '</div>'
-            f'<p class="mx-auto mt-6 max-w-2xl text-lg" style="color: #a8a29e;">Man of God, is a site that is a collection of daily readings with some thoughts on the verses, they are my thoughts and are not truth, The Word is truth and you should read for yourself, but maybe some thoughts could help, or draw you closer to reading the Bible for yourself. We would like to help men have a relationship with God and challenge each other to draw closer to God through His Word. We have added some resources and links to help build your faith and understanding.</p>'
-            f'<div class="mt-8 flex flex-wrap justify-center gap-4"><a class="btn" href="{base}/accept-jesus/">Accept Jesus</a>'
-            f'<a class="btn-sm py-2.5" href="{base}/daily/">Browse daily notes</a>'
-            f'<a class="btn-sm py-2.5" href="{base}/bible/">Explore verse pages</a></div></section>'
-            f'<blockquote class="card mb-8" style="border-left: 4px solid var(--color-gold);"><p class="font-display text-xl md:text-2xl" style="color: var(--color-gold);">“{esc(VERSE)}”</p></blockquote>'
-            f'{stats}'
-            f'<div class="flex items-center justify-between mt-10 mb-4"><h2 class="font-display text-2xl font-bold">Recent daily notes</h2><a class="text-gold font-medium hover:underline" href="{base}/daily/">View all →</a></div>'
-            f'<div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">{"".join(card_daily(p) for p in daily[:6])}</div>'
-            f'<div class="flex items-center justify-between mt-10 mb-4"><h2 class="font-display text-2xl font-bold">Recent verse pages</h2><a class="text-gold font-medium hover:underline" href="{base}/bible/">View all →</a></div>'
-            f'<div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">{"".join(card_verse(p) for p in bible[-8:][::-1])}</div>')
+    latest_url = daily[0]["url"] if daily else f"{base}/daily/"
+    latest_label = "Read the latest reading" if daily else "Browse readings"
+    hero = (f'<section class="home-hero">'
+            f'<p class="mb-4 text-sm uppercase tracking-widest" style="color: var(--color-gold);">Man of God · Faith · Strength · Brotherhood</p>'
+            f'<h1 class="font-display">Grow stronger in faith, one day at a time.</h1>'
+            f'<p class="mt-5 max-w-2xl text-lg" style="color: #d6d3d1;">Bible readings, personal reflections, and practical encouragement for Christian men.</p>'
+            f'<div class="mt-6 flex flex-wrap items-center gap-4"><a class="btn" href="{latest_url}">{latest_label}</a>'
+            f'<a href="{base}/daily/">Browse all readings →</a></div>'
+            f'<p class="mt-5 text-sm" style="color: #a8a29e;">New here? Begin with a reading, open the Bible passages, and take time to reflect and pray.</p>'
+            f'</section>'
+            f'<div class="flex items-center justify-between gap-4 mt-8 mb-4"><h2 class="font-display text-2xl font-bold">Latest readings</h2><a href="{base}/daily/">View all →</a></div>'
+            f'<div class="grid gap-4 md:grid-cols-3">{"".join(card_daily(p) for p in daily[:3])}</div>'
+            f'<section class="grid gap-4 md:grid-cols-3 mt-8" aria-label="Find your next step">'
+            f'<div class="card"><h2 class="font-display text-xl font-bold"><a href="{base}/accept-jesus/">Explore faith in Jesus</a></h2><p class="mt-2 text-sm">A place to begin if you want to know more about following Jesus.</p></div>'
+            f'<div class="card"><h2 class="font-display text-xl font-bold"><a href="{base}/bible/">Explore Scripture</a></h2><p class="mt-2 text-sm">Find Bible passages and follow the links into related readings.</p></div>'
+            f'<div class="card"><h2 class="font-display text-xl font-bold"><a href="{base}/resources/">Find helpful resources</a></h2><p class="mt-2 text-sm">Browse books, podcasts and resources for growing in faith.</p></div></section>'
+            f'<blockquote class="mt-8 p-5" style="border-left: 3px solid var(--color-gold);"><p class="font-display text-lg">“{esc(VERSE)}”</p></blockquote>')
 
     # ---- daily index + pages
     write("daily", "Daily notes", "Chronological daily Bible reading notes.",
-          f'<h1 class="font-display text-3xl font-black mb-2">Daily notes</h1><p class="mb-6" style="color: #a8a29e;">Newest first. Open any note to read reflections, verse inserts, and harvested verse pages.</p>'
-          f'<input id="filter" placeholder="Filter notes…" class="input mb-6">'
+          f'<h1 class="font-display text-3xl font-black mb-2">Daily readings</h1><p class="mb-6" style="color: #a8a29e;">Choose a reading for Scripture, personal reflection and prayer. Newest first.</p>'
+          f'<label for="filter" class="block mb-2">Find a reading</label><input id="filter" type="search" placeholder="Search by title, date or topic…" class="input mb-6">'
+          f'<p id="filter-empty" role="status" hidden>No readings match. Try another word or clear your search.</p>'
           f'<div class="grid gap-4 md:grid-cols-2">{"".join(card_daily(p) for p in daily)}</div>')
     for i, p in enumerate(daily):
         prev_url = f"{base}/daily/{daily[i-1]['slug']}/" if i > 0 else f"{base}/daily/"
@@ -999,8 +1031,13 @@ def main() -> int:
                      f'<div class="prose-custom daily-note">{html_body}</div>'
                      + (f'<h2 class="font-display text-2xl font-bold mt-10 mb-3">Harvested verse pages</h2><div>{"".join(links)}</div>' if links and "Harvested verse pages" not in html_body else "")
                      + f'<p class="mt-10 text-sm"><a class="text-gold hover:underline" href="{base}/daily/">← All daily notes</a></p>'
-                      + f'<div class="mt-10 flex flex-wrap items-center justify-between gap-3"><a class="text-gold hover:underline" href="{prev_url}">← Previous note</a><a class="text-gold hover:underline" href="{next_url}">Next note →</a></div>'
-                      + '<div class="mt-6 p-4 rounded border border-gold/30"><p class="font-display text-gold mb-1">Enjoying these notes?</p><p class="text-sm" style="color:#a8a29e;">Support the work on <a class="text-gold hover:underline" href="https://www.patreon.com/manofgod" target="_blank" rel="noopener">Patreon</a> or <a class="text-gold hover:underline" href="https://manofgod.online/blog/">read the blog</a>.</p></div>')
+                      + f'<div class="mt-10 flex flex-wrap items-center justify-between gap-3">'
+                      + (f'<a href="{prev_url}">← Newer reading</a>' if i > 0 else '')
+                      + (f'<a href="{next_url}">Older reading →</a>' if i + 1 < len(daily) else '')
+                      + '</div><section class="card mt-6"><h2 class="font-display text-xl mb-2">What stood out to you in this reading?</h2>'
+                      + '<p class="mb-4">The readings are also on Patreon, where we share questions, reflections and conversation. Come and add your thoughts.</p>'
+                      + '<a class="btn" href="https://www.patreon.com/c/ManOfGodSA" target="_blank" rel="noopener">Join the conversation on Patreon</a>'
+                      + '<p class="mt-3 text-sm" style="color:#a8a29e;">Open Man of God on Patreon, sign in or create an account, and look for this reading by its title. Check the membership options there to join in.</p></section>')
         tags = p["fm"].get("tags", [])
         topics = [t.replace("-", " ") for t in tags[:4]]
         # Don't repeat the note's own title as a topic (e.g. "Exclusivity: Exclusivity").
@@ -1281,7 +1318,7 @@ def main() -> int:
                      f'<div class="prose-custom">{render_blocks(p["body"], linkmap, base, books)}</div>'
                      f'<p class="mt-10 text-sm"><a class="text-gold hover:underline" href="{base}/blog/">← All articles</a></p>'
                       + f'<div class="mt-10 flex flex-wrap items-center justify-between gap-3"><a class="text-gold hover:underline" href="{prev_url}">← Previous post</a><a class="text-gold hover:underline" href="{next_url}">Next post →</a></div>'
-                      + '<div class="mt-6 p-4 rounded border border-gold/30"><p class="font-display text-gold mb-1">Enjoying this?</p><p class="text-sm" style="color:#a8a29e;">Support the work on <a class="text-gold hover:underline" href="https://www.patreon.com/manofgod" target="_blank" rel="noopener">Patreon</a>.</p></div>')
+                      + '<div class="mt-6 p-4 rounded border border-gold/30"><p class="font-display text-gold mb-1">Enjoying this?</p><p class="text-sm" style="color:#a8a29e;">Support the work on <a class="text-gold hover:underline" href="https://www.patreon.com/c/ManOfGodSA" target="_blank" rel="noopener">Patreon</a>.</p></div>')
         write_md(f"blog/{p['slug']}", p["title"], p["desc"], p["date"], p["tags"], p["body"])
         write(f"blog/{p['slug']}", p["title"], p["desc"] or p["title"], body_html, article={"date": p["date"], "tags": p["tags"]})
 
@@ -1296,7 +1333,14 @@ def main() -> int:
                 f'<a class="text-gold font-medium hover:underline" href="{base}/resources/">View all →</a></div>'
                 + (f'<div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">{"".join(res_card(r) for r in top_resources)}</div>' if top_resources
                    else '<p style="color: #a8a29e;">No ranked resources yet. Add a rank to a Resources file to feature it here.</p>'))
-    write("", SITE_NAME, SITE_DESC, hero + blog_home + top_html)
+    community = ('<section class="card mt-8"><h2 class="font-display text-2xl font-bold">Read here. Talk about it together.</h2>'
+                 '<p class="mt-2 mb-4">You will find the same Bible readings on Patreon, along with conversations about what we are reading. Share a reflection, ask a question, and grow in faith with others.</p>'
+                 '<div class="my-5"><h3 class="font-display text-xl mb-2">In the works</h3>'
+                 '<p>We are working on daily devotionals, comic books and animations, with plans for manly soaps, shirts, braai gear and other goods for men. These projects are still taking shape—join us on Patreon and tell us what you would love to see.</p></div>'
+                 '<a class="btn" href="https://www.patreon.com/c/ManOfGodSA" target="_blank" rel="noopener">Join us on Patreon</a>'
+                 '<p class="mt-3 text-sm" style="color:#a8a29e;">New to Patreon? Sign in or create an account, then check the membership options on the Man of God page to take part.</p>'
+                 '<p class="mt-4 text-sm">You can also <a href="https://www.facebook.com/profile.php?id=61596013522180" target="_blank" rel="noopener">follow Man of God on Facebook</a>.</p></section>')
+    write("", SITE_NAME, SITE_DESC, hero + (top_html if top_resources else "") + community)
 
     # ---- standalone pages: Pages/<slug>.md (frontmatter: title, description) -> /<slug>/
     if PAGES_DIR.exists():
