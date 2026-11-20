@@ -1083,7 +1083,15 @@ def main() -> int:
                      + (f'<div class="mt-6 p-4 card" style="border-left: 4px solid var(--color-gold);"><h3 class="font-semibold text-gold">Also known as</h3><ul class="list-disc ml-5" style="color: #a8a29e;">{aliases}</ul></div>' if aliases else "")
                      + ("".join(f'<h2 class="font-display text-2xl font-bold mt-10 mb-3">More in {esc(p["book"])} {esc(p["chapter"])}</h2><div class="grid gap-3 md:grid-cols-2 lg:grid-cols-3">' + "".join(card_verse(q) for q in related) + "</div>" if related else "")))
         tags = p["fm"].get("tags", [])
-        desc = f"{p['title']}: a Bible verse page with reflections on {', '.join(tags[:3])}. Read the passage and the daily notes that cite it." if tags else f"{p['title']}: a Bible verse page with reflections. Read the passage and the daily notes that cite it."
+        # Skip the book-name tag (e.g. "1kings") so the description names real themes, not the book.
+        book_tag = (p.get("book") or "").lower().replace(" ", "").replace("-", "")
+        themed = [t for t in tags if t.lower().replace("-", "") != book_tag]
+        desc_source = themed[:3] if themed else tags[:3]
+        desc_tags = [t.replace("-", " ") for t in desc_source]
+        desc_tags = [t[:1].upper() + t[1:] if t else t for t in desc_tags]
+        desc = (f"{p['title']}: a Bible verse page with reflections on {', '.join(desc_tags)}. "
+                f"Read the passage and the daily notes that cite it." if tags
+                else f"{p['title']}: a Bible verse page with reflections. Read the passage and the daily notes that cite it.")
         # Keep <title> (page title + " | Man of God Daily Readings") near the ~60 character search-result limit:
         # drop the " Bible Study" suffix for long passage names.
         bible_title = f"{p['title']} Bible Study"
