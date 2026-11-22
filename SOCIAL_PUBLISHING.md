@@ -55,7 +55,7 @@ X (Twitter) automation is supported via the X API v2. Posts are created as tweet
 |----------|---------|--------|---------|
 | `PUBLISH_PATREON` | `false` | `true`, `false` | Enable/disable Patreon (API limitation: read-only) |
 | `PUBLISH_FACEBOOK` | `true` | `true`, `false` | Enable/disable Facebook publishing |
-| `PUBLISH_X` | `true` | `true`, `false` | Enable/disable X (Twitter) publishing |
+| `PUBLISH_X` | `false` | `true`, `false` | Enable/disable X (Twitter) publishing (requires paid API tier) |
 
 ### What Gets Posted to X
 

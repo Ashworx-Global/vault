@@ -314,7 +314,7 @@ def publish_daily_notes(daily_dir: Path, published_content: PublishedContent,
     """Publish new or updated daily notes to Patreon and Facebook."""
     publish_patreon = os.getenv("PUBLISH_PATREON", "true").lower() in ["true", "1", "yes"]
     publish_facebook = os.getenv("PUBLISH_FACEBOOK", "true").lower() in ["true", "1", "yes"]
-    publish_x = os.getenv("PUBLISH_X", "true").lower() in ["true", "1", "yes"]
+    publish_x = os.getenv("PUBLISH_X", "false").lower() in ["true", "1", "yes"]
     
     if not publish_patreon and not publish_facebook and not publish_x:
         print("⚠ PUBLISH_PATREON, PUBLISH_FACEBOOK and PUBLISH_X all disabled")
@@ -352,7 +352,7 @@ def publish_art_projects(art_dir: Path, published_content: PublishedContent,
     """Publish new or updated art projects to Patreon and Facebook."""
     publish_patreon = os.getenv("PUBLISH_PATREON", "true").lower() in ["true", "1", "yes"]
     publish_facebook = os.getenv("PUBLISH_FACEBOOK", "true").lower() in ["true", "1", "yes"]
-    publish_x = os.getenv("PUBLISH_X", "true").lower() in ["true", "1", "yes"]
+    publish_x = os.getenv("PUBLISH_X", "false").lower() in ["true", "1", "yes"]
     
     if not publish_patreon and not publish_facebook and not publish_x:
         return
@@ -392,7 +392,7 @@ if __name__ == "__main__":
     
     publish_patreon = os.getenv("PUBLISH_PATREON", "false").lower() in ["true", "1", "yes"]
     publish_facebook = os.getenv("PUBLISH_FACEBOOK", "true").lower() in ["true", "1", "yes"]
-    publish_x = os.getenv("PUBLISH_X", "true").lower() in ["true", "1", "yes"]
+    publish_x = os.getenv("PUBLISH_X", "false").lower() in ["true", "1", "yes"]
     
     print("📱 Publishing to Patreon, Facebook and X...\n")
     print("Platform Status:")
