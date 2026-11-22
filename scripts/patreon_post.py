@@ -181,11 +181,11 @@ def main():
 
     note = Path(args.note)
     stem = note.stem
-    m = re.match(r"(\d{4}-\d{2}-\d{2})\s*\((.*?)\)?$", stem)
+    m = re.match(r"(\d{4}-\d{2}-\d{2})", stem)
     if not m:
         sys.exit(f"Can't read date/title from note name: {stem}")
-    date, title = m.groups()
-    title = title.strip()
+    date = m.group(1)
+    title = re.sub(r"^\d{4}-\d{2}-\d{2}\s*", "", stem).strip("() ").strip()
 
     tags, body = split_frontmatter(note.read_text(encoding="utf-8"))
     site_url = f"{SITE}/daily/{slugify(stem)}/"
