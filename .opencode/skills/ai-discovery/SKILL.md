@@ -48,9 +48,10 @@ so new content is discoverable as soon as it is built and deployed. Never hand-e
    reintroduce `/vault` in a link; the checker rejects it.
 7. **Scripture text.** Use public-domain (WEB) text or link to the ESV. Never paste ESV text
    (see verse-pages rules). Reflections are the author's thoughts; the guide says so.
-8. **Sharing.** New blog posts and daily notes should be shared to Patreon and Facebook
+8. **Sharing.** New blog posts and daily notes should be shared to Patreon, Facebook and X (Twitter)
    with their site link (`https://manofgod.online/<kind>/<slug>/`). The link is the thing
-   AI tools and search engines follow.
+   AI tools and search engines follow. X posting is automated via `scripts/social_publisher.py`
+   (X API v2, free tier) when `PUBLISH_X` is enabled.
 
 ## Verify after every build
 

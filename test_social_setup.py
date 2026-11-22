@@ -131,6 +131,46 @@ def test_facebook():
     return True
 
 
+def test_x():
+    """Test X (Twitter) API connection."""
+    api_key = os.getenv("X_API_KEY")
+    api_secret = os.getenv("X_API_SECRET")
+    access_token = os.getenv("X_ACCESS_TOKEN")
+    access_secret = os.getenv("X_ACCESS_TOKEN_SECRET")
+    
+    if not all([api_key, api_secret, access_token, access_secret]):
+        print("❌ X credentials not set (X_API_KEY, X_API_SECRET, X_ACCESS_TOKEN, X_ACCESS_TOKEN_SECRET)")
+        return False
+    
+    print(f"\n🔍 Testing X (Twitter) API...")
+    print(f"   API Key: {api_key[:10]}...")
+    
+    try:
+        import tweepy
+    except ImportError:
+        print("   ❌ tweepy not installed. Run: pip install tweepy")
+        return False
+    
+    try:
+        client = tweepy.Client(
+            consumer_key=api_key,
+            consumer_secret=api_secret,
+            access_token=access_token,
+            access_token_secret=access_secret,
+        )
+        # Verify credentials by fetching the authenticated user
+        me = client.get_me()
+        if me and me.data:
+            print(f"   ✓ Authenticated as: @{me.data.username} (id={me.data.id})")
+            return True
+        else:
+            print("   ✗ Could not fetch authenticated user")
+            return False
+    except Exception as e:
+        print(f"   ✗ Error: {e}")
+        return False
+
+
 if __name__ == "__main__":
     print("=" * 60)
     print("Social API Setup Diagnostic")
@@ -138,11 +178,12 @@ if __name__ == "__main__":
     
     patreon_ok = test_patreon()
     facebook_ok = test_facebook()
+    x_ok = test_x()
     
     print("\n" + "=" * 60)
-    if patreon_ok and facebook_ok:
+    if patreon_ok and facebook_ok and x_ok:
         print("✅ All systems configured correctly!")
-        print("\nYour vault can now publish to Patreon and Facebook.")
+        print("\nYour vault can now publish to Patreon, Facebook and X.")
     else:
         print("❌ Configuration issues detected")
         if not patreon_ok:
@@ -155,4 +196,10 @@ if __name__ == "__main__":
             print("   1. Verify your page access token has correct permissions")
             print("   2. Check that FACEBOOK_PAGE_ID is correct (numeric)")
             print("   3. Update both FACEBOOK_PAGE_TOKEN and FACEBOOK_PAGE_ID in GitHub")
+        if not x_ok:
+            print("\n🔧 X (Twitter) Fix:")
+            print("   1. Go to https://developer.x.com/ and create a project + app")
+            print("   2. Generate API Key, API Secret, Access Token, Access Token Secret")
+            print("   3. Ensure the app has Read+Write permissions")
+            print("   4. Update X_API_KEY, X_API_SECRET, X_ACCESS_TOKEN, X_ACCESS_TOKEN_SECRET secrets")
     print("=" * 60)

@@ -31,10 +31,22 @@ class PublishedContent:
     def _load(self) -> dict:
         if self.track_file.exists():
             return json.loads(self.track_file.read_text())
-        return {"daily": {}, "art": {}, "patreon": {}, "facebook": {}}
+        return {"daily": {}, "art": {}, "patreon": {}, "facebook": {}, "x": {}}
     
     def save(self):
         self.track_file.write_text(json.dumps(self.data, indent=2))
+    
+    def get_x_post_id(self, content_type: str, slug: str) -> Optional[str]:
+        """Get X (Twitter) post ID for content."""
+        key = f"{content_type}:{slug}"
+        return self.data.get("x", {}).get(key)
+    
+    def set_x_post_id(self, content_type: str, slug: str, post_id: str):
+        """Track published X post."""
+        if "x" not in self.data:
+            self.data["x"] = {}
+        self.data["x"][f"{content_type}:{slug}"] = post_id
+        self.save()
     
     def get_patreon_post_id(self, content_type: str, slug: str) -> Optional[str]:
         """Get Patreon post ID for content (to update instead of create)."""
@@ -63,7 +75,9 @@ class PublishedContent:
     def is_published(self, content_type: str, slug: str) -> bool:
         """Check if content has been published anywhere."""
         key = f"{content_type}:{slug}"
-        return key in self.data.get("patreon", {}) or key in self.data.get("facebook", {})
+        return (key in self.data.get("patreon", {}) or 
+                key in self.data.get("facebook", {}) or
+                key in self.data.get("x", {}))
 
 
 def strip_html_tags(html: str) -> str:
@@ -211,6 +225,59 @@ def publish_to_facebook(title: str, content_text: str, url_link: str,
     return None
 
 
+def publish_to_x(title: str, content_text: str, url_link: str,
+                 published_content: PublishedContent,
+                 content_type: str, slug: str) -> Optional[str]:
+    """Publish a tweet on X (Twitter). Returns tweet ID if successful."""
+    api_key = os.getenv("X_API_KEY")
+    api_secret = os.getenv("X_API_SECRET")
+    access_token = os.getenv("X_ACCESS_TOKEN")
+    access_secret = os.getenv("X_ACCESS_TOKEN_SECRET")
+
+    if not all([api_key, api_secret, access_token, access_secret]):
+        print("⚠ X credentials not set, skipping X")
+        return None
+
+    tweet_id = published_content.get_x_post_id(content_type, slug)
+    if tweet_id:
+        print(f"  ⏭ Already posted to X: https://x.com/i/web/status/{tweet_id}")
+        return tweet_id
+
+    try:
+        import tweepy
+    except ImportError:
+        print("⚠ tweepy not found; install with: pip install tweepy")
+        return None
+
+    # Build a concise tweet (280 char limit; URLs are wrapped to 23 chars).
+    tags = []
+    if content_type == "daily":
+        # Pull tags from frontmatter-ish content is not available here; use title words.
+        pass
+    hashtag = ""
+    # Keep it simple: title + link. The link preview (OG tags) carries the description.
+    tweet_text = f"{title}\n\n{url_link}"
+    if len(tweet_text) > 280:
+        tweet_text = f"{title[:200]}\n\n{url_link}"
+
+    try:
+        client = tweepy.Client(
+            consumer_key=api_key,
+            consumer_secret=api_secret,
+            access_token=access_token,
+            access_token_secret=access_secret,
+        )
+        print(f"📢 Posting to X: {title}")
+        response = client.create_tweet(text=tweet_text)
+        tweet_id = response.data["id"]
+        published_content.set_x_post_id(content_type, slug, tweet_id)
+        print(f"  ✓ Posted to X: https://x.com/i/web/status/{tweet_id}")
+        return tweet_id
+    except Exception as e:
+        print(f"  ✗ X failed: {e}")
+        return None
+
+
 def get_daily_notes(daily_dir: Path) -> list[tuple[str, str, str]]:
     """Get list of daily notes (slug, title, date). Returns: [(slug, title, date_str), ...]"""
     notes = []
@@ -247,9 +314,10 @@ def publish_daily_notes(daily_dir: Path, published_content: PublishedContent,
     """Publish new or updated daily notes to Patreon and Facebook."""
     publish_patreon = os.getenv("PUBLISH_PATREON", "true").lower() in ["true", "1", "yes"]
     publish_facebook = os.getenv("PUBLISH_FACEBOOK", "true").lower() in ["true", "1", "yes"]
+    publish_x = os.getenv("PUBLISH_X", "true").lower() in ["true", "1", "yes"]
     
-    if not publish_patreon and not publish_facebook:
-        print("⚠ Both PUBLISH_PATREON and PUBLISH_FACEBOOK disabled")
+    if not publish_patreon and not publish_facebook and not publish_x:
+        print("⚠ PUBLISH_PATREON, PUBLISH_FACEBOOK and PUBLISH_X all disabled")
         return
     
     for slug, title, _ in get_daily_notes(daily_dir):
@@ -274,6 +342,9 @@ def publish_daily_notes(daily_dir: Path, published_content: PublishedContent,
         
         if publish_facebook:
             publish_to_facebook(title, post_text, post_url, published_content, "daily", slug)
+        
+        if publish_x:
+            publish_to_x(title, post_text, post_url, published_content, "daily", slug)
 
 
 def publish_art_projects(art_dir: Path, published_content: PublishedContent,
@@ -281,8 +352,9 @@ def publish_art_projects(art_dir: Path, published_content: PublishedContent,
     """Publish new or updated art projects to Patreon and Facebook."""
     publish_patreon = os.getenv("PUBLISH_PATREON", "true").lower() in ["true", "1", "yes"]
     publish_facebook = os.getenv("PUBLISH_FACEBOOK", "true").lower() in ["true", "1", "yes"]
+    publish_x = os.getenv("PUBLISH_X", "true").lower() in ["true", "1", "yes"]
     
-    if not publish_patreon and not publish_facebook:
+    if not publish_patreon and not publish_facebook and not publish_x:
         return
     
     for slug, title in get_art_projects(art_dir):
@@ -307,6 +379,9 @@ def publish_art_projects(art_dir: Path, published_content: PublishedContent,
         
         if publish_facebook:
             publish_to_facebook(f"Art: {title}", post_text, post_url, published_content, "art", slug)
+        
+        if publish_x:
+            publish_to_x(f"Art: {title}", post_text, post_url, published_content, "art", slug)
 
 
 if __name__ == "__main__":
@@ -317,14 +392,16 @@ if __name__ == "__main__":
     
     publish_patreon = os.getenv("PUBLISH_PATREON", "false").lower() in ["true", "1", "yes"]
     publish_facebook = os.getenv("PUBLISH_FACEBOOK", "true").lower() in ["true", "1", "yes"]
+    publish_x = os.getenv("PUBLISH_X", "true").lower() in ["true", "1", "yes"]
     
-    print("📱 Publishing to Patreon and Facebook...\n")
+    print("📱 Publishing to Patreon, Facebook and X...\n")
     print("Platform Status:")
     if publish_patreon:
         print(f"  Patreon:  ⚠️  Enabled (but API is read-only - posts will fail)")
     else:
         print(f"  Patreon:  ✗ Disabled (API limitation: v2 is read-only)")
     print(f"  Facebook: {'✓ Enabled' if publish_facebook else '✗ Disabled'}")
+    print(f"  X:        {'✓ Enabled' if publish_x else '✗ Disabled'}")
     print()
     
     published = PublishedContent(TRACK_FILE)

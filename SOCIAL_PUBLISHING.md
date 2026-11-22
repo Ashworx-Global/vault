@@ -31,6 +31,43 @@ The **Patreon API v2 is strictly read-only**. It does not support POST/PATCH req
 2. **Facebook automation** - Use automated Facebook posts instead
 3. **Future API** - If Patreon releases write APIs, we can re-enable
 
+## X (Twitter) Publishing
+
+X (Twitter) automation is supported via the X API v2. Posts are created as tweets with the note title and a link to the published page.
+
+### Setup
+
+#### 1. X Developer Account
+1. Go to https://developer.x.com/ and create a project + app.
+2. Generate **API Key**, **API Key Secret**, **Access Token**, and **Access Token Secret** (with Read+Write permissions).
+3. Add them as GitHub Secrets:
+   - `X_API_KEY`
+   - `X_API_SECRET`
+   - `X_ACCESS_TOKEN`
+   - `X_ACCESS_TOKEN_SECRET`
+
+#### 2. GitHub Variables
+- `PUBLISH_X` (default: `true`) — enable/disable X publishing
+
+### Publishing Flags
+
+| Variable | Default | Values | Purpose |
+|----------|---------|--------|---------|
+| `PUBLISH_PATREON` | `false` | `true`, `false` | Enable/disable Patreon (API limitation: read-only) |
+| `PUBLISH_FACEBOOK` | `true` | `true`, `false` | Enable/disable Facebook publishing |
+| `PUBLISH_X` | `true` | `true`, `false` | Enable/disable X (Twitter) publishing |
+
+### What Gets Posted to X
+
+- **Daily notes**: A tweet with the note title and a link to the published page. The link preview (Open Graph tags) shows the description.
+- **Art projects**: A tweet with "Art: {title}" and a link to the project page.
+
+### X API Notes
+
+- Free tier: 1,500 tweets per month (write). Daily notes (~30/month) are well within limits.
+- Tweets are not updatable — re-running the publisher skips already-posted content.
+- The X handle is @ManOfGodKzn.
+
 ## Facebook Publishing
 
 Facebook automation works and is enabled by default once you fix the token/permissions issues.
