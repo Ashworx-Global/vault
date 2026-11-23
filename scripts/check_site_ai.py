@@ -38,11 +38,49 @@ def main() -> int:
     def fail(msg: str) -> None:
         failures.append(msg)
 
-    for name in ["index.html", "robots.txt", "sitemap.xml", "llms.txt", "llms-full.txt", "404.html"]:
+    for name in ["index.html", "robots.txt", "sitemap.xml", "llms.txt", "llms-full.txt", "404.html", "feed.xml"]:
         if not (dist / name).exists():
             fail(f"missing {name}")
     if failures:
         return report(failures, dist)
+    
+    pages = [p for p in dist.rglob("index.html")]
+    
+    # Validate the RSS feed is well-formed XML and lists the newest daily note
+    try:
+        import xml.etree.ElementTree as ET
+        feed_tree = ET.parse(dist / "feed.xml")
+        feed_root = feed_tree.getroot()
+        feed_items = feed_root.findall(".//item")
+        if not feed_items:
+            fail("feed.xml has no <item> entries")
+        # Check every page has the feed autodiscovery link
+        for p in pages:
+            rel = p.relative_to(dist).as_posix()
+            if rel == "404/index.html":
+                continue
+            text = p.read_text(encoding="utf-8", errors="replace")
+            if 'rel="alternate" type="application/rss+xml"' not in text:
+                fail(f"{rel} is missing the RSS feed autodiscovery link")
+        # Check feed contains at most 30 items and no future-dated items
+        if len(feed_items) > 30:
+            fail(f"feed.xml has {len(feed_items)} items (max 30)")
+        from datetime import date as _date
+        today = _date.today().isoformat()
+        for item in feed_items:
+            # pubDate is RFC-822; parse the date portion
+            pub = item.findtext("pubDate", "")
+            # Extract YYYY-MM-DD from the pubDate (format: "Tue, 17 Nov 2026 00:00:00 +0000")
+            # Use email.utils to parse
+            try:
+                from email.utils import parsedate_to_datetime
+                dt = parsedate_to_datetime(pub)
+                if dt.date().isoformat() > today:
+                    fail(f"feed.xml contains future-dated item: {item.findtext('title','')}")
+            except Exception:
+                pass
+    except Exception as e:
+        fail(f"feed.xml is not valid XML: {e}")
 
     robots = (dist / "robots.txt").read_text(encoding="utf-8")
     for bot in AI_BOTS:
@@ -51,7 +89,6 @@ def main() -> int:
     if "Sitemap: " not in robots:
         fail("robots.txt has no Sitemap line")
 
-    pages = [p for p in dist.rglob("index.html")]
     for p in pages:
         rel = p.relative_to(dist).as_posix()
         text = p.read_text(encoding="utf-8", errors="replace")

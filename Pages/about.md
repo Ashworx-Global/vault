@@ -23,4 +23,4 @@ We want to help men have a relationship with God, and to challenge each other to
 
 ## Follow along
 
-You can find the daily readings and more on [Patreon](https://www.patreon.com/cw/ManOfGodSA) and on [Facebook](https://www.facebook.com/profile.php?id=61596013522180).
+You can find the daily readings and more on [Patreon](https://www.patreon.com/c/ManOfGodSA?utm_source=manofgod.online&utm_medium=site&utm_campaign=about) and on [Facebook](https://www.facebook.com/profile.php?id=61596013522180).

@@ -32,7 +32,8 @@ import os
 import re
 import shutil
 import sys
-from datetime import date
+from datetime import date, datetime, timezone
+from email.utils import format_datetime
 from pathlib import Path
 from urllib.parse import quote, urlsplit
 
@@ -50,9 +51,9 @@ RESOURCE_TYPES = {"book": "Books", "podcast": "Podcasts", "youtube": "YouTube", 
 
 SITE_NAME = "Man of God Daily Readings"
 SITE_URL = "https://manofgod.online"
-SITE_DESC = ("Free daily Bible reading notes, verse pages, articles and recommended resources for men who want to "
-             "grow closer to God through His Word. Reflections are personal thoughts; Scripture is the authority.")
-SITE_SOCIAL = ["https://www.patreon.com/cw/ManOfGodSA",
+SITE_DESC = ("Free daily Bible reading notes, verse pages and resources for men who want to "
+             "grow closer to God through His Word.")
+SITE_SOCIAL = ["https://www.patreon.com/c/ManOfGodSA",
                "https://www.facebook.com/profile.php?id=61596013522180",
                "https://github.com/Ashworx-Global/vault"]
 VERSE = "Not by might, nor by power, but by my Spirit, says the Lord of hosts. — Zechariah 4:6"
@@ -183,7 +184,7 @@ BASE_TMPL = """<!DOCTYPE html>
 <div class="max-w-6xl mx-auto px-4 py-8 grid gap-6 md:grid-cols-3 text-sm" style="color: #a8a29e;">
 <div><h3 class="font-display text-gold mb-2">Man of God Daily Readings</h3><p>Bible readings and personal reflections to help men grow closer to God. Read the passages for yourself: Scripture is the authority, and these reflections are personal thoughts.</p><p class="mt-3"><a href="@@BASE@@/accept-jesus/">Explore faith in Jesus →</a></p></div>
 <div><h3 class="font-display text-gold mb-2">Browse</h3><p><a class="hover:text-gold" href="@@BASE@@/about/">About</a> · <a class="hover:text-gold" href="@@BASE@@/daily/">Daily notes</a> · <a class="hover:text-gold" href="@@BASE@@/blog/">Blog</a> · <a class="hover:text-gold" href="@@BASE@@/bible/">Verse pages</a> · <a class="hover:text-gold" href="@@BASE@@/books/">Books</a> · <a class="hover:text-gold" href="@@BASE@@/tags/">Topics</a> · <a class="hover:text-gold" href="@@BASE@@/art/">Art</a> · <a class="hover:text-gold" href="@@BASE@@/resources/">Resources</a> · <a class="hover:text-gold" href="@@BASE@@/graph/">Graph</a></p></div>
-<div><h3 class="font-display text-gold mb-2">Follow &amp; support</h3><p><a class="hover:text-gold" href="https://www.patreon.com/cw/ManOfGodSA" target="_blank" rel="noopener">Patreon</a> · <a class="hover:text-gold" href="https://www.facebook.com/profile.php?id=61596013522180" target="_blank" rel="noopener">Facebook</a></p><p class="mt-2"><a class="hover:text-gold" href="https://github.com/Ashworx-Global/vault" target="_blank" rel="noopener">Source on GitHub</a> · <a class="hover:text-gold" href="@@BASE@@/llms.txt">AI guide (llms.txt)</a></p></div>
+<div><h3 class="font-display text-gold mb-2">Follow &amp; support</h3><p><a class="hover:text-gold" href="https://www.patreon.com/c/ManOfGodSA?utm_source=manofgod.online&amp;utm_medium=site&amp;utm_campaign=footer" target="_blank" rel="noopener">Patreon</a> · <a class="hover:text-gold" href="https://www.facebook.com/profile.php?id=61596013522180" target="_blank" rel="noopener">Facebook</a> · <a class="hover:text-gold" href="/feed.xml">RSS</a></p><p class="mt-2"><a class="hover:text-gold" href="https://github.com/Ashworx-Global/vault" target="_blank" rel="noopener">Source on GitHub</a> · <a class="hover:text-gold" href="@@BASE@@/llms.txt">AI guide (llms.txt)</a></p></div>
 </div>
 </footer>
 <div id="lightbox">
@@ -423,6 +424,14 @@ def clip_desc(text: str, limit: int = 160) -> str:
 
 def esc(t: str) -> str:
     return html.escape(t, quote=False)
+
+
+def xml_esc(t: str) -> str:
+    return (t.replace("&", "&amp;")
+            .replace("<", "&lt;")
+            .replace(">", "&gt;")
+            .replace('"', "&quot;")
+            .replace("'", "&apos;"))
 
 
 def render_inline(text: str, linkmap: dict, base: str, books: set[str]) -> str:
@@ -896,17 +905,21 @@ def main() -> int:
                 f'<meta property="og:type" content="{"article" if article else "website"}">',
                 f'<meta property="og:title" content="{esc(title)}">',
                 f'<meta property="og:description" content="{short}">',
-                f'<meta property="og:image" content="{SITE_URL}{base}/logos/icon-256.png">',
-                '<meta name="twitter:card" content="summary">',
+                f'<meta property="og:image" content="{SITE_URL}{base}/logos/social-og.png">',
+                f'<meta property="og:image:width" content="1200">',
+                f'<meta property="og:image:height" content="630">',
+                '<meta name="twitter:card" content="summary_large_image">',
                 f'<meta name="twitter:title" content="{esc(title)}">',
-                f'<meta name="twitter:description" content="{short}">']
+                f'<meta name="twitter:description" content="{short}">',
+                f'<meta name="twitter:image" content="{SITE_URL}{base}/logos/social-og.png">']
         if rel is None:
             head.append('<meta name="robots" content="noindex">')
         else:
             url = f"{SITE_URL}{base}/{rel}/" if rel else f"{SITE_URL}{base}/"
             head += [f'<link rel="canonical" href="{url}">',
                      f'<meta property="og:url" content="{url}">',
-                     '<meta name="robots" content="index, follow, max-image-preview:large">']
+                     '<meta name="robots" content="index, follow, max-image-preview:large">',
+                     f'<link rel="alternate" type="application/rss+xml" title="{esc(SITE_NAME)}" href="{SITE_URL}{base}/feed.xml">']
             graph = [{"@type": "WebSite", "@id": f"{SITE_URL}/#website", "url": f"{SITE_URL}/", "name": SITE_NAME,
                       "description": SITE_DESC, "inLanguage": "en", "publisher": {"@id": f"{SITE_URL}/#organization"}},
                      {"@type": "Organization", "@id": f"{SITE_URL}/#organization", "name": SITE_NAME, "url": f"{SITE_URL}/",
@@ -1036,7 +1049,7 @@ def main() -> int:
                       + (f'<a href="{next_url}">Older reading →</a>' if i + 1 < len(daily) else '')
                       + '</div><section class="card mt-6"><h2 class="font-display text-xl mb-2">What stood out to you in this reading?</h2>'
                       + '<p class="mb-4">The readings are also on Patreon, where we share questions, reflections and conversation. Come and add your thoughts.</p>'
-                      + '<a class="btn" href="https://www.patreon.com/c/ManOfGodSA" target="_blank" rel="noopener">Join the conversation on Patreon</a>'
+                      + '<a class="btn" href="https://www.patreon.com/c/ManOfGodSA?utm_source=manofgod.online&amp;utm_medium=site&amp;utm_campaign=reading-cta" target="_blank" rel="noopener">Continue the conversation on Patreon</a>'
                       + '<p class="mt-3 text-sm" style="color:#a8a29e;">Open Man of God on Patreon, sign in or create an account, and look for this reading by its title. Check the membership options there to join in.</p></section>')
         tags = p["fm"].get("tags", [])
         topics = [t.replace("-", " ") for t in tags[:4]]
@@ -1326,7 +1339,7 @@ def main() -> int:
                      f'<div class="prose-custom">{render_blocks(p["body"], linkmap, base, books)}</div>'
                      f'<p class="mt-10 text-sm"><a class="text-gold hover:underline" href="{base}/blog/">← All articles</a></p>'
                       + f'<div class="mt-10 flex flex-wrap items-center justify-between gap-3"><a class="text-gold hover:underline" href="{prev_url}">← Previous post</a><a class="text-gold hover:underline" href="{next_url}">Next post →</a></div>'
-                      + '<div class="mt-6 p-4 rounded border border-gold/30"><p class="font-display text-gold mb-1">Enjoying this?</p><p class="text-sm" style="color:#a8a29e;">Support the work on <a class="text-gold hover:underline" href="https://www.patreon.com/c/ManOfGodSA" target="_blank" rel="noopener">Patreon</a>.</p></div>')
+                      + '<div class="mt-6 p-4 rounded border border-gold/30"><p class="font-display text-gold mb-1">Enjoying this?</p><p class="text-sm" style="color:#a8a29e;">Support the work on <a class="text-gold hover:underline" href="https://www.patreon.com/c/ManOfGodSA?utm_source=manofgod.online&amp;utm_medium=site&amp;utm_campaign=blog-cta" target="_blank" rel="noopener">Patreon</a>.</p></div>')
         write_md(f"blog/{p['slug']}", p["title"], p["desc"], p["date"], p["tags"], p["body"])
         write(f"blog/{p['slug']}", p["title"], p["desc"] or p["title"], body_html, article={"date": p["date"], "tags": p["tags"]})
 
@@ -1345,7 +1358,7 @@ def main() -> int:
                  '<p class="mt-2 mb-4">You will find the same Bible readings on Patreon, along with conversations about what we are reading. Share a reflection, ask a question, and grow in faith with others.</p>'
                  '<div class="my-5"><h3 class="font-display text-xl mb-2">In the works</h3>'
                  '<p>We are working on daily devotionals, comic books and animations, with plans for manly soaps, shirts, braai gear and other goods for men. These projects are still taking shape—join us on Patreon and tell us what you would love to see.</p></div>'
-                 '<a class="btn" href="https://www.patreon.com/c/ManOfGodSA" target="_blank" rel="noopener">Join us on Patreon</a>'
+                 '<a class="btn" href="https://www.patreon.com/c/ManOfGodSA?utm_source=manofgod.online&amp;utm_medium=site&amp;utm_campaign=homepage-cta" target="_blank" rel="noopener">Join us on Patreon</a>'
                  '<p class="mt-3 text-sm" style="color:#a8a29e;">New to Patreon? Sign in or create an account, then check the membership options on the Man of God page to take part.</p>'
                  '<p class="mt-4 text-sm">You can also <a href="https://www.facebook.com/profile.php?id=61596013522180" target="_blank" rel="noopener">follow Man of God on Facebook</a>.</p></section>')
     write("", SITE_NAME, SITE_DESC, hero + (top_html if top_resources else "") + community)
@@ -1434,7 +1447,7 @@ def main() -> int:
     guide += ["", "## Verse pages by book"]
     guide += [f"- [{b}]({site}/books/{slugify(b)}/)" for b in books_sorted]
     guide += ["", "## Follow and support",
-              "- [Patreon](https://www.patreon.com/cw/ManOfGodSA): posts from the daily readings",
+              "- [Patreon](https://www.patreon.com/c/ManOfGodSA): posts from the daily readings",
               "- [Facebook](https://www.facebook.com/profile.php?id=61596013522180): sharing the daily readings",
               "- [Source on GitHub](https://github.com/Ashworx-Global/vault): the vault and the build that makes this site"]
     (out / "llms.txt").write_text("\n".join(guide) + "\n", encoding="utf-8")
@@ -1455,6 +1468,95 @@ def main() -> int:
                 urls.append(u)
     (out / "sitemap.xml").write_text('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
                                      + "".join(f"<url><loc>{esc(u)}</loc><lastmod>{date.today().isoformat()}</lastmod></url>" for u in sorted(set(urls))) + "</urlset>", encoding="utf-8")
+    # ---- RSS feeds (main feed: 30 most recent daily readings; blog feed for posts)
+    def _rfc822(s: str) -> str:
+        return format_datetime(datetime.strptime(s, "%Y-%m-%d").replace(tzinfo=timezone.utc))
+
+    def _feed_desc(body: str, limit: int = 300) -> str:
+        text = OBSIDIAN_COMMENT_RE.sub("", body)
+        lines = []
+        in_bible = False
+        for line in text.splitlines():
+            if re.match(r"^\s*>\s*\[!bible\]", line, re.I):
+                in_bible = True
+                continue
+            if in_bible and line.lstrip().startswith(">"):
+                continue
+            if line.strip():
+                in_bible = False
+            if re.match(r"^\s*#|\s*!\[", line) or re.fullmatch(r"\s*(?:\[\[.*?\]\]\s*)+", line):
+                continue
+            lines.append(line)
+        plain = to_plain("\n".join(lines))
+        paragraphs = [p.strip() for p in plain.split("\n\n") if p.strip()]
+        text = " ".join((paragraphs[0] if paragraphs else "").split())
+        return clip_desc(text, limit)
+
+    today_iso = date.today().isoformat()
+
+    # Main feed
+    main_items = []
+    for p in daily:
+        if p.get("date", "") > today_iso:
+            continue
+        if len(main_items) >= 30:
+            break
+        url = f"{SITE_URL}{p['url']}"
+        cats = "".join(f"<category>{xml_esc(t)}</category>" for t in p["fm"].get("tags", []))
+        main_items.append(
+            f"  <item>\n"
+            f"    <title>{xml_esc(p['title'])}</title>\n"
+            f"    <link>{xml_esc(url)}</link>\n"
+            f"    <guid isPermaLink=\"true\">{xml_esc(url)}</guid>\n"
+            f"    <pubDate>{_rfc822(p['date'])}</pubDate>\n"
+            f"    <description>{xml_esc(_feed_desc(p['body'], 300))}</description>\n"
+            f"    {cats}\n"
+            f"  </item>")
+    main_feed = ('<?xml version="1.0" encoding="UTF-8"?>\n'
+                 '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">\n'
+                 "<channel>\n"
+                 f"  <title>{xml_esc(SITE_NAME)}</title>\n"
+                 f"  <link>{SITE_URL}{base}/</link>\n"
+                 f"  <description>{xml_esc(SITE_DESC)}</description>\n"
+                 "  <language>en</language>\n"
+                 f"  <lastBuildDate>{format_datetime(datetime.now(timezone.utc))}</lastBuildDate>\n"
+                 f'  <atom:link href="{SITE_URL}{base}/feed.xml" rel="self" type="application/rss+xml"/>\n'
+                 + "\n".join(main_items) + "\n"
+                 "</channel>\n</rss>\n")
+    (out / "feed.xml").write_text(main_feed, encoding="utf-8")
+
+    # Blog feed
+    if posts:
+        blog_items = []
+        for p in posts:
+            if p.get("date", "") > today_iso:
+                continue
+            url = f"{SITE_URL}{p['url']}"
+            cats = "".join(f"<category>{xml_esc(t)}</category>" for t in p.get("tags", []))
+            blog_items.append(
+                f"  <item>\n"
+                f"    <title>{xml_esc(p['title'])}</title>\n"
+                f"    <link>{xml_esc(url)}</link>\n"
+                f"    <guid isPermaLink=\"true\">{xml_esc(url)}</guid>\n"
+                f"    <pubDate>{_rfc822(p['date'])}</pubDate>\n"
+                f"    <description>{xml_esc(clip_desc(p.get('desc', '') or p['title'], 300))}</description>\n"
+                f"    {cats}\n"
+                f"  </item>")
+        blog_feed = ('<?xml version="1.0" encoding="UTF-8"?>\n'
+                     '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">\n'
+                     "<channel>\n"
+                     f"  <title>{xml_esc(SITE_NAME)} - Blog</title>\n"
+                     f"  <link>{SITE_URL}{base}/blog/</link>\n"
+                     f"  <description>Articles and reflections from {SITE_NAME}.</description>\n"
+                     "  <language>en</language>\n"
+                     f"  <lastBuildDate>{format_datetime(datetime.now(timezone.utc))}</lastBuildDate>\n"
+                     f'  <atom:link href="{SITE_URL}{base}/blog/feed.xml" rel="self" type="application/rss+xml"/>\n'
+                     + "\n".join(blog_items) + "\n"
+                     "</channel>\n</rss>\n")
+        blog_dir = out / "blog"
+        blog_dir.mkdir(parents=True, exist_ok=True)
+        (blog_dir / "feed.xml").write_text(blog_feed, encoding="utf-8")
+
     print(f"built {len(pages)} pages ({len(daily)} daily, {len(bible)} verse, {len(posts)} articles) -> {out}")
     return 0
 
