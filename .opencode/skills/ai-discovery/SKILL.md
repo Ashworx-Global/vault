@@ -23,7 +23,8 @@ so new content is discoverable as soon as it is built and deployed. Never hand-e
 | `sitemap.xml` (POSIX URLs) | discovery by search engines | end of `main()` |
 | `llms.txt` | the guide: start pages plus every content URL with a one-line description | end of `main()` |
 | `llms-full.txt` | all daily notes, articles and resources as plain text | `to_plain()` + end of `main()` |
-| `noindex` on 404 | keeps error pages out of search | `render_page(rel=None)` |
+| `feed.xml` (RSS 2.0) + `blog/feed.xml` | syndication feed for new readings and articles; auto-discovery on every page | end of `main()` |
+| `<link rel="alternate" type="application/rss+xml">` on every page | lets browsers and feed readers find the feed | `render_page()` |
 | `index.md` clean markdown copy beside each daily, blog, resource and standalone page | text an AI tool can read without HTML noise (llms.txt v2 convention) | `write_md(...)` |
 | `<link rel="alternate" type="text/markdown">` and `<link rel="describedby" href="/llms.txt">` | lets tools find the markdown copy and the guide from the HTML page | `render_page()` |
 
@@ -48,6 +49,8 @@ so new content is discoverable as soon as it is built and deployed. Never hand-e
    reintroduce `/vault` in a link; the checker rejects it.
 7. **Scripture text.** Use public-domain (WEB) text or link to the ESV. Never paste ESV text
    (see verse-pages rules). Reflections are the author's thoughts; the guide says so.
+7. **RSS feed.** The build generates `/feed.xml` (30 most recent daily readings) and `/blog/feed.xml`. Every page includes a feed autodiscovery `<link>`. The feed is regenerated on every build, so new readings appear automatically after a push. Automation tools (Buffer, Zapier) can watch the feed for new items.
+
 8. **Sharing.** New blog posts and daily notes should be shared to Patreon, Facebook and X (Twitter)
    with their site link (`https://manofgod.online/<kind>/<slug>/`). The link is the thing
    AI tools and search engines follow. X posting is automated via `scripts/social_publisher.py`

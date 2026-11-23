@@ -86,9 +86,11 @@ AI-discovery gap, report it.
    - no duplicate titles or descriptions across pages (report the paths)
    Report any failure with the page path. Fix titles and descriptions in `build-site.py`
    when they come from the build's templates. Leave author-written text alone.
-3. **Sitemap and crawl.** Confirm `sitemap.xml` lists every indexable page, has no `noindex`
+3. **Sitemap, crawl and feed.** Confirm `sitemap.xml` lists every indexable page, has no `noindex`
    pages, and uses https://manofgod.online URLs. Confirm `robots.txt` allows search crawlers
-   and names the sitemap.
+   and names the sitemap. Confirm `/feed.xml` exists, is valid RSS 2.0, contains the latest
+   daily reading, and that every page includes the feed autodiscovery
+   `<link rel="alternate" type="application/rss+xml">`. Report any missing feed link.
 4. **Speed and layout basics.** Check image file sizes in `site/dist` (flag any image over
    500 KB, with the file name) and that CSS and JavaScript are not loaded from unnecessary
    third-party hosts. Report; do not change image files.
