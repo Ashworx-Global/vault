@@ -1596,6 +1596,17 @@ def main() -> int:
             break
         url = f"{SITE_URL}{p['url']}"
         cats = "".join(f"<category>{xml_esc(t)}</category>" for t in p["fm"].get("tags", []))
+        # Image enclosure for Zapier/Buffer: use the unique OG image if it exists
+        og_rel = f"og/daily/{p['slug']}.png"
+        og_path = out / og_rel
+        if og_path.is_file():
+            img_url = f"{SITE_URL}{base}/{og_rel}"
+            img_size = og_path.stat().st_size
+        else:
+            img_url = f"{SITE_URL}{base}/logos/social-og.png"
+            img_size = (REPO / "logo" / "exports" / "social-og.png").stat().st_size if (REPO / "logo" / "exports" / "social-og.png").is_file() else 0
+        media = (f'    <enclosure url="{xml_esc(img_url)}" type="image/png" length="{img_size}"/>\n'
+                 f'    <media:content url="{xml_esc(img_url)}" medium="image" type="image/png" width="1200" height="630"/>\n')
         main_items.append(
             f"  <item>\n"
             f"    <title>{xml_esc(p['title'])}</title>\n"
@@ -1604,9 +1615,10 @@ def main() -> int:
             f"    <pubDate>{_rfc822(p['date'])}</pubDate>\n"
             f"    <description>{xml_esc(_feed_desc(p['body'], 300))}</description>\n"
             f"    {cats}\n"
+            f"{media}"
             f"  </item>")
     main_feed = ('<?xml version="1.0" encoding="UTF-8"?>\n'
-                 '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">\n'
+                 '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/">\n'
                  "<channel>\n"
                  f"  <title>{xml_esc(SITE_NAME)}</title>\n"
                  f"  <link>{SITE_URL}{base}/</link>\n"
@@ -1626,6 +1638,10 @@ def main() -> int:
                 continue
             url = f"{SITE_URL}{p['url']}"
             cats = "".join(f"<category>{xml_esc(t)}</category>" for t in p.get("tags", []))
+            img_url = f"{SITE_URL}{base}/logos/social-og.png"
+            img_size = (REPO / "logo" / "exports" / "social-og.png").stat().st_size if (REPO / "logo" / "exports" / "social-og.png").is_file() else 0
+            media = (f'    <enclosure url="{xml_esc(img_url)}" type="image/png" length="{img_size}"/>\n'
+                     f'    <media:content url="{xml_esc(img_url)}" medium="image" type="image/png" width="1200" height="630"/>\n')
             blog_items.append(
                 f"  <item>\n"
                 f"    <title>{xml_esc(p['title'])}</title>\n"
@@ -1634,9 +1650,10 @@ def main() -> int:
                 f"    <pubDate>{_rfc822(p['date'])}</pubDate>\n"
                 f"    <description>{xml_esc(clip_desc(p.get('desc', '') or p['title'], 300))}</description>\n"
                 f"    {cats}\n"
+                f"{media}"
                 f"  </item>")
         blog_feed = ('<?xml version="1.0" encoding="UTF-8"?>\n'
-                     '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">\n'
+                     '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/">\n'
                      "<channel>\n"
                      f"  <title>{xml_esc(SITE_NAME)} - Blog</title>\n"
                      f"  <link>{SITE_URL}{base}/blog/</link>\n"
