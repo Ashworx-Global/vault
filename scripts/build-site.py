@@ -426,6 +426,88 @@ def esc(t: str) -> str:
     return html.escape(t, quote=False)
 
 
+def _find_font(bold: bool = True) -> str | None:
+    """Find a bold sans-serif TTF on this machine (works in CI on ubuntu-latest)."""
+    candidates = [
+        "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf" if bold else "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+        "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf" if bold else "/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf",
+        "/usr/share/fonts/truetype/noto/NotoSans-Bold.ttf" if bold else "/usr/share/fonts/truetype/noto/NotoSans-Regular.ttf",
+    ]
+    for c in candidates:
+        if os.path.isfile(c):
+            return c
+    return None
+
+
+def make_og_image(out_path: Path, title: str, subtitle: str = "") -> bool:
+    """Generate a 1200x630 branded share image with title + subtitle over social-og.png.
+    Returns True on success. Falls back to the generic image if PIL is missing or fails."""
+    try:
+        from PIL import Image, ImageDraw, ImageFont
+    except ImportError:
+        return False
+    bg_path = REPO / "logo" / "exports" / "social-og.png"
+    if not bg_path.is_file():
+        return False
+    try:
+        img = Image.open(bg_path).convert("RGBA")
+        img = img.resize((1200, 630))
+        draw = ImageDraw.Draw(img)
+        font_bold = _find_font(True)
+        font_regular = _find_font(False)
+        if not font_bold:
+            return False
+        # Title: large, centered, with word wrap
+        title_font = ImageFont.truetype(font_bold, 56)
+        subtitle_font = ImageFont.truetype(font_regular or font_bold, 32) if (font_regular or font_bold) else title_font
+        # Wrap title to fit ~1100px width
+        def wrap(text, font, max_width=1100):
+            words = text.split()
+            lines, current = [], ""
+            for w in words:
+                test = (current + " " + w).strip()
+                if draw.textlength(test, font=font) <= max_width:
+                    current = test
+                else:
+                    if current:
+                        lines.append(current)
+                    current = w
+            if current:
+                lines.append(current)
+            return lines
+        title_lines = wrap(title, title_font)
+        # Limit to 3 lines
+        if len(title_lines) > 3:
+            title_lines = title_lines[:3]
+            title_lines[-1] = title_lines[-1].rstrip() + "…"
+        # Calculate vertical position: center the block
+        line_h = 70
+        block_h = len(title_lines) * line_h
+        if subtitle:
+            block_h += 50
+        y = (630 - block_h) // 2
+        # Draw title lines (centered, white with slight shadow)
+        for line in title_lines:
+            tw = draw.textlength(line, font=title_font)
+            x = (1200 - tw) // 2
+            # shadow
+            draw.text((x + 2, y + 2), line, font=title_font, fill=(0, 0, 0, 120))
+            draw.text((x, y), line, font=title_font, fill=(255, 255, 255, 255))
+            y += line_h
+        # Draw subtitle (verse reference) in gold
+        if subtitle:
+            y += 10
+            sw = draw.textlength(subtitle, font=subtitle_font)
+            sx = (1200 - sw) // 2
+            draw.text((sx + 1, y + 1), subtitle, font=subtitle_font, fill=(0, 0, 0, 100))
+            draw.text((sx, y), subtitle, font=subtitle_font, fill=(200, 162, 74, 255))
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+        img.convert("RGB").save(out_path, "PNG", optimize=True)
+        return True
+    except Exception:
+        return False
+
+
 def xml_esc(t: str) -> str:
     return (t.replace("&", "&amp;")
             .replace("<", "&lt;")
@@ -898,20 +980,21 @@ def main() -> int:
     posts.sort(key=lambda p: p["date"], reverse=True)
 
     def render_page(title: str, desc: str, body_html: str, rel: str | None = None, article: dict | None = None,
-                    extra: list[dict] | None = None) -> str:
+                    extra: list[dict] | None = None, og_image: str | None = None) -> str:
         desc = clip_desc(desc)
         short = esc(desc)
+        img = og_image or f"{SITE_URL}{base}/logos/social-og.png"
         head = [f'<meta property="og:site_name" content="{esc(SITE_NAME)}">',
                 f'<meta property="og:type" content="{"article" if article else "website"}">',
                 f'<meta property="og:title" content="{esc(title)}">',
                 f'<meta property="og:description" content="{short}">',
-                f'<meta property="og:image" content="{SITE_URL}{base}/logos/social-og.png">',
+                f'<meta property="og:image" content="{img}">',
                 f'<meta property="og:image:width" content="1200">',
                 f'<meta property="og:image:height" content="630">',
                 '<meta name="twitter:card" content="summary_large_image">',
                 f'<meta name="twitter:title" content="{esc(title)}">',
                 f'<meta name="twitter:description" content="{short}">',
-                f'<meta name="twitter:image" content="{SITE_URL}{base}/logos/social-og.png">']
+                f'<meta name="twitter:image" content="{img}">']
         if rel is None:
             head.append('<meta name="robots" content="noindex">')
         else:
@@ -943,10 +1026,11 @@ def main() -> int:
     def tag_pills(tags: list[str]) -> str:
         return "".join(f'<a class="tag" href="{base}/tags/{quote(slugify(t))}/">#{esc(t)}</a>' for t in tags)
 
-    def write(rel: str, title: str, desc: str, body_html: str, article: dict | None = None, extra: list[dict] | None = None) -> str:
+    def write(rel: str, title: str, desc: str, body_html: str, article: dict | None = None, extra: list[dict] | None = None,
+              og_image: str | None = None) -> str:
         d = out / rel
         d.mkdir(parents=True, exist_ok=True)
-        (d / "index.html").write_text(render_page(title, desc, body_html, rel, article, extra), encoding="utf-8")
+        (d / "index.html").write_text(render_page(title, desc, body_html, rel, article, extra, og_image), encoding="utf-8")
         return f"{base}/{rel}/".replace("//", "/")
 
     def write_md(rel: str, title: str, desc: str, date_s: str, tags: list[str], body_md: str) -> None:
@@ -1065,8 +1149,17 @@ def main() -> int:
                 else f"Daily Bible reading for {p.get('date', '')}: {p['title']}. Scripture reflections, encouragement, and links to cited verse pages.")
         if len(desc) > 160 and desc.endswith(" and links to cited verse pages."):
             desc = desc.removesuffix(" and links to cited verse pages.") + "."
+        # Generate a unique 1200x630 share image for this reading (title + verse ref over branded bg)
+        og_image_url = f"{SITE_URL}{base}/logos/social-og.png"  # fallback
+        m_ref = re.search(r">\s*\[!bible\][+-]?\s*\[([^\]]+?)\s+-\s+[^\]]+\]", p["body"])
+        verse_ref = m_ref.group(1).strip() if m_ref else ""
+        og_rel = f"og/daily/{p['slug']}.png"
+        og_path = out / og_rel
+        if make_og_image(og_path, p["title"], verse_ref):
+            og_image_url = f"{SITE_URL}{base}/{og_rel}"
         write_md(f"daily/{p['slug']}", p["title"], desc, p.get("date", ""), tags, p["body"])
-        write(f"daily/{p['slug']}", title_tag, desc, body_html, article={"date": p.get("date", ""), "tags": tags})
+        write(f"daily/{p['slug']}", title_tag, desc, body_html, article={"date": p.get("date", ""), "tags": tags},
+              og_image=og_image_url)
 
     # ---- bible index + pages
     books_sorted = sorted(by_book)
