@@ -68,7 +68,14 @@ X (Twitter) automation is supported via the X API v2. Posts are created as tweet
 - Tweets are not updatable — re-running the publisher skips already-posted content.
 - The X handle is @ManOfGodKzn.
 
-## Facebook Publishing
+## Facebook Publishing (Manual)
+
+Facebook posting is done manually (no API automation in the workflow). The site's
+social_publisher.py retains Facebook support for local testing, but the deploy
+workflow no longer passes Facebook credentials. To post to Facebook, use the
+site's content and the Buffer/Zapier RSS flow or post manually.
+
+---
 
 Facebook automation works and is enabled by default once you fix the token/permissions issues.
 

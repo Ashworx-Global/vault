@@ -313,7 +313,7 @@ def publish_daily_notes(daily_dir: Path, published_content: PublishedContent,
                        base_url: str = "https://manofgod.online"):
     """Publish new or updated daily notes to Patreon and Facebook."""
     publish_patreon = os.getenv("PUBLISH_PATREON", "true").lower() in ["true", "1", "yes"]
-    publish_facebook = os.getenv("PUBLISH_FACEBOOK", "true").lower() in ["true", "1", "yes"]
+    publish_facebook = os.getenv("PUBLISH_FACEBOOK", "false").lower() in ["true", "1", "yes"]
     publish_x = os.getenv("PUBLISH_X", "false").lower() in ["true", "1", "yes"]
     
     if not publish_patreon and not publish_facebook and not publish_x:
@@ -351,7 +351,7 @@ def publish_art_projects(art_dir: Path, published_content: PublishedContent,
                         base_url: str = "https://manofgod.online"):
     """Publish new or updated art projects to Patreon and Facebook."""
     publish_patreon = os.getenv("PUBLISH_PATREON", "true").lower() in ["true", "1", "yes"]
-    publish_facebook = os.getenv("PUBLISH_FACEBOOK", "true").lower() in ["true", "1", "yes"]
+    publish_facebook = os.getenv("PUBLISH_FACEBOOK", "false").lower() in ["true", "1", "yes"]
     publish_x = os.getenv("PUBLISH_X", "false").lower() in ["true", "1", "yes"]
     
     if not publish_patreon and not publish_facebook and not publish_x:
@@ -391,16 +391,16 @@ if __name__ == "__main__":
     TRACK_FILE = REPO / ".published-content.json"
     
     publish_patreon = os.getenv("PUBLISH_PATREON", "false").lower() in ["true", "1", "yes"]
-    publish_facebook = os.getenv("PUBLISH_FACEBOOK", "true").lower() in ["true", "1", "yes"]
+    publish_facebook = os.getenv("PUBLISH_FACEBOOK", "false").lower() in ["true", "1", "yes"]
     publish_x = os.getenv("PUBLISH_X", "false").lower() in ["true", "1", "yes"]
     
-    print("📱 Publishing to Patreon, Facebook and X...\n")
+    print("📱 Publishing to Patreon and X...\n")
     print("Platform Status:")
     if publish_patreon:
         print(f"  Patreon:  ⚠️  Enabled (but API is read-only - posts will fail)")
     else:
         print(f"  Patreon:  ✗ Disabled (API limitation: v2 is read-only)")
-    print(f"  Facebook: {'✓ Enabled' if publish_facebook else '✗ Disabled'}")
+    print(f"  Facebook: ✗ Manual (posted manually, not via workflow)")
     print(f"  X:        {'✓ Enabled' if publish_x else '✗ Disabled'}")
     print()
     

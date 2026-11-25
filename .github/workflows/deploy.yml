@@ -48,9 +48,6 @@ jobs:
       - name: Publish to social platforms
         if: success()
         env:
-          FACEBOOK_PAGE_TOKEN: ${{ secrets.FACEBOOK_PAGE_TOKEN }}
-          FACEBOOK_PAGE_ID: ${{ vars.FACEBOOK_PAGE_ID }}
-          PUBLISH_FACEBOOK: ${{ vars.PUBLISH_FACEBOOK || 'true' }}
           X_API_KEY: ${{ secrets.X_API_KEY }}
           X_API_SECRET: ${{ secrets.X_API_SECRET }}
           X_ACCESS_TOKEN: ${{ secrets.X_ACCESS_TOKEN }}
@@ -59,9 +56,9 @@ jobs:
           PUBLISH_PATREON: ${{ vars.PUBLISH_PATREON || 'false' }}
         run: |
           echo "📢 Publishing Configuration:"
-          echo "  PUBLISH_FACEBOOK=$PUBLISH_FACEBOOK"
           echo "  PUBLISH_X=$PUBLISH_X"
           echo "  (Patreon API v2 is read-only - automation not supported)"
+          echo "  (Facebook is posted manually)"
           echo ""
           python3 scripts/social_publisher.py
       - name: Setup Pages
