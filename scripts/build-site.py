@@ -426,6 +426,42 @@ def esc(t: str) -> str:
     return html.escape(t, quote=False)
 
 
+# Words in frontmatter tags that must keep a capital (or possessive) in prose, so
+# descriptions read "King of the Jews, Son of God" rather than "King of the jews".
+TAG_KEEP_CASE = {
+    "god": "God", "gods": "God's", "jesus": "Jesus", "christ": "Christ", "lord": "Lord",
+    "yahweh": "Yahweh", "spirit": "Spirit", "scripture": "Scripture", "jews": "Jews",
+    "gentiles": "Gentiles", "sabbath": "Sabbath", "passover": "Passover",
+    "gospel": "Gospel", "messiah": "Messiah",
+}
+# Joining words stay lowercase inside a phrase ("Chariots of Fire"), never first.
+TAG_SMALL_WORDS = {
+    "a", "an", "and", "as", "at", "but", "by", "for", "from", "in", "into", "nor",
+    "of", "on", "or", "the", "to", "with", "vs", "is", "are",
+}
+
+
+def tag_label(tag: str) -> str:
+    """Turn a frontmatter tag into a readable phrase for meta descriptions.
+
+    Words that already carry capitals are left alone; otherwise proper nouns keep
+    their capital and small joining words stay lowercase.
+    """
+    words = tag.replace("-", " ").split()
+    out: list[str] = []
+    for i, w in enumerate(words):
+        key = w.lower().strip(".,;:")
+        if any(c.isupper() for c in w):
+            out.append(w)
+        elif key in TAG_KEEP_CASE:
+            out.append(TAG_KEEP_CASE[key])
+        elif i > 0 and key in TAG_SMALL_WORDS:
+            out.append(w.lower())
+        else:
+            out.append(w[:1].upper() + w[1:])
+    return " ".join(out)
+
+
 def _find_font(bold: bool = True) -> str | None:
     """Find a bold sans-serif TTF on this machine (works in CI on ubuntu-latest)."""
     candidates = [
@@ -1192,12 +1228,16 @@ def main() -> int:
         # Skip the book-name tag (e.g. "1kings") so the description names real themes, not the book.
         book_tag = (p.get("book") or "").lower().replace(" ", "").replace("-", "")
         themed = [t for t in tags if t.lower().replace("-", "") != book_tag]
-        desc_source = themed[:3] if themed else tags[:3]
-        desc_tags = [t.replace("-", " ") for t in desc_source]
-        desc_tags = [t[:1].upper() + t[1:] if t else t for t in desc_tags]
-        desc = (f"{p['title']}: a Bible verse page with reflections on {', '.join(desc_tags)}. "
-                f"Read the passage and the daily notes that cite it." if tags
-                else f"{p['title']}: a Bible verse page with reflections. Read the passage and the daily notes that cite it.")
+        desc_source = themed[:3]
+        desc_tags = [tag_label(t) for t in desc_source]
+        if desc_tags:
+            desc = (f"{p['title']}: a Bible verse page with reflections on {', '.join(desc_tags)}. "
+                    f"Read the passage and the daily notes that cite it.")
+        else:
+            # No theme tags yet: never surface the raw book tag ("reflections on 1kings")
+            # as a topic. Describe the page honestly instead.
+            desc = (f"{p['title']}: read the passage, with short reflections and links to every "
+                    f"daily Bible reading note on Man of God that cites it.")
         # Keep <title> (page title + " | Man of God Daily Readings") near the ~60 character search-result limit:
         # drop the " Bible Study" suffix for long passage names.
         bible_title = f"{p['title']} Bible Study"
