@@ -1,5 +1,11 @@
 # AI discovery research log
 
+## 2026-11-27 — implementation review for 2026-11-21 (Walk Like the Shunammite)
+
+- Built 422 content pages (60 daily, 362 verse), up from 417; AI checker passed for 1149 pages and 62 content URLs. Resources gallery matches all 78 image files; image sync made no changes.
+- Daily markdown copy, alternate markdown link and llms.txt link to that copy verified. All four new verse URLs have canonicals and JSON-LD.
+- Existing guidance still matches llms.txt, llms-full.txt, crawler access and markdown copies. IndexNow key is served and deploy invokes sitemap submission. No build/checker gap found; this is an implementation review, not new external research.
+
 Append-only. Each entry: date, finding, source URL, adopted or not, and why. The
 site-growth agent writes here after each research pass.
 
@@ -291,3 +297,10 @@ site-growth agent writes here after each research pass.
 - **Advisories (not changed):** (1) `blog/health-monitor-own-your-data/` renders two identical `<h1>`s (template H1 + author body H1) — author content. (2) Tag pages use raw slugs in title/description/H1: `tags/king-of-the-jews/` → "Bible readings on king-of-the-jews | Man of God", desc "…tagged king-of-the-jews…", H1 "#king-of-the-jews" (same for `son-of-god`, `word-of-God`). Suggested: display the original tag text ("King of the Jews", "Son of God", "Word of God") in title, description and H1 — needs a site-wide tag-label decision. (3) `art/eyes-study/` title is the folder slug ("eyes-study | Man of God Daily Readings") and its images use alt "Image 1/2". (4) Art gallery images carry no `loading` attribute. (5) 75 PNGs exceed 500 KB — 74 under `resources/scripture-images/` plus one art image; largest 12.8 MB (`philippians-413-widescreen.png`), build output totals 225 MB. (6) Third-party `cdn.tailwindcss.com` (production CDN script) and `fonts.googleapis.com`/`fonts.gstatic.com` remain on every page. (7) Empty `src=""` lightbox placeholder `<img>` on every page. (8) Tags `god-sovereignty` and `solomons-wisdom` render as "God Sovereignty" / "Solomons Wisdom" in 6 descriptions — author tag naming.
 - **Needs the author:** (1) `Blog/health-monitor-own-your-data.md` opens with `# HealthMonitor — an app to own your health data`, duplicating the template H1 — make it `##` or remove it. (2) Add 2–3 theme tags to `Bible/Mark 9 v 1.md`, `Mark 8 v 12.md`, `Mark 8 v 34.md`, `Mark 8 v 11–38.md`, `Proverbs 3 v 13–22.md`, `1 Kings 13 v 1–34.md` (currently book tag only; they now fall back to the generic description). (3) Rename tags `god-sovereignty` → `sovereignty-of-god` and `solomons-wisdom` → `solomon-s-wisdom` if the phrasing matters.
 - **Changed:** `scripts/build-site.py` (verse meta-description generation: `tag_label()` helper, raw book-tag fallback) and this log entry. No vault content touched, nothing staged or committed.
+## 2026-11-27 — SEO scoped review (Walk Like the Shunammite)
+
+- **Health (SEO):** rebuilt 422 content pages; checker passed 1149 HTML pages and 62 llms.txt content URLs.
+- **Per-page (SEO):** `/daily/2026-11-21-walk-like-the-shunammite/` (title/description lengths 52/145), `/bible/2-kings-8-v-1-29/` (56/146), `/bible/2-kings-9-v-1-29/` (56/134), `/bible/mark-16-v-1-20/` (54/148), `/bible/proverbs-6-v-28-35/` (58/143). All five have globally unique titles/descriptions across 1149 HTML files, one topic-matching H1, self-canonical HTTPS URLs, non-empty image alt text, logo loading attributes, feed autodiscovery, and no broken internal page links.
+- **Advisory (SEO):** daily description displays “Trust in god”; suggest “Trust in God”. No author content changed. All five retain the previously reported empty-src lightbox placeholder with alt “Enlarged view”.
+- **Research (SEO):** scoped follow-up uses yesterday's recorded title/snippet guidance; no new research or adopted rules. No build/checker changes needed for requested structural checks.
+- **Cleanup (SEO):** removed generated `site/` as required by agent instructions; parent must rebuild if further inspection is needed.
