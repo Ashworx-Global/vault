@@ -1233,6 +1233,9 @@ def main() -> int:
         if desc_tags:
             desc = (f"{p['title']}: a Bible verse page with reflections on {', '.join(desc_tags)}. "
                     f"Read the passage and the daily notes that cite it.")
+            if len(desc) > 160:
+                desc = (f"{p['title']}: reflections on {', '.join(desc_tags)}. "
+                        f"Read the passage and the daily notes that cite it.")
         else:
             # No theme tags yet: never surface the raw book tag ("reflections on 1kings")
             # as a topic. Describe the page honestly instead.

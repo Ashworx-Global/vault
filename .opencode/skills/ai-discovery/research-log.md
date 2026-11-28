@@ -1,5 +1,11 @@
 # AI discovery research log
 
+## 2026-11-28 — implementation review for 2026-11-22 (Counterfeit Gospels)
+
+- Built 428 content pages (61 daily, 367 verse), up from 422; AI checker passed 1164 HTML pages and 63 content URLs. Gallery matches 79 images; sync added Galatians 220 with no removals or ambiguous matches.
+- Daily markdown copy, alternate link and llms.txt entry pointing at the copy verified; all five new verse URLs have canonicals and JSON-LD.
+- Existing skill guidance matches llms.txt, llms-full.txt, crawler access, markdown copies and IndexNow. Root key and deploy submission verified. No implementation gap or new external research this run.
+
 ## 2026-11-27 — implementation review for 2026-11-21 (Walk Like the Shunammite)
 
 - Built 422 content pages (60 daily, 362 verse), up from 417; AI checker passed for 1149 pages and 62 content URLs. Resources gallery matches all 78 image files; image sync made no changes.
@@ -304,3 +310,13 @@ site-growth agent writes here after each research pass.
 - **Advisory (SEO):** daily description displays “Trust in god”; suggest “Trust in God”. No author content changed. All five retain the previously reported empty-src lightbox placeholder with alt “Enlarged view”.
 - **Research (SEO):** scoped follow-up uses yesterday's recorded title/snippet guidance; no new research or adopted rules. No build/checker changes needed for requested structural checks.
 - **Cleanup (SEO):** removed generated `site/` as required by agent instructions; parent must rebuild if further inspection is needed.
+
+## 2026-11-28 — SEO scoped review (Counterfeit Gospels)
+
+- **Health (SEO):** rebuilt 428 content pages; sequential checker passed 1164 pages / 63 content URLs, both before and after the template change.
+- **Per-page (SEO):** `/daily/2026-11-22-counterfeit-gospels/`, `/bible/2-kings-9-v-30-37/`, `/bible/2-kings-10-v-1-36/`, `/bible/galatians-1-v-1-24/`, `/bible/galatians-2-v-1-21/`, `/bible/proverbs-7-v-1-9/` have globally unique titles/descriptions, one topic-matching H1, self-canonical URLs, non-empty image alt, eager logo loading and no broken internal page links. Title lengths: 60/57/57/58/58/56; final description lengths: 146/147/130/143/139/147.
+- **Fix (SEO):** Galatians 2's description was cut off at “that cite”. The verse template now removes “a Bible verse page with” when a themed description exceeds 160 characters, preserving a complete sentence here. Rechecked global uniqueness: zero duplicate titles or descriptions.
+- **Crawl/feed (SEO):** sitemap equals the indexable canonical URL set; robots permits search crawlers and names sitemap; RSS 2.0 latest item is the requested daily. `/404.html` lacks RSS autodiscovery (non-indexable); all other HTML pages have it.
+- **Existing advisories (SEO):** `/blog/health-monitor-own-your-data/` still has two H1s; all six scoped pages retain an empty-src lightbox placeholder. 76 image files exceed 500 KB; the scoped reading's `resources/scripture-images/galatians-220-widescreen.png` is 2,582,277 bytes; largest remains `resources/scripture-images/philippians-413-widescreen.png` at 12,793,827 bytes. Tailwind CDN JavaScript and Google Fonts stylesheet remain external performance dependencies. No assets or author writing changed.
+- **Research (SEO, reused 2026-11-26 findings):** https://developers.google.com/search/docs/appearance/snippet — unique, human-readable programmatic descriptions; adopted the concise complete-sentence template adjustment. https://developers.google.com/search/docs/appearance/title-link — distinct descriptive titles, no fixed character limit; retained existing titles. https://developers.google.com/search/docs/appearance/google-images and https://web.dev/articles/browser-level-image-lazy-loading — retained alt/loading checks; compression remains an author decision. No new research or checker rule adopted.
+- **Cleanup (SEO):** generated `site/` removed as required; parent must rebuild for further review.
